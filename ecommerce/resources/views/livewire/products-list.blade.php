@@ -5,7 +5,8 @@
             <div class="product-item">
                 <div class="pi-pic">
                     <a href="{{ url('products/'.$item->id) }}">
-                        <img src="{{ asset('storage/products-images/'.$item->image) }}" alt="{{ 'image of '.$item->name }}">
+                        {{-- <img src="{{ asset('storage/products-images/'.$item->image) }}" alt="{{ 'image of '.$item->name }}"> --}}
+                        <img src="{{ asset('asset/img/products/'.$item->image) }}" alt="{{ 'image of '.$item->name }}">
                     </a>
                     <div class="pi-links">
                         <a href="{{ url('products/'.$item->id) }}" class="add-card add-to-cart"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>

@@ -11,6 +11,7 @@ class ProductsController extends Controller
     public function index($id) {
         $data['title'] = 'Products';
         $data['products'] = Product::with('detailsProduct')->where('id', $id)->first();
+        $data['relatedProducts'] = Product::where('category_id', $data['products']->category_id)->get();
         return view('products', $data);
     }
 
