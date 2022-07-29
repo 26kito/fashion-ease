@@ -23,6 +23,9 @@ class CartController extends Controller
                 $data['total'] = $data['total'] + ( $row->price*$row->qty );
             };
             return view('cart', $data);
-        };
+        }
+        else {
+            return redirect('login');
+        }
     }
 }

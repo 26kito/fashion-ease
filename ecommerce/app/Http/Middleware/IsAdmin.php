@@ -17,17 +17,9 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-      // Check if user is login or not
-      if (Auth::check()) {
-        // Check if user is admin
-          if (Auth::user()->level == 'ADMIN') {
-            return $next($request);
-          } else {
-            // If user is not admin, they cannot login to admin page
-            return redirect('/home');
-          }
-      } else {
-            return redirect('/login');
+      if ( Auth::check() && Auth::user()->level == 'ADMIN' ) {
+        return $next($request);
       }
+      return redirect('/');
     }
 }

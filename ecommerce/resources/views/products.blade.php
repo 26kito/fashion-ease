@@ -33,7 +33,7 @@
 			<h2>RELATED PRODUCTS</h2>
 		</div>
 		<div class="product-slider owl-carousel">
-			@foreach($relatedProducts as $row )
+			@foreach( $relatedProducts as $row )
 			<div class="product-item">
 				<div class="pi-pic">
                     <a href="{{ url('products/'.$row->id) }}">

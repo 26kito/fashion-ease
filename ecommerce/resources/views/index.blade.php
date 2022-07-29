@@ -147,13 +147,3 @@
 	</section>
 	<!-- Banner section end  -->
 @endsection
-
-{{-- @push('feLogic')
-	<script>
-		$('.add-to-cart').on('click', (e) => {
-			e.preventDefault();
-			let qty = $(this).closest('.shopping-card').find('.qty').val();
-			alert(qty);
-		})
-	</script>
-@endpush --}}

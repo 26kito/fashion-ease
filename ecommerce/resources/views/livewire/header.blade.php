@@ -23,20 +23,16 @@
                                 {{ __('Hi! '). Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownUser">
-                                @if ( Auth::user()->level === 'ADMIN' )
-                                    <a class="dropdown-item" href="{{ route('admin') }}">Admin Page</a>
-                                @elseif ( Auth::user()->level === 'USER' )
-                                    <a class="dropdown-item" href="#">My Profile</a>
-                                    <a class="dropdown-item" href="#">Wishlist</a>
-                                @endif
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                                        Log Out
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                <a class="dropdown-item" href="#">My Profile</a>
+                                <a class="dropdown-item" href="#">Wishlist</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                    Log Out
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </div>
                         </div>
                         @else

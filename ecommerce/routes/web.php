@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -20,20 +21,25 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::middleware('is_user')->group(function() {
+    Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::middleware(['auth'])->group(function() {
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    Route::get('add-to-cart/{id}', [CartController::class, 'addToCart']);
+
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+
+    Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart']);
+    
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
+    Route::get('/products/{id}', [ProductsController::class, 'index']);
+    
+    Route::get('/category', [CategoryController::class, 'index'])->name('category');
+    
+    Route::get('/contact', [ContactController::class, 'index']);
 });
-
-Route::get('/products/{id}', [ProductsController::class, 'index']);
-
-Route::get('/category', [CategoryController::class, 'index'])->name('category');
-
-Route::get('/contact', [ContactController::class, 'index']);
 
 Route::middleware(['is_admin'])->group(function() {
     Route::prefix('admin')->group(function() {
@@ -84,5 +90,3 @@ Route::middleware(['is_admin'])->group(function() {
         });
     });
 });
-
-Auth::routes();
