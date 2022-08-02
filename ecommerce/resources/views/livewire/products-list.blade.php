@@ -9,7 +9,7 @@
                     </a>
                     <div class="pi-links">
                         <a href="{{ url('products/'.$item->id) }}" class="add-card add-to-cart"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                        <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                        <a wire:click.prevent='addToWishlist({{$item->id}})' href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                     </div>
                 </div>
                 <div class="pi-text">

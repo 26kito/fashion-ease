@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="{{asset('asset/css/style.css')}}">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	@livewireStyles
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
 	@include('layout.header')
@@ -39,5 +40,14 @@
 	<script src="{{asset('asset/js/main.js')}}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	@livewireScripts
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script>
+		window.addEventListener('toastr', event => {
+			toastr.success(event.detail.message);
+			toastr.options = {
+				"preventDuplicates": true,
+			};
+		})
+	</script>
 </body>
 </html>

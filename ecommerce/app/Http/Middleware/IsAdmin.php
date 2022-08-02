@@ -20,6 +20,6 @@ class IsAdmin
       if ( Auth::check() && Auth::user()->level == 'ADMIN' ) {
         return $next($request);
       }
-      return redirect('/');
+      return redirect()->route('home');
     }
 }

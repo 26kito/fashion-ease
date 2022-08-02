@@ -4,28 +4,19 @@ namespace App\Http\Controllers\Traits;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 trait cart {
-
     public function cart() {
         if ( Auth::check() ) {
-            $userId = Auth::user()->id;
-            $cartQty = DB::table( 'users' )
-                        ->join( 'orders', 'users.id' , '=' , 'orders.user_id' )
-                        ->join( 'order_items', 'orders.id' , '=' , 'order_items.order_id' )
-                        ->select( DB::raw( 'count(order_items.order_id) as qty' ) )
-                        ->where( 'orders.user_id', '=', $userId )
-                        ->first();
+            $cartQty = User::with('orders', 'orderItems')->withCount('orderItems as qty')
+            ->where('id', Auth::id())->first();
             return $cartQty;
-        } elseif ( !Auth::check() ) {
-            $arr = [];
-            return $arr;
-        };
+        }
     }
 
-    public function TraitAddToCart($productId, $size, $qty) {
+    public function addToCartTrait($productId, $size, $qty) {
         if ( Auth::check() ) {
             $userId = Auth::user()->id;
             $order = Order::where('user_id', '=', $userId)->first();
@@ -44,8 +35,8 @@ trait cart {
             }
         } elseif ( !Auth::check() ) {
             return redirect()->route('login');
-            $arr = [];
-            return $arr;
+            // $arr = [];
+            // return $arr;
         };
     }
 }

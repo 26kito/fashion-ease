@@ -19,6 +19,6 @@ class Header extends Component
     }
 
     public function addToCart($productId, $size, $qty) {
-        [ 'addToCart' => $this->TraitAddToCart($productId, $size, $qty) ];
+        [ 'addToCart' => $this->addToCartTrait($productId, $size, $qty) ];
     }
 }

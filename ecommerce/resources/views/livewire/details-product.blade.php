@@ -4,42 +4,37 @@
             <div class="product-pic">
                 <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}" alt="{{'image of '.$products->image}}">
             </div>
-            {{-- <div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
-                <div class="product-thumbs-track">
-                    <div class="pt active" data-imgbigurl="{{asset('asset/img/single-product/1.jpg')}}"><img src="{{asset('asset/img/single-product/thumb-1.jpg')}}" alt=""></div>
-                    <div class="pt" data-imgbigurl="{{asset('asset/img/single-product/2jpg')}}"><img src="{{asset('asset/img/single-product/thumb-2.jpg')}}" alt=""></div>
-                    <div class="pt" data-imgbigurl="{{asset('asset/img/single-product/3.jpg')}}"><img src="{{asset('asset/img/single-product/thumb-3.jpg')}}" alt=""></div>
-                    <div class="pt" data-imgbigurl="{{asset('asset/img/single-product/4.jpg')}}"><img src="{{asset('asset/img/single-product/thumb-4.jpg')}}" alt=""></div>
-                </div>
-            </div> --}}
         </div>
         <div class="col-lg-6 product-details">
             <h2 class="p-title">{{ $products->name }}</h2>
             <h3 class="p-price">{{ rupiah($products->price) }}</h3>
-            @if ( $products->stock > 0 )
+            @if ( $products->detailsProduct->isNotEmpty() )
                 <h4 class="p-stock">Available: <span>In Stock !</span></h4>
             @else
                 <h4 class="p-stock">Available: <span>Out of Stock !</span></h4>
             @endif
-            <div class="p-rating">
-                <i class="fa fa-star-o"></i>
-                <i class="fa fa-star-o"></i>
-                <i class="fa fa-star-o"></i>
-                <i class="fa fa-star-o"></i>
-                <i class="fa fa-star-o fa-fade"></i>
-            </div>
-            <div class="p-review">
-                <a href="#">3 reviews</a>|<a href="">Add your review</a>
-            </div>
             <form wire:submit.prevent='addToCart'>
                 <div class="fw-size-choose">
                     <p>Size</p>
-                    @foreach ($products->detailsProduct as $row)
                     <div class="sc-item">
+                    {{-- @foreach ( $products->detailsProduct as $row )
                         <input wire:model='size' type="radio" name="sc" id="{{ $row->size }}-size" value="{{ $row->size }}">
                         <label for="{{ $row->size }}-size">{{ $row->size }}</label>
+                    @endforeach --}}
+                    @forelse ( $products->detailsProduct as $row )
+                        <input wire:model='size' type="radio" name="sc" id="{{ $row->size }}-size" value="{{ $row->size }}">
+                        <label for="{{ $row->size }}-size">{{ $row->size }}</label>
+                    @empty
+                        <input wire:model='size' type="radio" name="sc" id="s-size" disabled>
+                        <label for="s-size">S</label>
+                        <input wire:model='size' type="radio" name="sc" id="m-size" disabled>
+                        <label for="m-size">M</label>
+                        <input wire:model='size' type="radio" name="sc" id="l-size" disabled>
+                        <label for="l-size">L</label>
+                        <input wire:model='size' type="radio" name="sc" id="xl-size" disabled>
+                        <label for="xl-size">XL</label>
+                    @endforelse
                     </div>
-                    @endforeach
                 </div>
                 <div class="quantity form-group">
                     <p>Quantity</p>
