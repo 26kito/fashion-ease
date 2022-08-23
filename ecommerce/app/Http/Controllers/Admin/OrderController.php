@@ -31,6 +31,7 @@ class OrderController extends Controller
                             ->join('users', 'orders.user_id', '=', 'users.id')
                             ->select('orders.user_id', 'users.name')
                             ->get();
+
         return view('admin.order.insert', compact('order', 'users'), $data);
     }
 
@@ -47,17 +48,9 @@ class OrderController extends Controller
     // Lihat Pesanan
     public function lihatPesanan(Request $request, $id) {
         $data['title'] = 'Pesanan';
-        
-        $orderList = DB::table('order_items')
-                                ->join('products', 'order_items.product_id', '=', 'products.id')
-                                ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                                ->join('users', 'orders.user_id', '=', 'users.id')
-                                ->select('order_items.id', 'users.name as nama_user', 'order_items.product_id', 'products.name as nama_produk', 'order_items.qty')
-                                ->where('order_id', '=', $id)
-                                ->get();
         $products = Product::all();
-
-        return view('admin.order.orderList', compact('orderList', 'id', 'products'), $data);
+        
+        return view('admin.order.orderList', compact('id', 'products'), $data);
     }
 
     public function insertOrder(Request $request) {
@@ -69,54 +62,4 @@ class OrderController extends Controller
 
         return back()->with('message', 'Data berhasil di tambahkan');
     }
-
-    // Delete Order
-    // public function deleteOrder($id) {
-    //     $orderItems = DB::table('order_items')->where('order_id', '=', $id)->delete();
-    //     $data = Order::find($id)->delete();
-
-    //     return back()->with('message', 'Berhasil menghapus pesanan');
-    // }
-
-    // // Delete Order Item
-    // public function deleteOrderItem($id) {
-    //     $orderItems = DB::table('order_items')->where('order_id', '=', $id)->delete();
-    //     $data = OrderItem::find($id)->delete();
-        
-    //     return back()->with('message', 'Berhasil menghapus pesanan');
-    // }
-
-    // Edit Order Item
-    // public function editOrderItem(Request $request, $id) {
-    //     $data['title'] = 'Pesanan';
-
-    //     $edit = DB::table('order_items')
-    //                     ->join('products', 'order_items.product_id', '=', 'products.id')
-    //                     ->join('orders', 'order_items.order_id', '=', 'orders.id')
-    //                     ->join('users', 'orders.user_id', '=', 'users.id')
-    //                     ->select('order_items.id', 'order_items.order_id', 'users.name as nama_user', 'order_items.product_id', 'products.name as nama_produk', 'order_items.qty')
-    //                     ->where('order_id', '=', $id)
-    //                     ->get();
-    //     $orderItems = OrderItem::find($id);
-    //     $products = Product::all();
-        
-    //     return view('admin.order.edit_order', compact('edit', 'orderItems', 'id', 'products'), $data);
-    // }
-
-    // public function updateOrderItem(Request $request, $id) {
-    //     $orderItems = OrderItem::find($id);
-
-    //     $orderItems->order_id = $request->order_id;
-    //     $orderItems->product_id = $request->input('insertProduct');
-    //     $orderItems->qty = $request->qty;
-    //     $orderItems->save();
-
-    //     /* $data = array();
-    //     $data['order_id'] = $request->order_id;
-    //     $data['product_id'] = $request->input('insertProduct');
-    //     $data['qty'] = $request->qty;
-    //     DB::table('order_items')->where('id', $id)->update($data); */
-
-    //     return back()->with('message', 'Data berhasil di ubah');
-    // }
 }

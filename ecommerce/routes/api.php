@@ -22,9 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // url: localhost:8000/api/order/.../
 Route::prefix('order')->group(function() {
     // View
-    Route::get('order_items/{id}', [OrderItemController::class, 'index']);
+    Route::get('order_items/{order_id}', [OrderItemController::class, 'index']);
     // Create Or Insert
-    Route::post('order_items/{id}', [OrderItemController::class, 'store']);
+    Route::post('order_items/{order_id}', [OrderItemController::class, 'store']);
     // Delete
     Route::delete('{order_id}/order_items/{id}/delete', [OrderItemController::class, 'destroy']);
     // Edit

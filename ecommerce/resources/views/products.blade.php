@@ -1,7 +1,7 @@
 @extends('layout.template')
 
 @section('title')
-	{{ ucwords($products->name) }}
+{{ ucwords($products->name) }}
 @endsection
 
 @section('content')
@@ -11,10 +11,10 @@
 		<h4>Details Product</h4>
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb site-pagination">
-			  <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-			  <li class="breadcrumb-item active" aria-current="page">Details Product</li>
+				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Details Product</li>
 			</ol>
-		  </nav>
+		</nav>
 	</div>
 </div>
 <!-- Page info end -->
@@ -36,11 +36,12 @@
 			@foreach( $relatedProducts as $row )
 			<div class="product-item">
 				<div class="pi-pic">
-                    <a href="{{ url('products/'.$row->id) }}">
+					<a href="{{ url('products/'.$row->id) }}">
 						<img src="{{ asset('asset/img/products/'.$row->image) }}" alt="">
 					</a>
 					<div class="pi-links">
-						<a href="{{ url('products/'.$row->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+						<a href="{{ url('products/'.$row->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD
+								TO CART</span></a>
 						<a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
 					</div>
 				</div>
