@@ -9,15 +9,13 @@ use App\Http\Controllers\Traits\addToWishlist;
 class ProductsList extends Component
 {
     use addToWishlist;
-
+    public $amount = 12;
     public $products;    
 
-    public function mount() {
-        $this->products = Product::all();
-    }
-
     public function render() {
-        return view('livewire.products-list');
+        $totalProducts = Product::count();
+        $products = $this->products = Product::take($this->amount)->get();
+        return view('livewire.products-list', ['products' => $products, 'totalProducts' => $totalProducts]);
     }
 
     public function addToCart($id) {
@@ -27,5 +25,9 @@ class ProductsList extends Component
 
     public function addToWishlist($productId) {
         $this->addToWishlistTrait($productId);
+    }
+
+    public function load() {
+        return $this->amount += 8;
     }
 }

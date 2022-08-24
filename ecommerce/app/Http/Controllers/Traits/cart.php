@@ -18,18 +18,20 @@ trait cart {
 
     public function addToCartTrait($productId, $size, $qty) {
         if ( Auth::check() ) {
-            $userId = Auth::user()->id;
-            $order = Order::where('user_id', '=', $userId)->first();
+            $order = Order::where('user_id', '=', Auth::id())->first();
             // Cek user ada order ga, klo ada cus proses
             if ( $order ) {
                 orderItem::updateOrCreate(
                     ['order_id' => $order->id, 'product_id' => $productId, 'size' => $size],
                     ['qty' => $qty]
                 );
+                $this->dispatchBrowserEvent('toastr', [
+                    'message' => 'Successfully Added To Cart!'
+                ]);
             // Klo user blm pernah melakukan / gaada order, bkin order
             } else {
                 Order::create([
-                    'user_id' => $userId,
+                    'user_id' => Auth::id(),
                     'order_date' => now()->toDateString()
                 ]);
             }

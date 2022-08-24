@@ -126,7 +126,7 @@
     $(document).ready(function() {
         $.ajax({
             type: "GET",
-            url: `/api/order/order_items/${order_id}`,
+            url: `/api/order/${order_id}`,
             success: function(result) {
                 $('#orderList').html(dataTable(result.data));
             }
@@ -139,14 +139,14 @@
         let qty = $('#qty').val();
         $.ajax({
             type: 'POST',
-            url: `/api/order/order_items/${order_id}`,
+            url: `/api/order/${order_id}/order_items`,
             data: {
                 'order_id': order_id,
                 'product_id': product_id,
                 'size': size,
                 'qty': qty
             },
-            success: function(result) {
+            success: (result) => {
                 $('#orderList').html(dataTable(result.data));
                 // alert
                 $.bootstrapGrowl("Berhasil Menambahkan Pesanan", {
@@ -156,11 +156,20 @@
                     width: 400,
                     stackup_spacing: 15
                 });
+            },
+            error: (result) => {
+                $.bootstrapGrowl("Gagal Menambahkan Pesanan", {
+                    type: 'danger',
+                    offset: {from: 'top', amount: 75},
+                    align: 'center',
+                    width: 400,
+                    stackup_spacing: 15
+                });
             }
         })
     }
     // Delete Data
-    $(document).on('click', function(e) {
+    $(document).on('click', (e) => {
         if($(e.target).hasClass('btn-delete')) {
             const order_id = $(e.target).data('order-id');
             const id = $(e.target).data('id');
