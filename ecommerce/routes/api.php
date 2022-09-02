@@ -28,8 +28,8 @@ Route::prefix('order')->group(function() {
     // Create Or Insert
     Route::post('{order_id}/order_items', [OrderItemController::class, 'store']);
     // Delete
-    Route::delete('{order_id}/order_items/{id}/delete', [OrderItemController::class, 'destroy']);
+    Route::delete('{order_id}/order_items/{id}', [OrderItemController::class, 'destroy']);
     // Edit
-    Route::get('order_items/{id}/edit', [OrderItemController::class, 'edit']);
-    Route::put('order_items/{id}/edit', [OrderItemController::class, 'update']);
+    Route::get('order_items/{id}', [OrderItemController::class, 'edit']);
+    Route::put('order_items/{id}', [OrderItemController::class, 'update']);
 });

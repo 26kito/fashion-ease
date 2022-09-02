@@ -12,12 +12,11 @@ class CheckoutController extends Controller
     public function index() {
         $data['title'] = 'Checkout';
         if ( Auth::check() ) {
-            $id = Auth::user()->id;
             $data['order_items'] = DB::table('order_items')
                                     ->join('orders', 'order_items.order_id', '=', 'orders.id')
                                     ->join('products', 'order_items.product_id', '=', 'products.id')
                                     ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'products.price', 'order_items.qty')
-                                    ->where('orders.user_id', '=', $id)
+                                    ->where('orders.user_id', '=', Auth::id())
                                     ->get();
                                     
             $data['total'] = 0;

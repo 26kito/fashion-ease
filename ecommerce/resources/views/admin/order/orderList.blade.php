@@ -175,7 +175,7 @@
             const id = $(e.target).data('id');
             $.ajax({
                 type: 'DELETE',
-                url: `/api/order/${order_id}/order_items/${id}/delete`,
+                url: `/api/order/${order_id}/order_items/${id}`,
                 success: function(result) {
                     $('#orderList').html(dataTable(result.data));
                     // alert
@@ -220,7 +220,7 @@
     function edit(id) {
         $.ajax({
             type: 'GET',
-            url: `/api/order/order_items/${id}/edit`,
+            url: `/api/order/order_items/${id}`,
             success: function(result) {
                 $('#editModal').html(result);
                 $('#exampleModal').modal('show');
@@ -234,7 +234,7 @@
         let qty = $('#updateQty').val();
         $.ajax({
             type: 'PUT',
-            url: `/api/order/order_items/${id}/edit`,
+            url: `/api/order/order_items/${id}`,
             data: {
                 'order_id' : order_id,
                 'product_id' : product_id,
