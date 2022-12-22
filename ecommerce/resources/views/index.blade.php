@@ -133,7 +133,6 @@
 			<li><a href="#">LEGGINGS</a></li>
 		</ul>
 		@livewire('products-list')
-
 	</div>
 </section>
 <!-- Product filter section end -->

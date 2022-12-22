@@ -213,7 +213,7 @@
                     </td>
                 </tr>
             `;
-        })
+        })  
         return table
     }
     // Edit
