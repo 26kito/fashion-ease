@@ -2,38 +2,27 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="product-pic">
-                <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}" alt="{{'image of '.$products->image}}">
+                <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}"
+                    alt="{{'image of '.$products->image}}">
             </div>
         </div>
         <div class="col-lg-6 product-details">
             <h2 class="p-title">{{ $products->name }}</h2>
             <h3 class="p-price">{{ rupiah($products->price) }}</h3>
             @if ( $products->detailsProduct->isNotEmpty() )
-                <h4 class="p-stock">Available: <span>In Stock !</span></h4>
+            <h4 class="p-stock">Available: <span>In Stock !</span></h4>
             @else
-                <h4 class="p-stock">Available: <span>Out of Stock !</span></h4>
+            <h4 class="p-stock">Available: <span>Out of Stock !</span></h4>
             @endif
             <form wire:submit.prevent='addToCart'>
                 <div class="fw-size-choose">
                     <p>Size</p>
                     <div class="sc-item">
-                    {{-- @foreach ( $products->detailsProduct as $row )
-                        <input wire:model='size' type="radio" name="sc" id="{{ $row->size }}-size" value="{{ $row->size }}">
-                        <label for="{{ $row->size }}-size">{{ $row->size }}</label>
-                    @endforeach --}}
-                    @forelse ( $products->detailsProduct as $row )
-                        <input wire:model='size' type="radio" name="sc" id="{{ $row->size }}-size" value="{{ $row->size }}">
-                        <label for="{{ $row->size }}-size">{{ $row->size }}</label>
-                    @empty
-                        <input wire:model='size' type="radio" name="sc" id="s-size" disabled>
-                        <label for="s-size">S</label>
-                        <input wire:model='size' type="radio" name="sc" id="m-size" disabled>
-                        <label for="m-size">M</label>
-                        <input wire:model='size' type="radio" name="sc" id="l-size" disabled>
-                        <label for="l-size">L</label>
-                        <input wire:model='size' type="radio" name="sc" id="xl-size" disabled>
-                        <label for="xl-size">XL</label>
-                    @endforelse
+                        @foreach ( $defaultSize as $row )
+                        <input wire:model='size' wire:click="checkSize('{{ $row }}')" type="radio" name="size"
+                            id="{{ $row }}-size" value="{{ $row }}">
+                        <label for="{{ $row }}-size">{{ $row }}</label>
+                        @endforeach
                     </div>
                 </div>
                 <div class="quantity form-group">
@@ -47,36 +36,43 @@
             <div id="accordion" class="accordion-area">
                 <div class="panel">
                     <div class="panel-header" id="headingOne">
-                        <button class="panel-link active" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">information</button>
+                        <button class="panel-link active" data-toggle="collapse" data-target="#collapse1"
+                            aria-expanded="true" aria-controls="collapse1">information</button>
                     </div>
                     <div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="panel-body">
                             <p>{{ $products->description }}</p>
-                            <p>{{ 'Stock: '.$products->stock }}</p>
+                            <p>{{ 'Stock: '.$stock }}</p>
                             <p>{{ $products->varian }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="panel">
                     <div class="panel-header" id="headingTwo">
-                        <button class="panel-link" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">care details </button>
+                        <button class="panel-link" data-toggle="collapse" data-target="#collapse2" aria-expanded="false"
+                            aria-controls="collapse2">care details </button>
                     </div>
                     <div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div class="panel-body">
                             <img src="{{asset('asset/img/cards.png')}}" alt="">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales. Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus. Ut consectetur lacus leo, non scelerisque nulla euismod nec.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales.
+                                Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus. Ut
+                                consectetur lacus leo, non scelerisque nulla euismod nec.</p>
                         </div>
                     </div>
                 </div>
                 <div class="panel">
                     <div class="panel-header" id="headingThree">
-                        <button class="panel-link" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">shipping & Returns</button>
+                        <button class="panel-link" data-toggle="collapse" data-target="#collapse3" aria-expanded="false"
+                            aria-controls="collapse3">shipping & Returns</button>
                     </div>
                     <div id="collapse3" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                         <div class="panel-body">
                             <h4>7 Days Returns</h4>
                             <p>Cash on Delivery Available<br>Home Delivery <span>3 - 4 days</span></p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales. Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus. Ut consectetur lacus leo, non scelerisque nulla euismod nec.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales.
+                                Phasellus sagittis auctor gravida. Integer bibendum sodales arcu id te mpus. Ut
+                                consectetur lacus leo, non scelerisque nulla euismod nec.</p>
                         </div>
                     </div>
                 </div>

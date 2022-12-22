@@ -22,7 +22,7 @@
 <!-- product section -->
 <section class="product-section">
 	{{-- Param 1:View. Param 2:Passing Model --}}
-	@livewire('details-product', ['products' => $products])
+	@livewire('details-product', ['products' => $products, 'defaultSize' => $defaultSize])
 </section>
 <!-- product section end -->
 
