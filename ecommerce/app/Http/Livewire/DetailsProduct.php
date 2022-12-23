@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DetailsProduct extends Component
 {
-    public $qty = 1;
+    public $qty;
     public $products;
     public $size;
     public $defaultSize;
@@ -24,28 +24,63 @@ class DetailsProduct extends Component
         $size = $this->size;
         $qty = $this->qty;
 
-        if ($this->stock !== 61) {
-            $this->dispatchBrowserEvent('toastr', [
+        if (!$size) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Lu blom pilih barang asw'
+            ]);
+        }
+        if (!$qty) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Lu mau beli brp cok'
+            ]);
+        }
+        if ($this->stock > 0) {
+            $this->emit('addToCart', $productId, $size, $qty);
+        } else {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
                 'message' => 'Barang lu lagi kosong ni.'
             ]);
-        } else {
-            $this->emit('addToCart', $productId, $size, $qty);
         }
     }
 
     public function increment()
     {
-        $this->qty++;
-        if ($this->qty >= 5) {
-            return $this->qty = 5;
+        if ($this->size) {
+            if ($this->stock !== 0) {
+                $this->qty++;
+                if ($this->qty >= 5) {
+                    return $this->qty = 5;
+                }
+            } else {
+                $this->reset('qty');
+            }
+        } else {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Lu blom pilih barang asw'
+            ]);
         }
     }
 
     public function decrement()
     {
-        $this->qty--;
-        if ($this->qty <= 1) {
-            return $this->qty = 1;
+        if ($this->size) {
+            if ($this->stock !== 0) {
+                $this->qty--;
+                if ($this->qty <= 1) {
+                    return $this->qty = 1;
+                }
+            } else {
+                $this->reset('qty');
+            }
+        } else {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Lu blom pilih barang asw'
+            ]);
         }
     }
 
@@ -56,8 +91,9 @@ class DetailsProduct extends Component
 
         if ($stock !== null) $stock = $stock->stock;
 
-        if ($stock == null) {
-            $this->stock = "abis dek stoknya";
+        if ($stock === null) {
+            $this->stock = 0;
+            $this->reset('qty');
         } else {
             $this->stock = $stock;
         }

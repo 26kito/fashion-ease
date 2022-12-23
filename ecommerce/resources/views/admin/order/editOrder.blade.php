@@ -33,5 +33,6 @@
 <!-- End of Jumlah -->
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" onclick="update({{$id}})">Update</button>
+    <button type="button" class="btn btn-primary"
+        onclick="update({{$orderItem->order_id}}, {{$orderItem->id}})">Update</button>
 </div>

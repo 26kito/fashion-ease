@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class OrderItemController extends Controller
@@ -17,13 +18,14 @@ class OrderItemController extends Controller
     public function index($order_id)
     {
         try {
-            $data = OrderItem::with('product')
-                            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                            ->join('users', 'users.id', '=', 'orders.user_id')
-                            ->where('order_id', '=', $order_id)
-                            ->select('order_items.*', 'users.name')
-                            ->get();
-            if ( count($data) === 0 ) {
+            $data = DB::table('orders')
+                ->join('order_items', 'orders.id', 'order_items.order_id')
+                ->join('products', 'order_items.product_id', 'products.id')
+                ->join('users', 'users.id', 'orders.user_id')
+                ->where('order_items.order_id', $order_id)
+                ->select('orders.id AS order_id', 'order_items.id', 'products.name', 'order_items.size', 'order_items.qty', 'products.price')
+                ->get();
+            if (count($data) === 0) {
                 return response()->json(['data' => 'data tidak ditemukan'], 400);
             }
             return response()->json(['data' => $data], 200);
@@ -61,12 +63,12 @@ class OrderItemController extends Controller
             $data = $request->all();
             OrderItem::create($data);
             $orderItem = OrderItem::with('product')
-                            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                            ->join('users', 'users.id', '=', 'orders.user_id')
-                            ->where('order_items.order_id', '=', $request->order_id)
-                            ->select('order_items.*', 'users.name')
-                            ->get();
-    
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->join('users', 'users.id', '=', 'orders.user_id')
+                ->where('order_items.order_id', '=', $request->order_id)
+                ->select('order_items.*', 'users.name')
+                ->get();
+
             return response()->json(['message' => 'berhasil menambahkan data', 'data' => $orderItem], 200);
         } catch (\Throwable $th) {
             throw $th;
@@ -83,14 +85,14 @@ class OrderItemController extends Controller
     {
         try {
             $data = OrderItem::with('product')
-                            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                            ->join('users', 'users.id', '=', 'orders.user_id')
-                            ->where('order_id', '=', $order_id)
-                            ->where('order_items.id', '=', $id)
-                            ->select('order_items.*', 'users.name')
-                            ->get();
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->join('users', 'users.id', '=', 'orders.user_id')
+                ->where('order_id', '=', $order_id)
+                ->where('order_items.id', '=', $id)
+                ->select('order_items.*', 'users.name')
+                ->get();
 
-            if ( count($data) === 0 ) {
+            if (count($data) === 0) {
                 return response()->json(['data' => 'data tidak ditemukan'], 400);
             }
 
@@ -106,11 +108,11 @@ class OrderItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($order_id, $id)
     {
-        $orderItem = OrderItem::where('id', '=', $id)->first();
+        $orderItem = OrderItem::where('id', $id)->where('order_id', $order_id)->first();
         $products = Product::all();
-        return view('admin.order.editOrder', compact('orderItem', 'id', 'products'));
+        return view('admin.order.editOrder', compact('orderItem', 'products'));
     }
 
     /**
@@ -136,11 +138,11 @@ class OrderItemController extends Controller
             $orderItem->qty = $request->qty;
             $orderItem->save();
             $orderItem = OrderItem::with('product')
-                                ->select('order_items.*', 'users.name')
-                                ->join('orders', 'orders.id', '=', 'order_items.order_id')
-                                ->join('users', 'users.id', '=', 'orders.user_id')
-                                ->where('order_items.order_id', '=', $request->order_id)
-                                ->get();
+                ->select('order_items.*', 'users.name')
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->join('users', 'users.id', '=', 'orders.user_id')
+                ->where('order_items.order_id', '=', $request->order_id)
+                ->get();
 
             return response()->json(['data' => $orderItem]);
         } catch (\Throwable $th) {
@@ -158,13 +160,20 @@ class OrderItemController extends Controller
     {
         try {
             $data = OrderItem::where('order_id', $order_id)->where('id', $id)->first();
-            if ( !$data ) {
+            if (!$data) {
                 return response()->json(['message' => 'data tidak ditemukan'], 400);
             }
             $data->delete();
-            $orderItem = OrderItem::with('product', 'user')->where('order_id', $order_id)->get();
+            // $orderItem = OrderItem::with('product', 'user')->where('order_id', $order_id)->get();
+            $orderItem = DB::table('orders')
+                ->join('order_items', 'orders.id', 'order_items.order_id')
+                ->join('products', 'order_items.product_id', 'products.id')
+                ->join('users', 'users.id', 'orders.user_id')
+                ->where('order_items.order_id', $order_id)
+                ->select('orders.id AS order_id', 'order_items.id', 'products.name', 'order_items.size', 'order_items.qty', 'products.price')
+                ->get();
 
-            return response()->json([ 'message' => 'data berhasil dihapus', 'data' => $orderItem ], 200);
+            return response()->json(['message' => 'data berhasil dihapus', 'data' => $orderItem], 200);
         } catch (\Throwable $th) {
             throw $th;
         }

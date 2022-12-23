@@ -26,7 +26,8 @@ trait cart {
                     ['qty' => $qty]
                 );
                 $this->dispatchBrowserEvent('toastr', [
-                    'message' => 'Successfully Added To Cart!'
+                'status' => 'success',
+                'message' => 'Successfully Added To Cart!'
                 ]);
             // Klo user blm pernah melakukan / gaada order, bkin order
             } else {
@@ -37,8 +38,6 @@ trait cart {
             }
         } elseif ( !Auth::check() ) {
             return redirect()->route('login');
-            // $arr = [];
-            // return $arr;
         };
     }
 }

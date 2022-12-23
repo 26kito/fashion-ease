@@ -12,10 +12,9 @@
             @foreach ( $order_items as $row )
             <tr>
                 <td class="product-col">
-                    <img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="">
+                    <a href="/products/{{ $row->productID }}"><img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}"></a>
                     <div class="pc-title">
                         <h4>{{ $row->prodName }}</h4>
-                        {{-- <span><p class="text-danger">{{ ' left!' }}</p></span> --}}
                     </div>
                 </td>
                 <td class="quy-col">
@@ -23,8 +22,12 @@
                         <input type="text" class="qty" readonly disabled value="{{ $row->qty }}">
                     </div>
                 </td>
-                <td class="size-col"><h4>{{ $row->size }}</h4></td>
-                <td class="total-col"><h4>{{ rupiah($row->price) }}</h4></td>
+                <td class="size-col">
+                    <h4>{{ $row->size }}</h4>
+                </td>
+                <td class="total-col">
+                    <h4>{{ rupiah($row->price) }}</h4>
+                </td>
             </tr>
             </tr>
             @endforeach

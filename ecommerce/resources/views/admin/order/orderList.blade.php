@@ -39,11 +39,12 @@
             </div>
         </div>
     </div>
-</div> <!-- End of Modal -->
+</div>
+<!-- End of Modal -->
 <div class="container-fluid">
     <div class="row">
         {{-- List Order --}}
-        <div class="col-6">
+        <div class="col-8">
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Order List</h3>
@@ -51,9 +52,10 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th style="text-align: center">Nama Pelanggan</th>
-                            <th style="text-align: center">Nama Produk</th>
+                            <th style="text-align: center">Product's Name</th>
+                            <th style="text-align: center">Size</th>
                             <th style="text-align: center">Qty</th>
+                            <th style="text-align: center">Price</th>
                             <th colspan="2" style="text-align: center">Action</th>
                         </tr>
                     </thead>
@@ -63,7 +65,7 @@
             </div>
         </div>
         {{-- Insert Order --}}
-        <div class="col-6">
+        <div class="col-4">
             <div class="card card-primary" id="actionForm">
                 <div class="card-header">
                     <h3 class="card-title">Tambah Barang</h3>
@@ -170,9 +172,10 @@
     }
     // Delete Data
     $(document).on('click', (e) => {
-        if($(e.target).hasClass('btn-delete')) {
-            const order_id = $(e.target).data('order-id');
-            const id = $(e.target).data('id');
+        let order_id = $(e.target).data('order-id');
+        let id = $(e.target).data('id');
+        let product_id = $('#updateProduct').val();
+        if ($(e.target).hasClass('btn-delete')) {
             $.ajax({
                 type: 'DELETE',
                 url: `/api/order/${order_id}/order_items/${id}`,
@@ -197,19 +200,20 @@
             table += `
                 <tr>
                     <td>${d.name}</td>
-                    <td>${d.product.name}</td>
+                    <td>${d.size}</td>
                     <td>${d.qty}</td>
+                    <td>${d.price}</td>
                     <td>
                         <button type="button" class="btn btn-primary btn-edit"
                         data-order-id="${d.order_id}"
                         data-id="${d.id}" 
-                        onclick="edit(${d.id})">Ubah</button>
+                        onclick="edit(${d.order_id}, ${d.id})">Edit</button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-delete"
                         data-order-id="${d.order_id}"
                         data-id="${d.id}"
-                        onclick="return confirm('Anda yakin ingin menghapus pesanan ini?')">Hapus</button>
+                        onclick="return confirm('Anda yakin ingin menghapus pesanan ini?')">Delete</button>
                     </td>
                 </tr>
             `;
@@ -217,10 +221,10 @@
         return table
     }
     // Edit
-    function edit(id) {
+    function edit(order_id, id) {
         $.ajax({
             type: 'GET',
-            url: `/api/order/order_items/${id}`,
+            url: `/api/order/${order_id}/order_items/${id}`,
             success: function(result) {
                 $('#editModal').html(result);
                 $('#exampleModal').modal('show');
@@ -228,13 +232,12 @@
         })
     }
     // Update
-    function update(id) {
-        let order_id = $('#order_id').val();
+    function update(order_id, id) {
         let product_id = $('#updateProduct').val();
         let qty = $('#updateQty').val();
         $.ajax({
             type: 'PUT',
-            url: `/api/order/order_items/${id}`,
+            url: `/api/order${order_id}/order_items/${id}`,
             data: {
                 'order_id' : order_id,
                 'product_id' : product_id,
