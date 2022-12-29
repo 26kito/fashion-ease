@@ -49,8 +49,9 @@ class OrderController extends Controller
     public function lihatPesanan(Request $request, $id) {
         $data['title'] = 'Pesanan';
         $products = Product::all();
+        $size = ['S', 'M', 'L', 'XL'];
         
-        return view('admin.order.orderList', compact('id', 'products'), $data);
+        return view('admin.order.orderList', compact('id', 'products', 'size'), $data);
     }
 
     public function insertOrder(Request $request) {

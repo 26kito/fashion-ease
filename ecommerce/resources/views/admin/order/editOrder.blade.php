@@ -3,7 +3,7 @@
     <input name="order_id" type="hidden" value="{{$orderItem->order_id}}" id="updateOrderId">
     <label for="insertProduct">Nama Produk:</label>
     <div class="input-group">
-        <select name="insertProduct" id="updateProduct" class="form-control">
+        <select name="product_id" id="updateProduct" class="form-control">
             @foreach ($products as $product)
             <option {{$product->id == $orderItem->product_id ? 'selected' : ''}}
                 value="{{$product->id}}">{{$product->name}}</option>
@@ -12,6 +12,18 @@
     </div>
 </div>
 <!-- End of Nama Produk -->
+<!-- Size -->
+<div class="form-group">
+    <label for="updateSize">Size:</label>
+    <div class="input-group">
+        <select name="size" id="updateSize" class="form-control">
+            @foreach ($size as $row)
+            <option value="{{$row}}">{{$row}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<!-- End of Size -->
 <!-- Jumlah -->
 <div class="form-group">
     <label for="qty">Jumlah:</label>

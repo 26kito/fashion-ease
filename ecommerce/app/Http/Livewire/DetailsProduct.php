@@ -41,7 +41,7 @@ class DetailsProduct extends Component
         } else {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Barang lu lagi kosong ni.'
+                'message' => 'Barang lu lagi kosong ni!'
             ]);
         }
     }

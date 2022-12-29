@@ -85,11 +85,20 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div> <!-- End of Nama Produk -->
+                        </div>
+                        <!-- End of Nama Produk -->
+                        <!-- Size -->
                         <div class="form-group">
                             <label for="size">Size:</label>
-                            <input type="text" id="size">
+                            <div class="input-group">
+                                <select name="size" id="size" class="form-control">
+                                    @foreach ($size as $row)
+                                    <option value="{{$row}}">{{$row}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
+                        <!-- End of Size -->
                         <div class="form-group">
                             <!-- Jumlah -->
                             <label for="qty">Jumlah:</label>
@@ -149,15 +158,25 @@
                 'qty': qty
             },
             success: (result) => {
-                $('#orderList').html(dataTable(result.data));
-                // alert
-                $.bootstrapGrowl("Berhasil Menambahkan Pesanan", {
-                    type: 'success',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
+                if (result.success) {
+                    $('#orderList').html(dataTable(result.data));
+                    // alert
+                    $.bootstrapGrowl(result.message, {
+                        type: 'success',
+                        offset: {from: 'top', amount: 75},
+                        align: 'center',
+                        width: 400,
+                        stackup_spacing: 15
+                    });
+                } else {
+                    $.bootstrapGrowl(result.message, {
+                        type: 'danger',
+                        offset: {from: 'top', amount: 75},
+                        align: 'center',
+                        width: 400,
+                        stackup_spacing: 15
+                    });
+                }
             },
             error: (result) => {
                 $.bootstrapGrowl("Gagal Menambahkan Pesanan", {
@@ -182,7 +201,7 @@
                 success: function(result) {
                     $('#orderList').html(dataTable(result.data));
                     // alert
-                    $.bootstrapGrowl("Berhasil Menghapus Pesanan", {
+                    $.bootstrapGrowl(result.message, {
                         type: 'danger',
                         offset: {from: 'top', amount: 75},
                         align: 'center',
@@ -234,35 +253,38 @@
     // Update
     function update(order_id, id) {
         let product_id = $('#updateProduct').val();
+        let size = $('#updateSize').val();
         let qty = $('#updateQty').val();
         $.ajax({
             type: 'PUT',
-            url: `/api/order${order_id}/order_items/${id}`,
+            url: `/api/order/${order_id}/order_items/${id}`,
             data: {
                 'order_id' : order_id,
                 'product_id' : product_id,
+                'size' : size,
                 'qty' : qty
             },
             success: function(result) {
-                $('#orderList').html(dataTable(result.data));
-                $('#exampleModal').modal('hide');
-                $.bootstrapGrowl("Berhasil Mengubah Pesanan", {
-                    type: 'success',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
+                if (result.success == true) {
+                    $('#orderList').html(dataTable(result.data));
+                    $('#exampleModal').modal('hide');
+                    $.bootstrapGrowl(result.message, {
+                        type: 'success',
+                        offset: {from: 'top', amount: 75},
+                        align: 'center',
+                        width: 400,
+                        stackup_spacing: 15
+                    });
+                } else {
+                    $.bootstrapGrowl(result.message, {
+                        type: 'danger',
+                        offset: {from: 'top', amount: 75},
+                        align: 'center',
+                        width: 400,
+                        stackup_spacing: 15
+                    });
+                }
             },
-            error: function(result) {
-                $.bootstrapGrowl("Gagal Mengubah Pesanan", {
-                    type: 'danger',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
-            }
         })
     }
     function increment() {

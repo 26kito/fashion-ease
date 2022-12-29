@@ -8,20 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-
-    public function index() {
+    public function index(Request $request)
+    {
+        $orderItemsID = $request->id;
         $data['title'] = 'Checkout';
-        if ( Auth::check() ) {
+        if (Auth::check()) {
             $data['order_items'] = DB::table('order_items')
-                                    ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                                    ->join('products', 'order_items.product_id', '=', 'products.id')
-                                    ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'products.price', 'order_items.qty')
-                                    ->where('orders.user_id', '=', Auth::id())
-                                    ->get();
-                                    
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->join('products', 'order_items.product_id', '=', 'products.id')
+                ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'products.price', 'order_items.qty')
+                ->where('orders.user_id', '=', Auth::id())
+                ->whereIn('order_items.id', $orderItemsID)
+                ->get();
+
             $data['total'] = 0;
-            foreach ( $data['order_items'] as $row ) {
-                $data['total'] = $data['total'] + ($row->price*$row->qty);
+            foreach ($data['order_items'] as $row) {
+                $data['total'] = $data['total'] + ($row->price * $row->qty);
             }
             return view('checkout', $data);
         };
