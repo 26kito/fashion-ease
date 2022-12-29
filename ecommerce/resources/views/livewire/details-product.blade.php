@@ -27,9 +27,9 @@
                 </div>
                 <div class="quantity form-group">
                     <p>Quantity</p>
-                    <a wire:click='decrement' class="btn">-</a>
-                    <input wire:model='qty' type="text" class="qty" readonly disabled value="{{ $qty }}">
-                    <a wire:click='increment' class="btn">+</a>
+                    <input wire:click='decrement' type="button" class="btn" value="-">
+                    <input wire:model.lazy='qty' type="text" class="qty" readonly disabled value="{{ $qty }}">
+                    <input wire:click='increment' type="button" class="btn" value="+">
                 </div>
                 <button type="submit" class="site-btn">Buy Now</button>
             </form>
