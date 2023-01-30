@@ -1,4 +1,11 @@
 <div class="row">
+    <ul class="product-filter-menu">
+        @foreach ( $productCategories as $row )
+        <li>
+            <a href="#" wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</a>
+        </li>
+        @endforeach
+    </ul>
     @foreach ( $products as $item )
     <div class="col-lg-3 col-sm-6">
         <div class="product-item">

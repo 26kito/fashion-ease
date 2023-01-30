@@ -15,11 +15,8 @@
             <tr>
                 <td>
                     <input type="checkbox" name="id[]" id="id" value="{{ $value->OrderItemsID }}">
-                    {{-- <input type="checkbox" wire:model='orderItems.{{$row}}.OrderItemsID' name="id[]" id="id"> --}}
                 </td>
                 <td class="product-col">
-                    {{-- <a href="/products/{{ $row->productID }}"><img
-                            src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}"></a> --}}
                     <a href="/products/{{ $value->productID }}">
                         <img src="{{ asset('asset/img/cart/'. $value->image ) }}" alt="{{ $value->image }}">
                     </a>

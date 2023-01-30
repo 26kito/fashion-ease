@@ -98,6 +98,7 @@
 						<li>
 							<div class="pl-thumb"><img src="{{ asset('asset/img/cart/'. $row->image )}}" alt=""></div>
 							<h6>{{ $row->prodName }}</h6>
+							<p>Size : {{ $row->size }}</p>
 							<p>{{ rupiah($row->price) }}</p>
 						</li>
 						@endforeach

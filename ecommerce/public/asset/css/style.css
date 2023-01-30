@@ -375,6 +375,19 @@ ol {
     background-color: transparent;
 }
 
+.header-search-result {
+    width: 33%;
+    /* height: 500px; */
+    /* border-radius: 15px; */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: fixed;
+    z-index: 2;
+    padding: 10px 20px;
+    background: #dfdfde;
+    /* background: lightblue; */
+}
+
 .user-panel .up-item {
     /* display: inline-block; */
     margin: 2.5px 0;
@@ -612,7 +625,7 @@ a#dropdownUser {
 }
 
 .hero-slider .hs-item .offer-card h2 {
-    font-size: 72px;
+    font-size: 52px;
     font-weight: 400;
     line-height: 1;
 }

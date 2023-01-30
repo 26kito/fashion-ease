@@ -20,74 +20,61 @@
 <!-- Page info end -->
 
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="post">
-	@csrf
-
-	<section class="cart-section spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="cart-table">
-						<h3>Your Cart</h3>
-						<div class="cart-table-warp">
-							<table>
-								<thead>
-									<tr>
-										<th></th>
-										<th class="product-th">Product</th>
-										<th class="quy-th">Quantity</th>
-										<th class="size-th">Size</th>
-										<th class="total-th">Price</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody id="content">
-								</tbody>
-							</table>
-						</div>
-						<div class="total-cost">
-							<h6>Total<span>{{ rupiah($total) }}</span></h6>
-						</div>
+<section class="cart-section spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="cart-table">
+					<h3>Your Cart</h3>
+					<div class="cart-table-warp">
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+									<th class="product-th">Product</th>
+									<th class="quy-th">Quantity</th>
+									<th class="size-th">Size</th>
+									<th class="total-th">Price</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody id="content">
+							</tbody>
+						</table>
 					</div>
-				</div>
-				<div class="col-lg-4 card-right">
-					<div class="promo-code-form">
-						<input type="text" placeholder="Enter promo code">
-						<button>Submit</button>
+					<div class="total-cost">
+						<h6>Total<span>{{ rupiah($total) }}</span></h6>
 					</div>
-					@if ( $total_orders->order_items_count > 0 )
-					<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
-					@endif
-					<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
 				</div>
 			</div>
+			<div class="col-lg-4 card-right">
+				<div class="promo-code-form">
+					<input type="text" placeholder="Enter promo code">
+					<button>Submit</button>
+				</div>
+				@if ( $total_orders->order_items_count > 0 )
+				<button type="submit" class="site-btn">Proceed to Checkout</button>
+				@endif
+				<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
+			</div>
 		</div>
-	</section>
-</form>
+	</div>
+</section>
 <!-- cart section end -->
 @endsection
 
 @push('js')
-@if (Session::has('error'))
-<script>
-	let status = 400;
-</script>
-@endif
-
+<script src="{{asset('asset/bootstrap-growl/jquery.bootstrap-growl.min.js')}}"></script>
 <script>
 	$(document).ready(() => {
 		$.ajax({
 			type: "GET",
-			url: `/cart/get`,
+			url: `/cart/get/`,
 			success: (result) => {
 				$('#content').html(table(result));
 			}
 		})
 	})
-
-	if (status == 400) {
-		toastr.info('Pilih pesanan yang mau di checkout dulu yaa')
-	}
 
 	function table(data) {
 		let table = ``;
@@ -97,7 +84,7 @@
 			`
 			<tr>
 				<td>
-					<input type="checkbox" name="id[]" id="orderItemsID" class="cb"
+					<input type="checkbox" name="id[]" id="orderItemsID"
 						value="${data.OrderItemsID}">
 				</td>
 				<td class="product-col">
@@ -163,8 +150,6 @@
 					}
 				})
 			}
-
-			e.preventDefault();
 		}
 	})
 </script>
