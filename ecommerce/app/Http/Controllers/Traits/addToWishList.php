@@ -12,7 +12,7 @@ trait addToWishlist {
             'product_id' => $productId,
         ]);
         $this->dispatchBrowserEvent('toastr', [
-            'message' => 'Successfully Added To Wishlist!'
+            'message' => 'Berhasil menambahkan ke keranjang!'
         ]);
     }
 }

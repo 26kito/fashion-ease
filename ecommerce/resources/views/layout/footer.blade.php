@@ -36,20 +36,12 @@
                 <div class="footer-widget contact-widget">
                     <h2>Questions</h2>
                     <div class="con-info">
-                        <span>C.</span>
-                        <p>Your Company Ltd </p>
-                    </div>
-                    <div class="con-info">
-                        <span>B.</span>
-                        <p>1481 Creekside Lane Avila Beach, CA 93424, P.O. BOX 68 </p>
-                    </div>
-                    <div class="con-info">
                         <span>T.</span>
-                        <p>+53 345 7953 32453</p>
+                        <p>(+62) 81 330 868 663</p>
                     </div>
                     <div class="con-info">
                         <span>E.</span>
-                        <p>office@youremail.com</p>
+                        <p>surya.aw26@gmail.com</p>
                     </div>
                 </div>
             </div>
@@ -58,17 +50,25 @@
     <div class="social-links-warp">
         <div class="container">
             <div class="social-links">
-                <a href="https://instagram.com/kt2602__" target="_blank" class="instagram"><i
-                        class="fa fa-instagram"></i><span>instagram</span></a>
-                <a href="https://twitter.com/kt2602__" target="_blank" class="twitter"><i
-                        class="fa fa-twitter"></i><span>twitter</span></a>
-                <a href="https://github.com/26kito" target="_blank" class="github"><i
-                        class="fa fa-github"></i><span>github</span></a>
+                <a href="https://instagram.com/kt2602__" target="_blank" class="instagram">
+                    <i class="fa fa-instagram"></i><span>instagram</span>
+                </a>
+                <a href="https://twitter.com/kt2602__" target="_blank" class="twitter">
+                    <i class="fa fa-twitter"></i><span>twitter</span>
+                </a>
+                <a href="https://github.com/26kito" target="_blank" class="github">
+                    <i class="fa fa-github"></i><span>github</span>
+                </a>
+                <a href="https://linkedin.com/in/kt2602" target="_blank" class="linkedin">
+                    <i class="fa fa-linkedin"></i><span>linkedin</span>
+                </a>
             </div>
-            <p class="text-white text-center mt-5">Copyright &copy;<script>
+            <p class="text-white text-center mt-5">Copyright &copy;
+                <script>
                     document.write(new Date().getFullYear());
-                </script> All rights reserved | This website is made by <a href="https://github.com/26kito"
-                    target="_blank">Surya Adhi Waskito</a></p>
+                </script> 
+                All rights reserved | This website is made by <a href="https://github.com/26kito" target="_blank">Surya Adhi Waskito</a>
+            </p>
         </div>
     </div>
 </section>

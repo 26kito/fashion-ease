@@ -27,22 +27,18 @@ class DetailsProduct extends Component
         if (!$size) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Lu blom pilih barang asw'
+                'message' => 'Kamu belum memilih size nih'
             ]);
         }
         if (!$qty) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Lu mau beli brp cok'
+                'message' => 'Masukin jumlah yang ingin dibeli ya'
             ]);
         }
+
         if ($this->stock > 0) {
             $this->emit('addToCart', $productId, $size, $qty);
-        } else {
-            return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'error',
-                'message' => 'Barang lu lagi kosong ni!'
-            ]);
         }
     }
 
@@ -51,16 +47,21 @@ class DetailsProduct extends Component
         if ($this->size) {
             if ($this->stock !== 0) {
                 $this->qty++;
+
                 if ($this->qty >= 5) {
                     return $this->qty = 5;
                 }
             } else {
                 $this->reset('qty');
+                return $this->dispatchBrowserEvent('toastr', [
+                    'status' => 'error',
+                    'message' => 'Size yang kmu pilih habis nih :('
+                ]);
             }
         } else {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Lu blom pilih barang asw'
+                'message' => 'Kamu belum memilih size nih'
             ]);
         }
     }
@@ -70,16 +71,21 @@ class DetailsProduct extends Component
         if ($this->size) {
             if ($this->stock !== 0) {
                 $this->qty--;
+
                 if ($this->qty <= 1) {
                     return $this->qty = 1;
                 }
             } else {
                 $this->reset('qty');
+                return $this->dispatchBrowserEvent('toastr', [
+                    'status' => 'error',
+                    'message' => 'Size yang kmu pilih habis nih :('
+                ]);
             }
         } else {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Lu blom pilih barang asw'
+                'message' => 'Kamu belum memilih size nih'
             ]);
         }
     }

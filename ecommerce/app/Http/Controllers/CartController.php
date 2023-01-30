@@ -33,6 +33,7 @@ class CartController extends Controller
             foreach ($data['orderItems'] as $row) {
                 $data['total'] = $data['total'] + ($row->price * $row->qty);
             };
+
             return view('cart', $data);
         } else {
             return redirect('login');
@@ -80,28 +81,7 @@ class CartController extends Controller
             return $this->failedResponse(200, 'Tidak ada data');
         }
 
-        $orderItems = DB::table('order_items')
-            ->join('orders', 'order_items.order_id', 'orders.id')
-            ->join('products', 'order_items.product_id', 'products.id')
-            ->select(
-                'orders.id AS OrderID',
-                'order_items.id AS OrderItemsID',
-                'products.id AS ProductID',
-                'products.name as ProductName',
-                'products.image',
-                'products.price',
-                'order_items.size',
-                'order_items.qty'
-            )
-            ->where('orders.id', $orderID)
-            ->where('orders.user_id', Auth::id())
-            ->get();
-
-        foreach ($orderItems as $key => $value) {
-            $value->price = rupiah($value->price);
-        }
-
-        // return response()->json(['data' => $orderItems]);
+        $orderItems = $this->getOrderItems();
         return $this->successResponse(200, 'Pesanan berhasil dihapus', $orderItems);
     }
 }

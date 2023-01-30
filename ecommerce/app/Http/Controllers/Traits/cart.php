@@ -30,7 +30,7 @@ trait cart
                 );
                 $this->dispatchBrowserEvent('toastr', [
                     'status' => 'success',
-                    'message' => 'Successfully Added To Cart!'
+                    'message' => 'Berhasil menambahkan ke keranjang!'
                 ]);
                 // Klo user blm pernah melakukan / gaada order, bkin order
             } else {

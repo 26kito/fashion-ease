@@ -3,15 +3,26 @@
         <div class="row">
             <div class="col-lg-2 text-center text-lg-left">
                 <!-- logo -->
-                <a href="home" class="site-logo">
+                <a href="{{ route('home') }}" class="site-logo">
                     <img src="{{asset('asset/img/logo.png')}}" alt="">
                 </a>
             </div>
             <div class="col-xl-6 col-lg-5">
-                <form class="header-search-form">
-                    <input type="text" placeholder="Search on divisima ....">
+                <div class="header-search-form">
+                    <input wire:model='keyword' placeholder="Ketik nama produk yang ingin km cari :)">
                     <button><i class="flaticon-search"></i></button>
-                </form>
+                </div>
+                @if ($productsSearch)
+                <div class="header-search-result">
+                    @if (count($productsSearch) > 0)
+                        @foreach ($productsSearch as $row)
+                            <a href="" class="search-result-items">{{ $row->ProductName }}</a>
+                        @endforeach
+                    @else
+                        <p>Oops... Produk yang kamu cari gaada nih:(</p>
+                    @endif
+                </div>
+                @endif
             </div>
             <div class="col-xl-4 col-lg-5">
                 <div class="user-panel d-flex">
@@ -26,8 +37,7 @@
                                 <a class="dropdown-item" href="#">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('wishlist') }}">Wishlist</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Log Out
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

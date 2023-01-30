@@ -40,8 +40,9 @@
 						<img src="{{ asset('asset/img/products/'.$row->image) }}" alt="">
 					</a>
 					<div class="pi-links">
-						<a href="{{ url('products/'.$row->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD
-								TO CART</span></a>
+						<a href="{{ url('products/'.$row->id) }}" class="add-card">
+							<i class="flaticon-bag"></i><span>ADD TO CART</span>
+						</a>
 						<a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
 					</div>
 				</div>
