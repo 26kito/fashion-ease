@@ -28,6 +28,9 @@
 <body>
 	@include('layout.header')
 
+	{{-- Overlay --}}
+	<div class="overlay-black"></div>
+	{{-- End of Overlay --}}
 	@yield('content')
 
 	@include('layout.footer')

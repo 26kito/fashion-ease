@@ -22,6 +22,16 @@ body {
     font-smoothing: antialiased;
 }
 
+.overlay-black {
+    display: none;
+    width: 100%;
+    height: 150%;
+    position: fixed;
+    z-index: 98;
+    background: black;
+    opacity: 55%;
+}
+
 h1,
 h2,
 h3,
@@ -335,6 +345,16 @@ ol {
   Header section
 ---------------------*/
 
+.header-section {
+    height: max-content;
+    background: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
 .header-top {
     padding: 18px 0 14px;
 }
@@ -353,7 +373,7 @@ ol {
     width: 100%;
     height: 44px;
     font-size: 14px;
-    border-radius: 50px;
+    border-radius: 10px;
     border: none;
     padding: 0 19px;
     background: #f0f0f0;
@@ -376,20 +396,23 @@ ol {
 }
 
 .header-search-result {
-    width: 33%;
-    /* height: 500px; */
-    /* border-radius: 15px; */
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    width: 32.5%;
+    margin-left: 10px;
+    border-radius: 10px;
     position: fixed;
     z-index: 2;
     padding: 10px 20px;
     background: #dfdfde;
-    /* background: lightblue; */
+}
+
+.search-result-items {
+    padding: 90px 0;
+    margin-top: 200px;
+    color: black;
+    font-size: 17px;
 }
 
 .user-panel .up-item {
-    /* display: inline-block; */
     margin: 2.5px 0;
 }
 
@@ -449,6 +472,10 @@ a#dropdownUser {
 
 .main-menu {
     list-style: none;
+}
+
+.main-menu {
+    margin-bottom: 0px !important;
 }
 
 .main-menu li {
