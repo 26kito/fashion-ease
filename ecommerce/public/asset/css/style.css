@@ -562,7 +562,8 @@ a#dropdownUser {
 
 .hero-section {
     padding-bottom: 54px;
-    margin-top: -15.6px;
+    /* margin-top: -15.6px; */
+    margin-top: 125px;
 }
 
 .hero-slider .hs-item {
@@ -1263,7 +1264,7 @@ a#dropdownUser {
 
 .page-top-info {
     background: #f8f7f7;
-    padding: 20px 0 30px;
+    padding: 60px 0 30px;
 }
 
 .page-top-info h4 {

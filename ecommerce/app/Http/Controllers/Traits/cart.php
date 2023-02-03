@@ -12,8 +12,11 @@ trait cart
     public function cart()
     {
         if (Auth::check()) {
-            $cartQty = User::with('orders', 'orderItems')->withCount('orderItems as qty')
-                ->where('id', Auth::id())->first();
+            $cartQty = User::with('orders', 'orderItems')
+                ->withCount('orderItems as qty')
+                ->where('id', Auth::id())
+                ->first();
+
             return $cartQty;
         }
     }

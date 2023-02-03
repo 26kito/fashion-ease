@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::middleware('is_user')->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+
+    Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::get('/cart/get', [CartController::class, 'getOrderItems']);
