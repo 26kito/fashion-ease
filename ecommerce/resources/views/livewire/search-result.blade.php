@@ -1,13 +1,17 @@
 <div class="row">
+    {{-- Klo gaada produk tampilkan pesan error --}}
+    @if ($message)
+    <h1>{{ $message }}</h1>
+    @else
     <div class="col-lg-3 order-2 order-lg-1">
         <div class="filter-widget">
             <h2 class="fw-title">Categories</h2>
             <ul class="category-menu">
                 @foreach ($category as $row)
                 <li class="form-check">
-                    <input wire:model='categoryId' wire:click='refresh' type="radio" name="category"
-                        id="category({{$row->id}})" value="{{$row->id}}">
-                    <label for="category({{$row->id}})">{{ $row->name }}</label>
+                    <input wire:model='categoryID' wire:click='refresh' type="radio" name="category"
+                        id="category( {{ $row->id }} )" value="{{ $row->id }}">
+                    <label for="category( {{ $row->id }} )">{{ $row->name }}</label>
                 </li>
                 @endforeach
             </ul>
@@ -15,7 +19,9 @@
     </div>
     <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
-            @foreach ( $products as $row )
+            {{-- <h1>{{ count($products) }}</h1> --}}
+            <p>Menampilkan 1 - 60 barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>"</p>
+            @foreach ($products as $row)
             <div class="col-lg-4 col-sm-6">
                 <div class="product-item">
                     <div class="pi-pic">
@@ -24,9 +30,12 @@
                                 alt="{{ 'image of '.$row->name }}">
                         </a>
                         <div class="pi-links">
-                            <a href="{{ url('products/'.$row->id) }}" class="add-card"><i
-                                    class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                            <a href="{{ url('products/'.$row->id) }}" class="add-card">
+                                <i class="flaticon-bag"></i><span>ADD TO CART</span>
+                            </a>
+                            <a href="#" class="wishlist-btn">
+                                <i class="flaticon-heart"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="pi-text">
@@ -36,11 +45,12 @@
                 </div>
             </div>
             @endforeach
-            @if ( count($products) < $totalProducts )
-            <div class="text-center w-100 pt-3">
-                <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
-            </div>
-            @endif
         </div>
+        @if (count($products) < $totalProduct)
+        <div class="text-center w-100 pt-3">
+            <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
+        </div>
+        @endif
     </div>
+    @endif
 </div>

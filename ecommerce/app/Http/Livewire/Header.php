@@ -19,7 +19,7 @@ class Header extends Component
 
     public function render()
     {
-        if (strlen($this->keyword) >= 2) {
+        if (strlen($this->keyword) >= 3) {
             $products = DB::table('products')
                 ->join('categories', 'products.category_id', 'categories.id')
                 ->select('products.id AS ProductID', 'products.name AS ProductName', 'categories.name AS CategoryName')
@@ -38,5 +38,10 @@ class Header extends Component
     public function addToCart($productId, $size, $qty)
     {
         ['addToCart' => $this->addToCartTrait($productId, $size, $qty)];
+    }
+
+    public function search()
+    {
+        $keyword = $this->keyword;
     }
 }
