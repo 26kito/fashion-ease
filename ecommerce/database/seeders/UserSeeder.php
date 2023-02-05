@@ -21,6 +21,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'level' => 'ADMIN',
         ]);
-        User::factory(3)->create();
+        User::factory(500)->create();
     }
 }
