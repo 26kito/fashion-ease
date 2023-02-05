@@ -18,7 +18,7 @@ class ProductsController extends Controller
     // Admin
     public function productsList() {
         $data['title'] = 'Products List';
-        $data['products'] = Product::all();
+        $data['products'] = Product::paginate(30);
         return view('admin.product.list', $data);
     }
 }
