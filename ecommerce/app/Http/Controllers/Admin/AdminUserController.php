@@ -11,19 +11,22 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserController extends Controller
 {
     // Insert Data
-    public function insert() {
+    public function insert()
+    {
         $users = User::get();
         $data['title'] = 'Insert Data';
+
         return view('admin.user.insert', compact('users'), $data);
     }
 
-    public function insertAction(Request $request) {
-        $validated = $request->validate([
+    public function insertAction(Request $request)
+    {
+        $request->validate([
             'name' => 'required|string',
             'email' => 'required|unique:users|email',
             'password' => 'required'
         ]);
-        
+
         $user = new User;
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -37,18 +40,20 @@ class AdminUserController extends Controller
     // End of Insert Data
 
     // Update Data
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $data['title'] = 'Update Data';
         $user = User::find($id);
         return view('admin.user.update', compact('user'), $data);
     }
 
-    public function update(Request $request, $id) {
-        $user= User::find($id); // ini untuk get data sesuai ID
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id); // ini untuk get data sesuai ID
         // Validation
         $validated = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email|'.Rule::unique('users')->ignore($user->email, 'email'),
+            'email' => 'required|email|' . Rule::unique('users')->ignore($user->email, 'email'),
         ]);
 
         $user->name = $request->input('name');
@@ -60,7 +65,8 @@ class AdminUserController extends Controller
     // End of Update Data
 
     // Delete Data
-    public function delete($id) {
+    public function delete($id)
+    {
         $data = User::find($id);
         $data->delete();
 

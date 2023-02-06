@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
@@ -53,7 +54,7 @@ Route::middleware(['is_admin'])->group(function () {
 
         Route::prefix('tables')->group(function () {
             Route::get('/user', [UsersController::class, 'usersList']);
-            Route::get('/productsList', [ProductsController::class, 'productsList']);
+            Route::get('/productsList', [AdminProductController::class, 'index']);
         });
 
         Route::prefix('form')->group(function () {

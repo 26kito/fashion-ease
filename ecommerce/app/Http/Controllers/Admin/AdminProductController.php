@@ -10,14 +10,24 @@ use App\Models\Product;
 
 class AdminProductController extends Controller
 {
+    public function index()
+    {
+        $title = 'Products List';
+        $products = Product::paginate(30);
+
+        return view('admin.product.list', ['title' => $title, 'products' => $products]);
+    }
+
     // Insert Data
-    public function insert() {
+    public function insert()
+    {
         $categories = Category::get();
         $data['title'] = 'Insert Data';
         return view('admin.product.insert', compact('categories'), $data);
     }
 
-    public function insertAction(Request $request) {
+    public function insertAction(Request $request)
+    {
         $validated = $request->validate([
             // 'id' => 'required|integer',
             'category_id' => 'required|integer',
@@ -47,7 +57,7 @@ class AdminProductController extends Controller
         $product->description = $request->input('description');
         $product->image = $request->file('productsImage')->store('products-images');
         $product->save();
-        
+
         // Product::create($validated);
 
         return back()->with('message', 'Data berhasil di tambahkan');
@@ -55,20 +65,22 @@ class AdminProductController extends Controller
     // End of Insert Data
 
     // Update Data
-    public function edit(Request $request, $id) {
+    public function edit(Request $request, $id)
+    {
         $data['title'] = 'Update Data';
         $product = Product::find($id);
         $categories = Category::get();
         return view('admin.product.update', compact('categories', 'product'), $data);
     }
 
-    public function update(Request $request, $id) {
-        $product= Product::find($id); // ini untuk get data sesuai ID
+    public function update(Request $request, $id)
+    {
+        $product = Product::find($id); // ini untuk get data sesuai ID
         // Validation
         $validated = $request->validate([
             'id' => 'required|integer',
             'category_id' => 'required',
-            'code' => 'required|integer|'.Rule::unique('products')->ignore($product->code, 'code'),
+            'code' => 'required|integer|' . Rule::unique('products')->ignore($product->code, 'code'),
             'name' => 'required|string',
             'stock' => 'required|integer',
             'varian' => 'required',
@@ -91,7 +103,8 @@ class AdminProductController extends Controller
     // End of Update Data
 
     // Delete Data
-    public function delete($id) {
+    public function delete($id)
+    {
         $data = Product::find($id);
         $data->delete();
 
