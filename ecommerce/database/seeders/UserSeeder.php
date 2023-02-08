@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'name' => 'kito',
             'email' => 'kito@example.com',
             'password' => Hash::make('12345678'),
-            'level' => 'ADMIN',
+            'role_id' => 1,
         ]);
         User::factory(500)->create();
     }

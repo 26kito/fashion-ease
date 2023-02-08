@@ -8,8 +8,8 @@
                 </a>
             </div>
             <div class="col-xl-6 col-lg-5">
-                <div class="header-search-form">
-                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)">
+                <div class="header-search-form form-group">
+                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)" class="form-control">
                     {{-- <button wire:click='search' id="search-btn"><i class="flaticon-search"></i></button> --}}
                     <button id="search-btn"><i class="flaticon-search"></i></button>
                 </div>
@@ -65,9 +65,9 @@
                         <div class="shopping-card">
                             <i class="flaticon-bag"></i>
                             @auth
-                            @if ( Auth::user()->level === 'USER' )
-                            @if ( $cartQty->qty > 0 )
-                            <span class="qty">{{ $cartQty->qty }}</span>
+                            @if ( Auth::user()->role_id === 2 )
+                            @if ( $cartQty > 0 )
+                            <span class="qty">{{ $cartQty }}</span>
                             @endif
                             @endif
                             @endauth

@@ -16,20 +16,23 @@ class CheckoutController extends Controller
         if (Auth::check()) {
             if ($orderItemsID) {
                 $data['order_items'] = DB::table('order_items')
-                    ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                    ->join('products', 'order_items.product_id', '=', 'products.id')
-                    ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'order_items.size', 'products.price', 'order_items.qty')
-                    ->where('orders.user_id', '=', Auth::id())
+                    ->join('orders', 'order_items.order_id', 'orders.order_id')
+                    ->join('products', 'order_items.product_id', 'products.id')
+                    ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'order_items.size', 'order_items.price', 'order_items.qty')
+                    ->where('orders.user_id', Auth::id())
                     ->whereIn('order_items.id', $orderItemsID)
                     ->get();
 
                 $data['total'] = 0;
+
                 foreach ($data['order_items'] as $row) {
-                    $data['total'] = $data['total'] + ($row->price * $row->qty);
-                }
+                    $data['total'] += $row->price;
+                };
+
                 return view('checkout', $data);
             } else {
                 $status = 400;
+
                 return redirect()->back()->with('error', $status);
             }
         };

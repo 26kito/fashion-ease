@@ -49,11 +49,11 @@
 							<input type="text" placeholder="Address line 2">
 							<input type="text" placeholder="Country">
 						</div>
-						<div class="col-md-6">
-							<input type="text" placeholder="Zip code">
+						<div class="col-md-6 form-group">
+							<input type="text" class="form-control" placeholder="Zip code">
 						</div>
-						<div class="col-md-6">
-							<input type="text" placeholder="Phone no.">
+						<div class="col-md-6 form-group">
+							<input type="tel" class="form-control" placeholder="Nomor HP" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
 						</div>
 					</div>
 					<div class="cf-title">Delievery Info</div>
@@ -70,7 +70,7 @@
 							</div>
 						</div>
 						<div class="col-6">
-							<h4>Next day delievery  </h4>
+							<h4>Next day delievery</h4>
 						</div>
 						<div class="col-6">
 							<div class="cf-radio-btns">
@@ -83,8 +83,8 @@
 					</div>
 					<div class="cf-title">Payment</div>
 					<ul class="payment-list">
-						<li>Paypal<a href="#"><img src="{{asset('asset/img/paypal.png')}}" alt=""></a></li>
-						<li>Credit / Debit card<a href="#"><img src="{{asset('asset/img/mastercart.png')}}" alt=""></a></li>
+						<li>Paypal<a href="#"><img src="{{ asset('asset/img/paypal.png') }}" alt=""></a></li>
+						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}" alt=""></a></li>
 						<li>Pay when you get the package</li>
 					</ul>
 					<button class="site-btn submit-order-btn">Place Order</button>
@@ -96,7 +96,7 @@
 					<ul class="product-list">
 						@foreach ( $order_items as $row )
 						<li>
-							<div class="pl-thumb"><img src="{{ asset('asset/img/cart/'. $row->image )}}" alt=""></div>
+							<div class="pl-thumb"><img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt=""></div>
 							<h6>{{ $row->prodName }}</h6>
 							<p>Size : {{ $row->size }}</p>
 							<p>{{ rupiah($row->price) }}</p>

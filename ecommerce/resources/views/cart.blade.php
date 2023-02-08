@@ -22,14 +22,14 @@
 <!-- cart section -->
 <form action="{{ route('checkout') }}" method="post">
 	@csrf
-
 	<section class="cart-section spad">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="cart-table">
 						<h3>Your Cart</h3>
-						<div class="cart-table-warp">
+						@livewire('cart')
+						{{-- <div class="cart-table-warp">
 							<table>
 								<thead>
 									<tr>
@@ -44,10 +44,11 @@
 								<tbody id="content">
 								</tbody>
 							</table>
-						</div>
-						<div class="total-cost">
+						</div> --}}
+						@livewire('total-price-cart')
+						{{-- <div class="total-cost" id="total-cost">
 							<h6>Total<span>{{ rupiah($total) }}</span></h6>
-						</div>
+						</div> --}}
 					</div>
 				</div>
 				<div class="col-lg-4 card-right">
@@ -55,10 +56,12 @@
 						<input type="text" placeholder="Enter promo code">
 						<button>Submit</button>
 					</div>
-					@if ( $total_orders->order_items_count > 0 )
-					<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
-					@endif
-					<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
+					<div class="">
+						@if ( count($orderItems) > 0 )
+						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
+						@endif
+						<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -120,10 +123,7 @@
 					<h4>${data.price}</h4>
 				</td>
 				<td>
-					<button
-					data-order-items-id="${data.OrderItemsID}" 
-					data-order-id="${data.OrderID}" 
-					class="btn btn-danger delete">
+					<button data-order-items-id="${data.OrderItemsID}" data-order-id="${data.OrderID}" class="btn btn-danger delete">
 					Hapus
 					</button>
 				</td>
@@ -132,6 +132,12 @@
 		})
 		return table;
 	}
+
+	// function totalPrice(data) {
+	// 	let total = `<h6>Total<span>${data}</span></h6>`;
+
+	// 	return total;
+	// }
 
 	$(document).on('click', (e) => {
 		let orderID = $(e.target).data('order-id');
@@ -144,6 +150,7 @@
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					}
 				});
+
 				$.ajax({
 					type: 'DELETE',
 					url: `/cart/remove-cart-item/orderID/${orderID}/orderItemsID/${orderItemsID}`,

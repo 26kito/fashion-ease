@@ -24,7 +24,7 @@ class Header extends Component
                 ->join('categories', 'products.category_id', 'categories.id')
                 ->select('products.id AS ProductID', 'products.name AS ProductName', 'categories.name AS CategoryName')
                 ->where('products.name', 'LIKE', '%' . $this->keyword . '%')
-                ->get();
+                ->take(3)->get();
         } else {
             $products = "";
         }
