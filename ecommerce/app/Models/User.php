@@ -18,8 +18,13 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone_number',
+        'username',
+        'address',
+        'role_id',
         'password',
     ];
 
@@ -41,12 +46,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
-    public function orders() {
+
+    public function orders()
+    {
         return $this->hasMany(Order::class, 'user_id');
     }
 
-    public function orderItems() {
+    public function orderItems()
+    {
         // return $this->hasMany(OrderItem::class);
         return $this->HasManyThrough(OrderItem::class, Order::class, 'user_id', 'order_id', 'id', 'id');
     }

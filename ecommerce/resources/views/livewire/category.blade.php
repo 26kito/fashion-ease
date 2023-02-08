@@ -19,14 +19,16 @@
             <div class="col-lg-4 col-sm-6">
                 <div class="product-item">
                     <div class="pi-pic">
-                        <a href="{{ url('products/'.$row->id) }}">
-                            <img src="{{ asset('storage/products-images/'.$row->image) }}"
-                                alt="{{ 'image of '.$row->name }}">
+                        <a href="{{ url('product/'.$row->product_id) }}">
+                            <img src="{{ asset('storage/products-images/'.$row->image) }}" alt="{{ 'image of '.$row->name }}">
                         </a>
                         <div class="pi-links">
-                            <a href="{{ url('products/'.$row->id) }}" class="add-card"><i
-                                    class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                            <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                            <a href="{{ url('product/'.$row->product_id) }}" class="add-card">
+                                <i class="flaticon-bag"></i><span>ADD TO CART</span>
+                            </a>
+                            <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
+                                <i class="flaticon-heart"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="pi-text">

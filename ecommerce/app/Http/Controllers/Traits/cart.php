@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +34,7 @@ trait cart
             $price = $prodPrice->price * $qty;
 
             if ($order) {
-                orderItem::updateOrCreate(
+                OrderItem::updateOrCreate(
                     ['order_id' => $order->order_id, 'product_id' => $productId, 'size' => $size],
                     ['qty' => $qty, 'price' => $price]
                 );

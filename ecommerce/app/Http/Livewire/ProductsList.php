@@ -10,6 +10,7 @@ use App\Http\Controllers\Traits\addToWishlist;
 class ProductsList extends Component
 {
     use addToWishlist;
+
     public $amount = 8;
     public $products;
     public $category = NULL;

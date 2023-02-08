@@ -16,11 +16,12 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::insert([
-            'name' => 'kito',
+            'first_name' => 'kito',
             'email' => 'kito@example.com',
             'password' => Hash::make('12345678'),
             'role_id' => 1,
         ]);
+
         User::factory(500)->create();
     }
 }

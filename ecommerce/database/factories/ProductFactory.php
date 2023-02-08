@@ -15,7 +15,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'product_id' => 'P-' . $this->faker->unique()->numerify('######'),
+            'product_id' => 'P-' . date('md') . '-' . $this->faker->unique()->numerify('######'),
             'category_id' => $this->faker->numberBetween(1, 5),
             'code' => $this->faker->unique()->bothify('??#?##'),
             'name' => $this->faker->word(2),

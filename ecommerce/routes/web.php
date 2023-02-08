@@ -37,11 +37,11 @@ Route::middleware('is_user')->group(function () {
     Route::get('/cart/get', [CartController::class, 'getOrderItems']);
     Route::delete('/cart/remove-cart-item/orderID/{orderID}/orderItemsID/{orderItemsID}', [CartController::class, 'removeCartItem']);
 
-    Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart']);
+    Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
     Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
-    Route::get('/products/{id}', [ProductsController::class, 'index']);
+    Route::get('/product/{product_id}', [ProductsController::class, 'index']);
 
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
 

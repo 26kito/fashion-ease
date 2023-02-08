@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Foreach_;
 
 class DetailsProduct extends Component
 {
@@ -17,14 +16,11 @@ class DetailsProduct extends Component
     public function render()
     {
         if ($this->stock == null) {
-            $products = DB::table('detail_products')
+            $stock = DB::table('detail_products')
                 ->where('dp_id', $this->products->id)
-                ->select('size', 'stock')
-                ->get();
+                ->sum('stock');
 
-            foreach ($products as $row) {
-                $this->stock += $row->stock;
-            }
+            $this->stock = $stock;
         }
 
         return view('livewire.details-product');

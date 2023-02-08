@@ -141,7 +141,7 @@
           </div>
           @auth
           <div class="info">
-            <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+            <a href="#" class="d-block">{{ Auth::user()->username }}</a>
           </div>
           @else
           <div class="info">

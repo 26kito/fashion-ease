@@ -17,7 +17,7 @@
                     <input type="checkbox" name="id[]" id="id" value="{{ $row->OrderItemsID }}">
                 </td>
                 <td class="product-col">
-                    <a href="/products/{{ $row->productID }}">
+                    <a href="/product/{{ $row->product_id }}">
                         <img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}">
                     </a>
                     <div class="pc-title">
@@ -25,10 +25,12 @@
                     </div>
                 </td>
                 <td class="quy-col">
-                    <p>{{ $row->qty }}</p>
-                    {{-- <div class="quantity form-group">
-                        <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
-                    </div> --}}
+                    <div class="quantity form-group">
+                        <input wire:click="decrement('{{ $row->OrderItemsID }}')" type="button" class="btn" value="-">
+                        <h4>{{ $row->qty }}</h4>
+                        {{-- <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled> --}}
+                        <input wire:click="increment('{{ $row->OrderItemsID }}')" type="button" class="btn" value="+">
+                    </div>
                 </td>
                 <td class="size-col">
                     <h4>{{ $row->size }}</h4>
