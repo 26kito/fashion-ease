@@ -8,7 +8,7 @@
 <!-- Hero section -->
 <section class="hero-section">
 	<div class="hero-slider owl-carousel">
-		@foreach ($LatestProducts as $row)
+		@foreach ($latestProducts as $row)
 		<div class="hs-item set-bg" data-setbg="{{ asset('asset/img/bg.jpg') }}">
 			<div class="container">
 				<div class="row">
@@ -16,8 +16,8 @@
 						<span>New Arrivals</span>
 						<h2>{{ $row->name }}</h2>
 						<p>{{ $row->description }}</p>
-						<a href="#" class="site-btn sb-line">DISCOVER</a>
-						<a href="{{ 'products/'.$row->id }}" class="site-btn sb-white">ADD TO CART</a>
+						<a href="{{ 'product/'.$row->product_id }}" class="site-btn sb-line">DISCOVER</a>
+						<a href="{{ 'product/'.$row->product_id }}" class="site-btn sb-white">ADD TO CART</a>
 					</div>
 				</div>
 				<div class="offer-card text-white">

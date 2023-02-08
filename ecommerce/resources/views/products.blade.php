@@ -36,11 +36,11 @@
 			@foreach( $relatedProducts as $row )
 			<div class="product-item">
 				<div class="pi-pic">
-					<a href="{{ url('products/'.$row->id) }}">
+					<a href="{{ url('product/'.$row->product_id) }}">
 						<img src="{{ asset('asset/img/products/'.$row->image) }}" alt="">
 					</a>
 					<div class="pi-links">
-						<a href="{{ url('products/'.$row->id) }}" class="add-card">
+						<a href="{{ url('product/'.$row->product_id) }}" class="add-card">
 							<i class="flaticon-bag"></i><span>ADD TO CART</span>
 						</a>
 						<a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>

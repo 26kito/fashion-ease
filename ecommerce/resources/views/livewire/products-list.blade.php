@@ -2,7 +2,8 @@
     <ul class="product-filter-menu">
         @foreach ( $productCategories as $row )
         <li>
-            <a href="#" wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</a>
+            {{-- <a href="#" wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</a> --}}
+            <button wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</button>
         </li>
         @endforeach
     </ul>
@@ -10,14 +11,16 @@
     <div class="col-lg-3 col-sm-6">
         <div class="product-item">
             <div class="pi-pic">
-                <a href="{{ url('products/'.$item->id) }}">
+                <a href="{{ url('product/'.$item->product_id) }}">
                     <img src="{{ asset('asset/img/products/'.$item->image) }}" alt="{{ 'image of '.$item->name }}">
                 </a>
                 <div class="pi-links">
-                    <a href="{{ url('products/'.$item->id) }}" class="add-card add-to-cart"><i
-                            class="flaticon-bag"></i><span>ADD TO CART</span></a>
-                    <a wire:click.prevent='addToWishlist({{$item->id}})' href="#" class="wishlist-btn"><i
-                            class="flaticon-heart"></i></a>
+                    <a href="{{ url('product/'.$item->product_id) }}" class="add-card add-to-cart">
+                        <i class="flaticon-bag"></i><span>ADD TO CART</span>
+                    </a>
+                    <a wire:click.prevent='addToWishlist({{$item->id}})' class="wishlist-btn">
+                        <i class="flaticon-heart"></i>
+                    </a>
                 </div>
             </div>
             <div class="pi-text">

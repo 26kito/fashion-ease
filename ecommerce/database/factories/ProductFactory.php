@@ -15,12 +15,13 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'category_id' => $this->faker->numberBetween(1,5),
-            'code' => $this->faker->bothify('??#?##'),
+            'product_id' => 'P-' . date('md') . '-' . $this->faker->unique()->numerify('######'),
+            'category_id' => $this->faker->numberBetween(1, 5),
+            'code' => $this->faker->unique()->bothify('??#?##'),
             'name' => $this->faker->word(2),
             'varian' => $this->faker->word(1),
             'description' => $this->faker->sentence(2),
-            'image' => $this->faker->randomNumber(1,10).'.jpg',
+            'image' => $this->faker->randomNumber(1, 10) . '.jpg',
             'price' => $this->faker->randomNumber(4),
             'created_at' => Carbon::now()->format('Y-m-d')
         ];

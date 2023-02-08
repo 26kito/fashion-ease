@@ -13,25 +13,26 @@ class CartController extends Controller
         $data['title'] = 'Cart';
         if (Auth::check()) {
             $data['orderItems'] = DB::table('order_items')
-                ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->join('products', 'order_items.product_id', '=', 'products.id')
+                ->join('orders', 'order_items.order_id', 'orders.order_id')
+                ->join('products', 'order_items.product_id', 'products.id')
                 ->select(
                     'orders.id AS OrderID',
                     'order_items.id AS OrderItemsID',
                     'products.id AS ProductID',
                     'products.name AS ProductName',
                     'products.image',
-                    'products.price',
+                    'order_items.price',
                     'order_items.size',
                     'order_items.qty'
                 )
-                ->where('orders.user_id', '=', Auth::id())
+                ->where('orders.user_id', Auth::id())
                 ->get();
-            // dd($data);
+
             $data['total_orders'] = User::withCount('orderItems')->where('id', Auth::id())->first();
             $data['total'] = 0;
+
             foreach ($data['orderItems'] as $row) {
-                $data['total'] = $data['total'] + ($row->price * $row->qty);
+                $data['total'] += $row->price;
             };
 
             return view('cart', $data);
@@ -43,15 +44,15 @@ class CartController extends Controller
     public function getOrderItems()
     {
         $orderItems = DB::table('order_items')
-            ->join('orders', 'order_items.order_id', 'orders.id')
+            ->join('orders', 'order_items.order_id', 'orders.order_id')
             ->join('products', 'order_items.product_id', 'products.id')
             ->select(
-                'orders.id AS OrderID',
+                'orders.order_id AS OrderID',
                 'order_items.id AS OrderItemsID',
                 'products.id AS ProductID',
                 'products.name as ProductName',
                 'products.image',
-                'products.price',
+                'order_items.price',
                 'order_items.size',
                 'order_items.qty'
             )

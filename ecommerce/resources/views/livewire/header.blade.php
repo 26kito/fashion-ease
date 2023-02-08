@@ -8,9 +8,8 @@
                 </a>
             </div>
             <div class="col-xl-6 col-lg-5">
-                <div class="header-search-form">
-                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)">
-                    {{-- <button wire:click='search' id="search-btn"><i class="flaticon-search"></i></button> --}}
+                <div class="header-search-form form-group">
+                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)" class="form-control">
                     <button id="search-btn"><i class="flaticon-search"></i></button>
                 </div>
                 @if ($productsSearch)
@@ -18,7 +17,7 @@
                     @if (count($productsSearch) > 0)
                     @foreach ($productsSearch as $row)
                     <div>
-                        <a href="{{ url('products/'. $row->ProductID) }}" class="search-result-items">
+                        <a href="{{ url('product/'. $row->product_id) }}" class="search-result-items">
                             <i class="flaticon-search"></i>
                             {{ $row->ProductName }}
                         </a>
@@ -38,7 +37,7 @@
                         <div class="nav-item dropdown d-inline-block">
                             <a class="nav-link dropdown-toggle profile-dropdown" id="dropdownUser"
                                 data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                                {{ __('Hi! '). Auth::user()->name }}
+                                {{ __('Hi! '). Auth::user()->first_name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownUser">
                                 <a class="dropdown-item" href="#">My Profile</a>
@@ -65,9 +64,9 @@
                         <div class="shopping-card">
                             <i class="flaticon-bag"></i>
                             @auth
-                            @if ( Auth::user()->level === 'USER' )
-                            @if ( $cartQty->qty > 0 )
-                            <span class="qty">{{ $cartQty->qty }}</span>
+                            @if ( Auth::user()->role_id === 2 )
+                            @if ( $cartQty > 0 )
+                            <span class="qty">{{ $cartQty }}</span>
                             @endif
                             @endif
                             @endauth

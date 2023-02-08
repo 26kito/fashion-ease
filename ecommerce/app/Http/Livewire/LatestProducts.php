@@ -2,24 +2,35 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
 use App\Models\Product;
+use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Traits\addToWishlist;
 
 class LatestProducts extends Component
 {
-    public $products;    
+    use addToWishlist;
 
-    public function mount() {
-        $this->products = Product::latest('id')->get();
-    }
+    public $products;
 
     public function render()
     {
+        $this->products = DB::table('products')
+            ->orderBy('created_at', 'DESC')
+            ->take(5)
+            ->get();
+
         return view('livewire.latest-products');
     }
 
-    public function addToCart($id) {
+    public function addToCart($id)
+    {
         // Emit u/ lempar function, param 1 = nama, param 2 opsional
         $this->emit('addToCart', $id);
+    }
+
+    public function addToWishlist($productID)
+    {
+        $this->addToWishlistTrait($productID);
     }
 }

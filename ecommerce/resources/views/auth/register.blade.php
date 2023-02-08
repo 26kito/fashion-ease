@@ -7,7 +7,7 @@
 @section('content')
     <div class="register-box">
         <div class="register-logo">
-            <a href="#"><b>Admin</b>LTE</a>
+            <a href="#"><b>E-</b>Commerce</a>
         </div>
 
         <div class="card">
@@ -78,7 +78,7 @@
                     </div>
                 </form>
 
-                <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
+                <a href="{{ route('login') }}" class="text-center">I already have a account</a>
             </div>
         </div>
     </div>

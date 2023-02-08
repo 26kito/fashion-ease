@@ -37,12 +37,12 @@
 @endif
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">User</h3>
             </div>
             <div class="card-body">
-                <a href="{{url('admin/form/user/insert')}}" class="btn btn-success">Insert</a>
+                {{-- <a href="{{url('admin/form/user/insert')}}" class="btn btn-success">Insert</a> --}}
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -53,13 +53,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
+                        @foreach($users as $index => $row)
                         <tr>
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td><a href="{{url('admin/edit/user/'.$user->id)}}" class="btn btn-primary">Edit</a></td>
-                            <td><a href="{{url('admin/delete/user/'.$user->id)}}" class="btn btn-danger"
+                            <td>{{ $users->firstItem() + $index }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->email }}</td>
+                            <td>
+                                <a href="{{url('admin/edit/user/'.$row->id)}}" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                <a href="{{url('admin/delete/user/'.$row->id)}}" class="btn btn-danger"
                                     onclick="return confirm('Are you sure want do delete this data? It cannot be undo')">Delete</a>
                             </td>
                         </tr>

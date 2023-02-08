@@ -923,6 +923,7 @@ a#dropdownUser {
     padding-top: 9px;
     overflow: hidden;
     color: #000;
+    cursor: pointer;
     position: relative;
     -webkit-box-shadow: 1px 0 32px rgba(0, 0, 0, 0.2);
     box-shadow: 1px 0 32px rgba(0, 0, 0, 0.2);
@@ -1007,7 +1008,19 @@ a#dropdownUser {
     display: inline-block;
 }
 
-.product-filter-menu li a {
+/* .product-filter-menu li a {
+    color: #111111;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #ebebeb;
+    display: block;
+    width: 100%;
+    padding: 10px 34px;
+    border-radius: 31px;
+} */
+
+.product-filter-menu li button {
     color: #111111;
     font-size: 12px;
     font-weight: 700;
@@ -1865,7 +1878,7 @@ a#dropdownUser {
 .cart-table .product-col .pc-title h4 {
     font-size: 16px;
     color: #414141;
-    font-weight: 700;
+    /* font-weight: 700; */
     margin-bottom: 3px;
 }
 
@@ -1902,6 +1915,7 @@ a#dropdownUser {
 }
 
 .cart-table .size-col h4,
+.cart-table .quy-col h4,
 .cart-table .total-col h4 {
     font-size: 18px;
     color: #414141;
@@ -1992,7 +2006,7 @@ a#dropdownUser {
     color: #414141;
 }
 
-.checkout-form input[type="text"] {
+.checkout-form input {
     width: 100%;
     height: 44px;
     border: none;
@@ -2002,6 +2016,17 @@ a#dropdownUser {
     margin-bottom: 20px;
     font-size: 14px;
 }
+
+/* .checkout-form input[type="number"] {
+    width: 100%;
+    height: 44px;
+    border: none;
+    padding: 0 18px;
+    background: #f0f0f0;
+    border-radius: 40px;
+    margin-bottom: 20px;
+    font-size: 14px;
+} */
 
 .checkout-form .address-inputs {
     margin-bottom: 54px;

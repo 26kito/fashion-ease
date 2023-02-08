@@ -19,21 +19,20 @@
     </div>
     <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
-            {{-- <h1>{{ count($products) }}</h1> --}}
             <p>Menampilkan 1 - 60 barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>"</p>
             @foreach ($products as $row)
             <div class="col-lg-4 col-sm-6">
                 <div class="product-item">
                     <div class="pi-pic">
-                        <a href="{{ url('products/'.$row->id) }}">
+                        <a href="{{ url('product/'.$row->product_id) }}">
                             <img src="{{ asset('storage/products-images/'.$row->image) }}"
                                 alt="{{ 'image of '.$row->name }}">
                         </a>
                         <div class="pi-links">
-                            <a href="{{ url('products/'.$row->id) }}" class="add-card">
+                            <a href="{{ url('product/'.$row->product_id) }}" class="add-card">
                                 <i class="flaticon-bag"></i><span>ADD TO CART</span>
                             </a>
-                            <a href="#" class="wishlist-btn">
+                            <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
                                 <i class="flaticon-heart"></i>
                             </a>
                         </div>

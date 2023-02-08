@@ -43,35 +43,33 @@
                 <h3 class="card-title">Products List</h3>
             </div>
             <div class="card-body">
-                <a href="{{url('admin/form/product/insert')}}" class="btn btn-success">Insert</a>
+                {{-- <a href="{{url('admin/form/product/insert')}}" class="btn btn-success">Insert</a> --}}
                 <table id="table-content" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th style="text-align: center">No.</th>
                             <th style="text-align: center">Code</th>
                             <th style="text-align: center">Name</th>
-                            <th style="text-align: center">Stock</th>
                             <th style="text-align: center">Varian</th>
                             <th style="text-align: center">Description</th>
                             <th colspan="2" style="text-align: center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
+                        @foreach($products as $index => $row)
                         <tr>
-                            <td>{{ $product->id }}</td>
-                            <td>{{ $product->code }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->stock }}</td>
-                            <td>{{ $product->varian }}</td>
-                            <td>{{ $product->description }}</td>
+                            <td>{{ $products->firstItem() + $index }}</td>
+                            <td>{{ $row->code }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->varian }}</td>
+                            <td>{{ $row->description }}</td>
                             <td>
-                                <a href="{{ url('admin/edit/product/'.$product->id) }}" class="btn btn-primary">
+                                <a href="{{ url('admin/edit/product/'.$row->id) }}" class="btn btn-primary">
                                     Edit
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ url('admin/delete/product/'.$product->id) }}" class="btn btn-danger"
+                                <a href="{{ url('admin/delete/product/'.$row->id) }}" class="btn btn-danger"
                                     onclick="return confirm('Are you sure want do delete this data? It cannot be undo')">
                                     Delete
                                 </a>

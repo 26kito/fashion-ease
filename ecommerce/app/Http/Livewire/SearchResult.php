@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Traits\addToWishlist;
 
 class SearchResult extends Component
 {
+    use addToWishlist;
+
     public $categoryID;
     public $keyword;
     public $amount = 6;
@@ -70,5 +73,10 @@ class SearchResult extends Component
     public function refresh()
     {
         $this->reset('amount');
+    }
+
+    public function addToWishlist($productID)
+    {
+        $this->addToWishlistTrait($productID);
     }
 }

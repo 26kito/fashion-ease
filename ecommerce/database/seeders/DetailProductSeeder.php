@@ -14,6 +14,6 @@ class DetailProductSeeder extends Seeder
      */
     public function run()
     {
-        DetailProduct::factory(5)->create();
+        DetailProduct::factory(800)->create();
     }
 }
