@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        foreach(range(1,5) as $index) {
+        foreach(range(1,8) as $index) {
             DB::table('categories')->insert([
                 'name' => 'kategori '. $index
             ]);

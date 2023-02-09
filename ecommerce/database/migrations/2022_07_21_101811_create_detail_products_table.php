@@ -19,6 +19,7 @@ class CreateDetailProductsTable extends Migration
             $table->string('size');
             $table->integer('stock');
 
+            $table->unique(['dp_id', 'size']);
             $table->foreign('dp_id')->references('id')->on('products');
         });
     }

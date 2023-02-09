@@ -14,11 +14,10 @@ class TotalPriceCart extends Component
 
     public function render()
     {
-        $total = DB::table('order_items')
-            ->join('orders', 'order_items.order_id', 'orders.order_id')
-            ->where('orders.user_id', Auth::id())
-            // ->sum('order_items.price');
-            ->selectRaw("SUM(order_items.price * order_items.qty) AS price")
+        $total = DB::table('carts')
+            ->join('products', 'carts.product_id', 'products.id')
+            ->where('carts.user_id', Auth::id())
+            ->selectRaw("SUM(products.price * carts.qty) AS price")
             ->first();
 
         $this->total = rupiah($total->price);

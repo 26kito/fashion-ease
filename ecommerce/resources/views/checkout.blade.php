@@ -94,7 +94,7 @@
 				<div class="checkout-cart">
 					<h3>Your Cart</h3>
 					<ul class="product-list">
-						@foreach ( $order_items as $row )
+						@foreach ( $orderItems as $row )
 						<li>
 							<div class="pl-thumb"><img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt=""></div>
 							<h6>{{ $row->prodName }}</h6>

@@ -12,6 +12,7 @@ class DetailsProduct extends Component
     public $size;
     public $defaultSize;
     public $stock;
+    public $isDisabled = false;
 
     public function render()
     {
@@ -38,6 +39,7 @@ class DetailsProduct extends Component
                 'message' => 'Kamu belum memilih size nih'
             ]);
         }
+
         if (!$qty) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
@@ -54,11 +56,13 @@ class DetailsProduct extends Component
     public function increment()
     {
         if ($this->size) {
-            if ($this->stock !== '0') {
-                $this->qty++;
+            if ($this->stock != '0') {
+                if ($this->qty < $this->stock) {
+                    $this->qty++;
 
-                if ($this->qty >= 5) {
-                    return $this->qty = 5;
+                    if ($this->qty >= 5) {
+                        return $this->qty = 5;
+                    }
                 }
             } else {
                 $this->reset('qty');
@@ -79,7 +83,7 @@ class DetailsProduct extends Component
     {
         if ($this->size) {
             if ($this->qty) {
-                if ($this->stock !== '0') {
+                if ($this->stock != '0') {
                     $this->qty--;
 
                     if ($this->qty <= 1) {

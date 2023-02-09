@@ -11,10 +11,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ( $orderItems as $row )
+            @foreach ( $carts as $row )
             <tr>
                 <td>
-                    <input type="checkbox" name="id[]" id="id" value="{{ $row->OrderItemsID }}">
+                    <input type="checkbox" name="id[]" id="id" value="{{ $row->CartID }}">
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
@@ -22,14 +22,15 @@
                     </a>
                     <div class="pc-title">
                         <h4>{{ $row->prodName }}</h4>
+                        <p>{{ "Sisa stok: ". $stock }}</p>
                     </div>
                 </td>
                 <td class="quy-col">
                     <div class="quantity form-group">
-                        <input wire:click="decrement('{{ $row->OrderItemsID }}')" type="button" class="btn" value="-">
-                        <h4>{{ $row->qty }}</h4>
-                        {{-- <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled> --}}
-                        <input wire:click="increment('{{ $row->OrderItemsID }}')" type="button" class="btn" value="+">
+                        {{-- <h4>{{ $row->qty }}</h4> --}}
+                        <input wire:click="decrement('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button" class="btn" value="-">
+                        <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
+                        <input wire:click="increment('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button" class="btn" value="+">
                     </div>
                 </td>
                 <td class="size-col">
@@ -39,7 +40,7 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    <a href="#" wire:click.prevent="remove('{{ $row->OrderID }}', '{{ $row->OrderItemsID }}')" class="btn btn-danger">
+                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()" wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')" class="btn btn-danger">
                         Hapus
                     </a>
                 </td>

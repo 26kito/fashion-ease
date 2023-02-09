@@ -29,7 +29,7 @@
                     <p>Quantity</p>
                     <input wire:click='decrement' type="button" class="btn" value="-">
                     <input wire:model.lazy='qty' type="text" class="qty" readonly disabled value="{{ $qty }}">
-                    <input wire:click='increment' type="button" class="btn" value="+">
+                    <input wire:click='increment' type="button" {{ $isDisabled ? 'disabled' : '' }} class="btn" value="+">
                 </div>
                 <button type="submit" class="site-btn">Buy Now</button>
             </form>

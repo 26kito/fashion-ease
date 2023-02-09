@@ -20,7 +20,7 @@
 <!-- Page info end -->
 
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="post">
+<form action="{{ route('checkout') }}" method="POST">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
@@ -28,7 +28,7 @@
 				<div class="col-lg-8">
 					<div class="cart-table">
 						<h3>Your Cart</h3>
-						@livewire('cart')
+						@livewire('cart', ['page' => request()->fullUrl() ])
 						{{-- <div class="cart-table-warp">
 							<table>
 								<thead>
@@ -57,7 +57,7 @@
 						<button>Submit</button>
 					</div>
 					<div class="">
-						@if ( count($orderItems) > 0 )
+						@if ( $totalOrders > 0 )
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif
 						<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
@@ -78,101 +78,8 @@
 @endif
 
 <script>
-	$(document).ready(() => {
-		$.ajax({
-			type: "GET",
-			url: `/cart/get`,
-			success: (result) => {
-				$('#content').html(table(result));
-			}
-		})
-	})
-
 	if (status == 400) {
 		toastr.info('Pilih pesanan yang mau di checkout dulu yaa')
 	}
-
-	function table(data) {
-		let table = ``;
-		let baseImg = "asset/img/cart/";
-		data.forEach((data) => {
-			table += 
-			`
-			<tr>
-				<td>
-					<input type="checkbox" name="id[]" id="orderItemsID" class="cb"
-						value="${data.OrderItemsID}">
-				</td>
-				<td class="product-col">
-					<a href="/products/${data.ProductID}">
-						<img src="${baseImg + data.image}">
-					</a>
-					<div class="pc-title">
-						<h4>${data.ProductName}</h4>
-					</div>
-				</td>
-				<td class="quy-col">
-					<div class="quantity form-group">
-						<input type="text" class="qty" value="${data.qty}" readonly disabled>
-					</div>
-				</td>
-				<td class="size-col">
-					<h4>${data.size}</h4>
-				</td>
-				<td class="total-col">
-					<h4>${data.price}</h4>
-				</td>
-				<td>
-					<button data-order-items-id="${data.OrderItemsID}" data-order-id="${data.OrderID}" class="btn btn-danger delete">
-					Hapus
-					</button>
-				</td>
-			</tr>
-			`;
-		})
-		return table;
-	}
-
-	// function totalPrice(data) {
-	// 	let total = `<h6>Total<span>${data}</span></h6>`;
-
-	// 	return total;
-	// }
-
-	$(document).on('click', (e) => {
-		let orderID = $(e.target).data('order-id');
-		let orderItemsID = $(e.target).data('order-items-id');
-
-		if ($(e.target).hasClass('delete')) {
-			if (confirm('kmu yakin ingin menghapus pesanan ini?')) {
-				$.ajaxSetup({
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					}
-				});
-
-				$.ajax({
-					type: 'DELETE',
-					url: `/cart/remove-cart-item/orderID/${orderID}/orderItemsID/${orderItemsID}`,
-					success: (result) => {
-						$('#content').html(table(result.data));
-						if (result.success == true) {
-							toastr.success(result.message);
-							toastr.options = {
-								"preventDuplicates": true,
-							};
-						} else {
-							toastr.error(result.message);
-							toastr.options = {
-								"preventDuplicates": true,
-							};
-						}
-					}
-				})
-			}
-
-			e.preventDefault();
-		}
-	})
 </script>
 @endpush
