@@ -10,9 +10,10 @@ class CartController extends Controller
 {
     public function index()
     {
-        $data['title'] = 'Cart';
         if (Auth::check()) {
-            $data['orderItems'] = DB::table('order_items')
+            $title = 'Cart';
+
+            $orderItems = DB::table('order_items')
                 ->join('orders', 'order_items.order_id', 'orders.order_id')
                 ->join('products', 'order_items.product_id', 'products.id')
                 ->select(
@@ -28,14 +29,9 @@ class CartController extends Controller
                 ->where('orders.user_id', Auth::id())
                 ->get();
 
-            $data['total_orders'] = User::withCount('orderItems')->where('id', Auth::id())->first();
-            $data['total'] = 0;
+            $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
 
-            foreach ($data['orderItems'] as $row) {
-                $data['total'] += $row->price;
-            };
-
-            return view('cart', $data);
+            return view('cart', ['title' => $title, 'orderItems' => $orderItems, 'totalOrders' => $totalOrders]);
         } else {
             return redirect('login');
         }
