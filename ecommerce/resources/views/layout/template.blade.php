@@ -60,11 +60,13 @@
 				toastr.success(event.detail.message);
 				toastr.options = {
 					"preventDuplicates": true,
+					"positionClass": "toast-top-center",
 				};
 			} else {
 				toastr.error(event.detail.message);
 				toastr.options = {
 					"preventDuplicates": true,
+					"positionClass": "toast-top-center",
 				};
 			}
 		})

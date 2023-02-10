@@ -1846,6 +1846,20 @@ a#dropdownUser {
     padding-right: 20px;
 }
 
+/* .select-all {
+    display: flex;
+    margin-bottom: 40px;
+} */
+
+.select-all .select-all-checkbox .select-all-text {
+    cursor: pointer;
+}
+
+.select-all .delete-all-cart-items {
+    cursor: pointer;
+    display: none;
+}
+
 .cart-table .product-col {
     display: table;
     margin-bottom: 19px;
@@ -1873,8 +1887,7 @@ a#dropdownUser {
 
 .cart-table .product-col .pc-title p {
     margin-bottom: 0;
-    font-size: 16px;
-    color: #414141;
+    font-size: 13px;
 }
 
 .cart-table .quy-col {

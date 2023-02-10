@@ -56,7 +56,7 @@
                         @foreach($users as $index => $row)
                         <tr>
                             <td>{{ $users->firstItem() + $index }}</td>
-                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->first_name. ' '. $row->last_name}}</td>
                             <td>{{ $row->email }}</td>
                             <td>
                                 <a href="{{url('admin/edit/user/'.$row->id)}}" class="btn btn-primary">Edit</a>
