@@ -5,12 +5,20 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Traits\addToWishlist;
 
 class Cart extends Component
 {
+    use addToWishlist;
+
     public $carts = [];
     public $page;
     public $stock;
+
+    public $listeners = [
+        'addAllCartItemsToWishlist' => 'addAllCartItemsToWishlist',
+        'removeAllCartItems' => 'removeAllCartItems'
+    ];
 
     public function mount($page)
     {
@@ -19,34 +27,44 @@ class Cart extends Component
 
     public function render()
     {
-        $carts = DB::table('carts')
+        $this->carts = DB::table('carts')
             ->join('products', 'carts.product_id', 'products.id')
+            ->join('detail_products', function ($join) {
+                $join->on('carts.product_id', 'detail_products.dp_id')
+                    ->on('detail_products.size', 'carts.size');
+            })
             ->where('carts.user_id', Auth::id())
             ->select(
                 'carts.id AS CartID',
                 'products.id AS ProductID',
                 'products.product_id',
-                'products.name as prodName',
+                'products.name AS ProdName',
+                'detail_products.stock AS AvailStock',
                 'products.image',
                 DB::raw("products.price * carts.qty AS price"),
                 'carts.size',
                 'carts.qty'
             )
             ->get();
-        // $carts[0]->stock = 'haha';
-        // dd($carts);
-
-        foreach ($carts as $row) {
-            $availStock = DB::table('detail_products')
-                ->where('dp_id', $row->ProductID)
-                ->where('size', $row->size)
-                ->selectRaw("SUM(stock) AS stock")
-                ->first();
-
-            $carts['stock'] = $availStock->stock;
-        }
 
         return view('livewire.cart');
+    }
+
+    public function addAllCartItemsToWishlist()
+    {
+        $this->addAllCartItemsToWishlistTrait();
+    }
+
+    public function removeAllCartItems()
+    {
+        DB::table('carts')
+            ->where('carts.user_id', Auth::id())
+            ->delete();
+
+        $this->emit('refreshTotalPrice');
+        $this->emit('refreshCart');
+
+        return redirect($this->page)->with('status', 200);
     }
 
     public function remove($CartID, $ProductID)
@@ -64,15 +82,10 @@ class Cart extends Component
                 ->where('carts.product_id', $ProductID)
                 ->delete();
 
-            $this->dispatchBrowserEvent('toastr', [
-                'status' => 'success',
-                'message' => 'Pesanan berhasil dihapus'
-            ]);
-
             $this->emit('refreshTotalPrice');
             $this->emit('refreshCart');
 
-            return redirect($this->page);
+            return redirect($this->page)->with('status', 200);
         } else {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',

@@ -32,7 +32,7 @@ class ProductsList extends Component
 
         $productCategories = DB::table('categories')
             ->select('id', 'name')
-            ->get();
+            ->take(6)->get();
 
         return view('livewire.products-list', ['products' => $products, 'totalProducts' => $totalProducts, 'productCategories' => $productCategories]);
     }

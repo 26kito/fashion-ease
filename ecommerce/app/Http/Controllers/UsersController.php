@@ -10,8 +10,7 @@ class UsersController extends Controller
     public function usersList()
     {
         $title = 'Users List';
-        $users = User::where('level', 'USER')->paginate(30);
-        // $data['users'] = $data['users']->firstItem();
+        $users = User::where('role_id', 2)->paginate(30);
 
         return view('admin.user.list', ['title' => $title, 'users' => $users]);
     }

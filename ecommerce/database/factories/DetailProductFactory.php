@@ -14,8 +14,8 @@ class DetailProductFactory extends Factory
     public function definition()
     {
         return [
-            'dp_id' => $this->faker->unique()->numberBetween(1, 1000),
-            'size' => $this->faker->randomElement(['S', 'M', 'L', 'XL']),
+            'dp_id' => $this->faker->unique()->numberBetween(1, 200),
+            'size' => $this->faker->randomElement(['S', 'M', 'L', 'XL'], 4),
             'stock' => $this->faker->numberBetween(1, 20)
         ];
     }

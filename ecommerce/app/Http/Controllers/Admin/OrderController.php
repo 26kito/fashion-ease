@@ -17,8 +17,8 @@ class OrderController extends Controller
     {
         $data['title'] = 'Order Page';
         $order = DB::table('orders')
-            ->join('users', 'orders.user_id', '=', 'users.id')
-            ->select('orders.id', 'users.name', 'orders.order_date')
+            ->join('users', 'orders.user_id', 'users.id')
+            ->select('orders.id', 'users.first_name', 'orders.order_date')
             ->get();
 
         return view('admin.order.dashboard', compact('order'), $data);

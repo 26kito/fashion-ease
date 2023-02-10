@@ -27,28 +27,14 @@
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="cart-table">
+						@if ( $totalOrders > 0 )
 						<h3>Your Cart</h3>
 						@livewire('cart', ['page' => request()->fullUrl() ])
-						{{-- <div class="cart-table-warp">
-							<table>
-								<thead>
-									<tr>
-										<th></th>
-										<th class="product-th">Product</th>
-										<th class="quy-th">Quantity</th>
-										<th class="size-th">Size</th>
-										<th class="total-th">Price</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody id="content">
-								</tbody>
-							</table>
-						</div> --}}
 						@livewire('total-price-cart')
-						{{-- <div class="total-cost" id="total-cost">
-							<h6>Total<span>{{ rupiah($total) }}</span></h6>
-						</div> --}}
+						@else
+						<h3 class="text-center">Duh, keranjangmu kosong nih:(</h3>
+						<p class="text-center">Yuk isi keranjangmu dengan barang-barang impianmu!</p>
+						@endif
 					</div>
 				</div>
 				<div class="col-lg-4 card-right">
@@ -76,7 +62,22 @@
 	let status = 400;
 </script>
 @endif
+@if (Session::has('status'))
+<script>
+    let status = {{ Session::get('status') }}
 
+    if (status == 200) {
+        let event = new CustomEvent('toastr', {
+            'detail': {
+                'status': 'success', 
+                'message': 'Pesanan berhasil dihapus'
+            }
+        });
+
+        window.dispatchEvent(event);
+	}
+</script>
+@endif
 <script>
 	if (status == 400) {
 		toastr.info('Pilih pesanan yang mau di checkout dulu yaa')
