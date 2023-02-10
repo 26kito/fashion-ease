@@ -33,8 +33,6 @@ class Cart extends Component
                 'carts.qty'
             )
             ->get();
-        // $carts[0]->stock = 'haha';
-        // dd($carts);
 
         foreach ($carts as $row) {
             $availStock = DB::table('detail_products')

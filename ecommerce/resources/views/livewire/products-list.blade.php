@@ -1,9 +1,11 @@
 <div class="row">
     <ul class="product-filter-menu">
+        <li>
+            <a href="{{ route('category') }}">Lihat semua kategori</a>
+        </li>
         @foreach ( $productCategories as $row )
         <li>
-            {{-- <a href="#" wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</a> --}}
-            <button wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</button>
+            <a wire:click.prevent='category({{ $row->id }})'>{{ $row->name }}</a>
         </li>
         @endforeach
     </ul>
@@ -30,9 +32,8 @@
         </div>
     </div>
     @endforeach
-    @if ( count($products) < $totalProducts ) 
-    <div class="text-center pt-5">
+    @if ( count($products) < $totalProducts ) <div class="text-center pt-5">
         <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
-    </div>
-    @endif
+</div>
+@endif
 </div>
