@@ -29,7 +29,7 @@ class Cart extends Component
     {
         $this->carts = DB::table('carts')
             ->join('products', 'carts.product_id', 'products.id')
-            ->join('detail_products', function ($join) {
+            ->leftJoin('detail_products', function ($join) {
                 $join->on('carts.product_id', 'detail_products.dp_id')
                     ->on('detail_products.size', 'carts.size');
             })
@@ -39,7 +39,7 @@ class Cart extends Component
                 'products.id AS ProductID',
                 'products.product_id',
                 'products.name AS ProdName',
-                'detail_products.stock AS AvailStock',
+                DB::raw("IFNULL(detail_products.stock, 0) AS AvailStock"),
                 'products.image',
                 DB::raw("products.price * carts.qty AS price"),
                 'carts.size',
