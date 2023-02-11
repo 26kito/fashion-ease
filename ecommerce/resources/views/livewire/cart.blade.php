@@ -29,9 +29,10 @@
         <a onclick="confirmDelete()" class="delete-all-cart-items text-danger ms-auto">Hapus</a>
     </div>
 
-    <table>
+    <table id="cartform">
         <thead>
             <tr>
+                <th></th>
                 <th class="product-th">Product</th>
                 <th class="quy-th">Quantity</th>
                 <th class="size-th">Size</th>
@@ -43,8 +44,8 @@
             @foreach ( $carts as $row )
             <tr>
                 <td>
-                    <input type="checkbox" name="id[]" id="id[{{$row->CartID}}]" value="{{ $row->CartID }}"
-                        class="cartid">
+                    <input type="checkbox" name="cartid" id="id[{{$row->CartID}}]" value="{{ $row->CartID }}" 
+                    class="cartid {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{ ($row->AvailStock == 0) ? 'disabled' : '' }}>
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
@@ -71,9 +72,7 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()"
-                        wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')"
-                        class="btn btn-danger">
+                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()" wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')" class="btn btn-danger">
                         Hapus
                     </a>
                 </td>
@@ -103,10 +102,10 @@
 <script>
     $('#select-all').on('click', () => {
         if ($('#select-all').is(':checked')) {
-            $('.cartid').prop('checked', true);
+            $('.availstock').prop('checked', true);
             $('.delete-all-cart-items').show();
         } else {
-            $('.cartid').prop('checked', false);
+            $('.availstock').prop('checked', false);
             $('.delete-all-cart-items').hide();
         }
     })
