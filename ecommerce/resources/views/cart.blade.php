@@ -38,11 +38,12 @@
 					</div>
 				</div>
 				<div class="col-lg-4 card-right">
-					<div class="promo-code-form">
+					@livewire('promo')
+					{{-- <div class="promo-code-form">
 						<input type="text" placeholder="Enter promo code">
 						<button>Submit</button>
-					</div>
-					<div class="">
+					</div> --}}
+					<div>
 						@if ( $totalOrders > 0 )
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif

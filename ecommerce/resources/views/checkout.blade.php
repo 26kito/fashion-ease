@@ -97,17 +97,14 @@
 						@foreach ( $orderItems as $row )
 						<li>
 							<div class="pl-thumb"><img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt=""></div>
-							<h6>{{ $row->prodName }}</h6>
+							<h6>{{ $row->ProdName }}</h6>
 							<p>Size : {{ $row->size }}</p>
-							<p>{{ rupiah($row->price) }}</p>
+							<p>Qty : {{ $row->qty }}</p>
+							<p>{{ rupiah($row->Price) }}</p>
 						</li>
 						@endforeach
 					</ul>
-					<ul class="price-list">
-						<li>Total<span>{{ rupiah($total) }}</span></li>
-						<li>Shipping<span>free</span></li>
-						<li class="total">Total<span>{{ rupiah($total) }}</span></li>
-					</ul>
+					@livewire('total-price-checkout', ['cartItemsID' => $cartItemsID])
 				</div>
 			</div>
 		</div>
