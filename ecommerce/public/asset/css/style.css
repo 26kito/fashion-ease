@@ -320,7 +320,6 @@ ol {
 }
 
 .accordion-area .panel-body p {
-    color: #8f8f8f;
     margin-bottom: 25px;
     line-height: 1.8;
 }
@@ -1809,7 +1808,7 @@ a#dropdownUser {
 }
 
 .cart-table {
-    padding: 40px 34px 0;
+    /* padding: 40px 34px 0; */
     background: #f0f0f0;
     border-radius: 27px;
     overflow: hidden;
@@ -1846,18 +1845,27 @@ a#dropdownUser {
     padding-right: 20px;
 }
 
-/* .select-all {
-    display: flex;
-    margin-bottom: 40px;
-} */
+.cart-table h3 {
+    margin-top: 30px !important;
+    margin-left: 30px !important;
+}
+
+.cart-table-warp {
+    margin-left: 30px !important;
+}
 
 .select-all .select-all-checkbox .select-all-text {
+    cursor: pointer;
+}
+
+.select-all .select-all-checkbox input {
     cursor: pointer;
 }
 
 .select-all .delete-all-cart-items {
     cursor: pointer;
     display: none;
+    margin-left: 70% !important;
 }
 
 .cart-table .product-col {
@@ -1955,11 +1963,11 @@ a#dropdownUser {
 }
 
 .promo-code-form {
-    position: relative;
-    margin-bottom: 14px;
+    position: block;
+    margin-bottom: 40px;
 }
 
-.promo-code-form input {
+/* .promo-code-form input {
     width: 100%;
     height: 58px;
     border: 2px solid #f0f0f0;
@@ -1981,7 +1989,7 @@ a#dropdownUser {
     font-weight: 700;
     color: #f51167;
     cursor: pointer;
-}
+} */
 
 /* ----------------
   Checkout Page

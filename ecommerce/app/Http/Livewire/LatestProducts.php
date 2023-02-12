@@ -16,9 +16,12 @@ class LatestProducts extends Component
     public function render()
     {
         $this->products = DB::table('products')
-            ->orderBy('created_at', 'DESC')
+            ->join('detail_products', 'products.id', 'detail_products.dp_id')
+            ->groupBy('products.id')
+            ->havingRaw("SUM(detail_products.stock) != 0")
+            ->orderByDesc('products.created_at')
             ->take(5)
-            ->get();
+            ->get()->toArray();
 
         return view('livewire.latest-products');
     }

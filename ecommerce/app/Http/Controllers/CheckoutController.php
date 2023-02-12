@@ -11,7 +11,7 @@ class CheckoutController extends Controller
     public function index(Request $request)
     {
         if (Auth::check()) {
-            $cartItemsID = $request->id;
+            $cartItemsID = $request->cartid;
             $title = 'Checkout';
 
             if ($cartItemsID) {
@@ -19,10 +19,19 @@ class CheckoutController extends Controller
                     ->join('products', 'carts.product_id', 'products.id')
                     ->where('carts.user_id', Auth::id())
                     ->whereIn('carts.id', $cartItemsID)
-                    ->select('orders.id as orderId', 'products.name as prodName', 'products.image', 'carts.size', 'order_items.price', 'order_items.qty')
+                    ->select(
+                        'carts.id AS CartID',
+                        'products.id AS ProductID',
+                        'products.product_id',
+                        'products.name AS ProdName',
+                        'products.image',
+                        DB::raw("products.price * carts.qty AS Price"),
+                        'carts.size',
+                        'carts.qty'
+                    )
                     ->get();
 
-                return view('checkout', ['title' => $title, 'orderItems' => $orderItems]);
+                return view('checkout', ['title' => $title, 'orderItems' => $orderItems, 'cartItemsID' => $cartItemsID]);
             } else {
                 $status = 400;
 

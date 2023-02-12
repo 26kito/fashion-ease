@@ -11,6 +11,7 @@ class DetailsProduct extends Component
     public $products;
     public $size;
     public $defaultSize;
+    public $defaultStock;
     public $stock;
     public $isDisabled = false;
 
@@ -23,6 +24,10 @@ class DetailsProduct extends Component
 
             $this->stock = $stock;
         }
+
+        $this->defaultStock = DB::table('detail_products')
+            ->where('dp_id', $this->products->id)
+            ->sum('stock');
 
         return view('livewire.details-product');
     }
