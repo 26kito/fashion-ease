@@ -2003,11 +2003,11 @@ a#dropdownUser {
     border-radius: 50px;
     background: #3b3b3b;
     padding: 21px 29px 20px;
-    margin-bottom: 66px;
+    margin-bottom: 26px;
 }
 
 .checkout-form p {
-    font-size: 16px;
+    /* font-size: 16px; */
     color: #414141;
 }
 
