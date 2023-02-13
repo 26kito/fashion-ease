@@ -25,38 +25,8 @@
 		<div class="row">
 			<div class="col-lg-8 order-2 order-lg-1">
 				<form class="checkout-form">
-					<div class="cf-title">Billing Address</div>
-					<div class="row">
-						<div class="col-md-7">
-							<p>*Billing Information</p>
-						</div>
-						<div class="col-md-5">
-							<div class="cf-radio-btns address-rb">
-								<div class="cfr-item">
-									<input type="radio" name="pm" id="one">
-									<label for="one">Use my regular address</label>
-								</div>
-								<div class="cfr-item">
-									<input type="radio" name="pm" id="two">
-									<label for="two">Use a different address</label>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row address-inputs">
-						<div class="col-md-12">
-							<input type="text" placeholder="Address">
-							<input type="text" placeholder="Address line 2">
-							<input type="text" placeholder="Country">
-						</div>
-						<div class="col-md-6 form-group">
-							<input type="text" class="form-control" placeholder="Zip code">
-						</div>
-						<div class="col-md-6 form-group">
-							<input type="tel" class="form-control" placeholder="Nomor HP" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
-						</div>
-					</div>
-					<div class="cf-title">Delievery Info</div>
+					@livewire('delivery-address')
+					<div class="cf-title">Delivery Info</div>
 					<div class="row shipping-btns">
 						<div class="col-6">
 							<h4>Standard</h4>

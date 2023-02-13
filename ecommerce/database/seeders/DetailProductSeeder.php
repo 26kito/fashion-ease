@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\DetailProduct;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class DetailProductSeeder extends Seeder
 {
@@ -14,6 +16,6 @@ class DetailProductSeeder extends Seeder
      */
     public function run()
     {
-        DetailProduct::factory(150)->create();
+        DetailProduct::factory(700)->create();
     }
 }

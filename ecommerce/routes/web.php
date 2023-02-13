@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
@@ -24,7 +25,8 @@ use App\Http\Controllers\WishlistController;
 |
 */
 
-Auth::routes();
+// Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::middleware('is_user')->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -93,4 +95,9 @@ Route::middleware(['is_admin'])->group(function () {
             Route::post('/lihat-pesanan/{id}', [App\Http\Controllers\Admin\OrderController::class, 'insertOrder']);
         });
     });
+});
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('postregister');
 });

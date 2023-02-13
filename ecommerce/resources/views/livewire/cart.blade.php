@@ -1,6 +1,6 @@
 <div class="cart-table-warp">
     {{-- Modal --}}
-    <div class="modal" id="hadeh" tabindex="-1" role="dialog">
+    <div class="modal" id="modalcart" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -106,7 +106,7 @@
     })
 
     function confirmDelete() {
-        $('#hadeh').modal('show');
+        $('#modalcart').modal('show');
     }
 
     $('#removeAllCartItems').on('click', () => {
