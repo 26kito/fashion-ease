@@ -8,7 +8,8 @@
                     <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
                     <div class="d-flex flex-column">
                         <button type="button" id='removeAllCartItems' class="btn btn-primary mb-2">Hapus Barang</button>
-                        <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">Pindahkan ke Wishlist</button>
+                        <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3"
+                            data-dismiss="modal">Pindahkan ke Wishlist</button>
                     </div>
                 </div>
             </div>
@@ -39,8 +40,9 @@
             @foreach ( $carts as $row )
             <tr>
                 <td>
-                    <input type="checkbox" name="cartid[]" id="id[{{$row->CartID}}]" value="{{ $row->CartID }}" 
-                    class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{ ($row->AvailStock == 0) ? 'disabled' : '' }}>
+                    <input type="checkbox" name="cartid[]" id="id[{{$row->CartID}}]" value="{{ $row->CartID }}"
+                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{
+                        ($row->AvailStock == 0) ? 'disabled' : '' }}>
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
@@ -67,7 +69,9 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()" wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')" class="btn btn-danger">
+                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()"
+                        wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')"
+                        class="btn btn-danger">
                         Hapus
                     </a>
                 </td>
@@ -95,15 +99,15 @@
 </script>
 @endif
 <script>
-    $('#select-all').on('click', () => {
-        if ($('#select-all').is(':checked')) {
-            $('.availstock').prop('checked', true);
-            $('.delete-all-cart-items').show();
-        } else {
-            $('.availstock').prop('checked', false);
-            $('.delete-all-cart-items').hide();
-        }
-    })
+    // $('#select-all').on('click', () => {
+    //     if ($('#select-all').is(':checked')) {
+    //         $('.availstock').prop('checked', true);
+    //         $('.delete-all-cart-items').show();
+    //     } else {
+    //         $('.availstock').prop('checked', false);
+    //         $('.delete-all-cart-items').hide();
+    //     }
+    // })
 
     function confirmDelete() {
         $('#modalcart').modal('show');
@@ -118,5 +122,28 @@
         Livewire.emit('addAllCartItemsToWishlist');
         $('.modal').modal('hide');
     })
+
+    // Check or Uncheck All checkboxes
+    $("#select-all").change(function() {
+        let checked = $(this).is(':checked');
+        if(checked) {
+            $(".availstock").each(function() {
+                $(this).prop("checked", true);
+            });
+        } else{
+            $(".availstock").each(function() {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+ 
+  // Changing state of CheckAll checkbox 
+    $(".availstock").click(function() {
+        if($(".availstock").length == $(".availstock:checked").length) {
+            $("#select-all").prop("checked", true);
+        } else {
+            $("#select-all").prop("checked", false);
+        }
+    });
 </script>
 @endpush

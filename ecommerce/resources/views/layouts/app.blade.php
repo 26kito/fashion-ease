@@ -11,5 +11,7 @@
   @yield('content')
 
   @include('layout.adminlte.js')
+
+  @stack('js')
 </body>
 </html>
