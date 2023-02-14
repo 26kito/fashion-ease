@@ -7,7 +7,7 @@ Log In
 @section('content')
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>E-</b>Commerce</a>
+        <a href="#" class="text-decoration-none"><b>E-</b>Commerce</a>
     </div>
     <div class="card">
         <div class="card-body login-card-body">
@@ -65,13 +65,13 @@ Log In
             </form>
             @if (Route::has('password.request'))
             <p class="mb-1">
-                <a href="{{ route('password.request') }}">
+                <a href="{{ route('password.request') }}" class="text-decoration-none">
                     {{ __('Forgot Your Password?') }}
                 </a>
             </p>
             @endif
             <p class="mb-0">
-                <a href="{{ route('register') }}">Register</a>
+                <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
             </p>
         </div>
     </div>

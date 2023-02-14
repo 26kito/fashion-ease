@@ -80,6 +80,7 @@ Register
                         name="password" autocomplete="new-password" placeholder="Password">
                     <div class="input-group-append">
                         <div class="input-group-text">
+                            <a role="button" id="seePassword" class="me-2 text-decoration-none">Lihat</a>
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
@@ -89,15 +90,6 @@ Register
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
-                </div>
-                <div class="input-group mb-3">
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
-                        autocomplete="new-password" placeholder="Password Confirmation">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-8">
@@ -116,7 +108,7 @@ Register
                 </div>
             </form>
 
-            <a href="{{ route('login') }}" class="text-center">I already have a account</a>
+            <a href="{{ route('login') }}" class="text-center text-decoration-none">I already have a account</a>
         </div>
     </div>
 </div>
@@ -124,8 +116,12 @@ Register
 
 @push('js')
     <script>
-        if ($("input").is(":not(:checked)")) {
-            
-        }
+        $('#seePassword').on('click', () => {
+            if ($('#password').attr('type') == 'password') {
+                $('#password').attr('type', 'text')
+            } else {
+                $('#password').attr('type', 'password')
+            }
+        })
     </script>
 @endpush
