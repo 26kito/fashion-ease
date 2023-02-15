@@ -19,7 +19,7 @@
     </div>
     <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
-            <p>Menampilkan 1 - 60 barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>"</p>
+            <p>Menampilkan 1 - {{ ($amount < $totalProduct) ? $amount : $totalProduct }} barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>"</p>
             @foreach ($products as $row)
             <div class="col-lg-4 col-sm-6">
                 <div class="product-item">

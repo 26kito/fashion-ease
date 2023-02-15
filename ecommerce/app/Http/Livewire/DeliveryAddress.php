@@ -8,14 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DeliveryAddress extends Component
 {
-    public $userInfo;
-
     public function render()
     {
-        $this->userInfo = DB::table('users')
+        $userInfo = DB::table('users')
             ->where('id', Auth::id())
-            ->get();
+            ->first();
 
-        return view('livewire.delivery-address');
+        return view('livewire.delivery-address', ['userInfo' => $userInfo]);
     }
 }
