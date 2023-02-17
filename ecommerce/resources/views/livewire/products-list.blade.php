@@ -32,8 +32,9 @@
         </div>
     </div>
     @endforeach
-    @if ( count($products) < $totalProducts ) <div class="text-center pt-5">
+    @if ( count($products) < $totalProducts ) 
+    <div class="text-center pt-5">
         <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
-</div>
-@endif
+    </div>
+    @endif
 </div>

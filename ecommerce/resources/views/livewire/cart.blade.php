@@ -1,16 +1,9 @@
 <div class="cart-table-warp">
     {{-- Modal --}}
-    <div class="modal" id="modalcart" tabindex="-1" role="dialog">
+    <div class="modal" id="modalcart" tabindex="-1" role="dialog" wire:ignore>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
-                    <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
-                    <div class="d-flex flex-column">
-                        <button type="button" id='removeAllCartItems' class="btn btn-primary mb-2">Hapus Barang</button>
-                        <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3"
-                            data-dismiss="modal">Pindahkan ke Wishlist</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -22,7 +15,7 @@
             <input type="checkbox" id="select-all" class="form-check-input">
             <label for="select-all" class="select-all-text form-check-label">Pilih Semua</label>
         </div>
-        <a onclick="confirmDelete()" class="delete-all-cart-items text-danger">Hapus</a>
+        <a data-bs-toggle="modal" data-bs-target="#modalcart" wire:ignore class="delete-all-cart-items text-danger">Hapus</a>
     </div>
 
     <table id="cartform">
@@ -55,11 +48,9 @@
                 </td>
                 <td class="quy-col">
                     <div class="quantity form-group">
-                        <input wire:click="decrement('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
-                            class="btn" value="-">
+                        <input wire:click="decrement('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button" class="btn" value="-">
                         <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
-                        <input wire:click="increment('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
-                            class="btn" value="+">
+                        <input wire:click="increment('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button" class="btn" value="+">
                     </div>
                 </td>
                 <td class="size-col">
@@ -69,9 +60,8 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    <a onclick="confirm('Yakin?') || event.stopImmediatePropagation()"
-                        wire:click.prevent="remove('{{ $row->CartID }}', '{{ $row->ProductID }}')"
-                        class="btn btn-danger">
+                    <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" data-bs-toggle="modal"
+                        data-bs-target="#modalcart" class="removeCartItem btn btn-danger">
                         Hapus
                     </a>
                 </td>
@@ -99,28 +89,47 @@
 </script>
 @endif
 <script>
-    // $('#select-all').on('click', () => {
-    //     if ($('#select-all').is(':checked')) {
-    //         $('.availstock').prop('checked', true);
-    //         $('.delete-all-cart-items').show();
-    //     } else {
-    //         $('.availstock').prop('checked', false);
-    //         $('.delete-all-cart-items').hide();
-    //     }
-    // })
+    $('.delete-all-cart-items').on('click', () => {
+        $('.modal-body').html(`
+            <h5 class="text-center mt-3 mb-4">Hapus semua barang?</h5>
+            <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
+            <div class="d-flex flex-column">
+                <button type="button" id="removeAllCartItems" class="btn btn-primary mb-2">Hapus Barang</button>
+                <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
+                    Pindahkan ke Wishlist
+                </button>
+            </div>
+        `)
+    })
 
-    function confirmDelete() {
-        $('#modalcart').modal('show');
-    }
-
-    $('#removeAllCartItems').on('click', () => {
+    $('.removeCartItem').on('click', () => {
+        $('.modal-body').html(`
+            <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
+            <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
+            <div class="d-flex flex-column">
+                <button type="button" id="removeCartItem" class="btn btn-primary mb-2">Hapus Barang</button>
+                <button type="button" id="addCartItemToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
+                    Pindahkan ke Wishlist
+                </button>
+            </div>
+        `)
+    })
+    
+    $(document).on('click', '#removeAllCartItems', () => {
         Livewire.emit('removeAllCartItems');
+    })
+
+    $(document).on('click', '#addAllCartItemsToWishlist', () => {
+        Livewire.emit('addAllCartItemsToWishlist');
         $('.modal').modal('hide');
     })
 
-    $('#addAllCartItemsToWishlist').on('click', () => {
-        Livewire.emit('addAllCartItemsToWishlist');
-        $('.modal').modal('hide');
+    $(document).on('click', '#removeCartItem', () => {
+        Livewire.emit('removeCartItem');
+    })
+
+    $(document).on('click', '#addCartItemToWishlist', () => {
+        Livewire.emit('addCartItemToWishlist');
     })
 
     // Check or Uncheck All checkboxes
@@ -129,20 +138,24 @@
         if(checked) {
             $(".availstock").each(function() {
                 $(this).prop("checked", true);
+                $('.delete-all-cart-items').show();
             });
         } else{
             $(".availstock").each(function() {
                 $(this).prop("checked", false);
+                $('.delete-all-cart-items').hide();
             });
         }
     });
  
-  // Changing state of CheckAll checkbox 
+    // Changing state of CheckAll checkbox 
     $(".availstock").click(function() {
         if($(".availstock").length == $(".availstock:checked").length) {
             $("#select-all").prop("checked", true);
+            $('.delete-all-cart-items').show();
         } else {
             $("#select-all").prop("checked", false);
+            $('.delete-all-cart-items').hide();
         }
     });
 </script>

@@ -14,10 +14,14 @@ class Cart extends Component
     public $carts = [];
     public $page;
     public $stock;
+    public $cartID;
+    public $productID;
 
     public $listeners = [
         'addAllCartItemsToWishlist' => 'addAllCartItemsToWishlist',
-        'removeAllCartItems' => 'removeAllCartItems'
+        'removeAllCartItems' => 'removeAllCartItems',
+        'addCartItemToWishlist' => 'addCartItemToWishlist',
+        'removeCartItem' => 'removeCartItem',
     ];
 
     public function mount($page)
@@ -50,6 +54,12 @@ class Cart extends Component
         return view('livewire.cart');
     }
 
+    public function initProp($cartID, $productID)
+    {
+        $this->cartID = $cartID;
+        $this->productID = $productID;
+    }
+
     public function addAllCartItemsToWishlist()
     {
         $this->addAllCartItemsToWishlistTrait();
@@ -67,19 +77,19 @@ class Cart extends Component
         return redirect($this->page)->with('status', 200);
     }
 
-    public function remove($CartID, $ProductID)
+    public function removeCartItem()
     {
         $data = DB::table('carts')
-            ->where('carts.id', $CartID)
+            ->where('carts.id', $this->cartID)
             ->where('carts.user_id', Auth::id())
-            ->where('carts.product_id', $ProductID)
+            ->where('carts.product_id', $this->productID)
             ->first();
 
         if ($data) {
             DB::table('carts')
-                ->where('carts.id', $CartID)
+                ->where('carts.id', $this->cartID)
                 ->where('carts.user_id', Auth::id())
-                ->where('carts.product_id', $ProductID)
+                ->where('carts.product_id', $this->productID)
                 ->delete();
 
             $this->emit('refreshTotalPrice');
@@ -92,6 +102,11 @@ class Cart extends Component
                 'message' => 'Gagal menghapus pesanan'
             ]);
         }
+    }
+
+    public function addCartItemToWishlist()
+    {
+        $this->addToWishlistTrait($this->productID);
     }
 
     public function checkSize($ProductID, $size)

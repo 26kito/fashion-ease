@@ -57,17 +57,17 @@
 		window.addEventListener('toastr', event => {
 			let status = event.detail.status;
 			if (status == 'success') {
+				toastr.options = {
+					"preventDuplicates": true,
+					"positionClass": "toast-top-center",
+				};
 				toastr.success(event.detail.message);
-				toastr.options = {
-					"preventDuplicates": true,
-					"positionClass": "toast-top-center",
-				};
 			} else {
-				toastr.error(event.detail.message);
 				toastr.options = {
 					"preventDuplicates": true,
 					"positionClass": "toast-top-center",
 				};
+				toastr.error(event.detail.message);
 			}
 		})
 	</script>
