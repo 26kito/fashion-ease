@@ -1,6 +1,6 @@
 <div class="cart-table-warp">
     {{-- Modal --}}
-    <div class="modal" id="modalcart" tabindex="-1" role="dialog" wire:ignore>
+    <div class="modal" id="modalCart" tabindex="-1" role="dialog" wire:ignore>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -15,7 +15,7 @@
             <input type="checkbox" id="select-all" class="form-check-input">
             <label for="select-all" class="select-all-text form-check-label">Pilih Semua</label>
         </div>
-        <a data-bs-toggle="modal" data-bs-target="#modalcart" wire:ignore class="delete-all-cart-items text-danger">Hapus</a>
+        <a data-bs-toggle="modal" data-bs-target="#modalCart" wire:ignore class="delete-all-cart-items text-danger">Hapus</a>
     </div>
 
     <table id="cartform">
@@ -61,7 +61,7 @@
                 </td>
                 <td>
                     <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" data-bs-toggle="modal"
-                        data-bs-target="#modalcart" class="removeCartItem btn btn-danger">
+                        data-bs-target="#modalCart" class="removeCartItem btn btn-danger">
                         Hapus
                     </a>
                 </td>
