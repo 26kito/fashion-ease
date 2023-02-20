@@ -11,7 +11,7 @@
     {{-- End of Modal --}}
 
     <table id="cartform">
-        @foreach ( $wishlists as $row )
+        @foreach ( $wishlists as $key => $row )
         <tr>
             <td class="product-col">
                 <a href="/product/{{ $row->product_id }}">
@@ -25,15 +25,17 @@
             </td>
             <td>
                 <select class="form-select" aria-label="Default select example">
-                    <option selected disabled>Pilih size</option>
-                    @foreach ($row->size as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
+                    <option selected disabled value="null">Pilih size</option>
+                    @foreach ($row->sizeAndStock as $sizeRow => $stockRow)
+                    <option value="{{ " $row->ProductID, $sizeRow" }}" {{ ($stockRow==0) ? 'disabled' : '' }}>
+                        {{ $sizeRow }} {{ ($stockRow == 0) ? ' - Stok habis' : '' }}
+                    </option>
                     @endforeach
                 </select>
             </td>
             <td>
                 <div class="float-end me-4">
-                    <a wire:click.prevent="addToCart('{{ $row->WishlistID }}', '{{ $row->ProductID }}')"
+                    <a wire:click.prevent="addToCart('{{ $row->ProductID }}', '{{ $size }}')"
                         class="btn btn-sm btn-info d-block">
                         Tambahkan ke keranjang
                     </a>
@@ -48,3 +50,12 @@
         @endforeach
     </table>
 </div>
+
+@push('js')
+<script>
+    $('select').on('change', function() {
+        let size = this.value;
+        Livewire.emit('setSize', size);
+    });
+</script>
+@endpush

@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class Wishlist extends Component
 {
+    public $page;
     public $wishlists = [];
+    public $ProductID;
+    public $size;
+
+    public $listeners = ['setSize' => 'setSize'];
 
     public function render()
     {
@@ -41,13 +46,39 @@ class Wishlist extends Component
 
             $newStock = explode(', ', $row->stock);
             $row->stock = $newStock;
+
+            $row->sizeAndStock = array_combine($newSize, $newStock);
         }
 
         return view('livewire.wishlist');
     }
 
-    public function addToCart($wishlistID, $ProductID)
+    public function setSize($size)
     {
-        dd("$wishlistID dan $ProductID");
+        $toArr = explode(', ', $size);
+        $ProductID = $toArr[0];
+        $size = $toArr[1];
+        $this->ProductID = $ProductID;
+        $this->size = $size;
+    }
+
+    public function addToCart($ProductID, $size)
+    {
+        if ($ProductID == $this->ProductID && $this->size) {
+            $checkStock = DB::table('detail_products')
+                ->where('dp_id', $ProductID)
+                ->where('size', $size)
+                ->first();
+
+            if ($checkStock->stock > 0) {
+                $this->emit('addToCart', $ProductID, $size, 1);
+                $this->emit('refreshCart');
+            }
+        } else {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Kamu belum memilih size nih'
+            ]);
+        }
     }
 }

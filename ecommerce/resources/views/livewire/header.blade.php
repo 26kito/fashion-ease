@@ -64,10 +64,8 @@
                         <div class="shopping-card">
                             <i class="flaticon-bag"></i>
                             @auth
-                            @if ( Auth::user()->role_id === 2 )
-                            @if ( $cartQty > 0 )
+                            @if ( Auth::user()->role_id === 2 && $cartQty > 0 )
                             <span class="qty">{{ $cartQty }}</span>
-                            @endif
                             @endif
                             @endauth
                         </div>
