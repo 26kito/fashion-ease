@@ -29,7 +29,7 @@
 					<div class="cart-table">
 						@if ( $totalOrders > 0 )
 						<h3>Your Cart</h3>
-						@livewire('cart', ['page' => request()->fullUrl() ])
+						@livewire('cart', ['page' => request()->fullUrl()])
 						@livewire('total-price-cart')
 						@else
 						<h3 class="text-center">Duh, keranjangmu kosong nih:(</h3>

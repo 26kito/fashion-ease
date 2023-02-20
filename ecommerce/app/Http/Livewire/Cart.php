@@ -11,8 +11,8 @@ class Cart extends Component
 {
     use addToWishlist;
 
-    public $carts = [];
     public $page;
+    public $carts = [];
     public $stock;
     public $cartID;
     public $productID;
@@ -77,6 +77,11 @@ class Cart extends Component
         return redirect($this->page)->with('status', 200);
     }
 
+    public function addCartItemToWishlist()
+    {
+        $this->addToWishlistTrait($this->productID);
+    }
+
     public function removeCartItem()
     {
         $data = DB::table('carts')
@@ -102,11 +107,6 @@ class Cart extends Component
                 'message' => 'Gagal menghapus pesanan'
             ]);
         }
-    }
-
-    public function addCartItemToWishlist()
-    {
-        $this->addToWishlistTrait($this->productID);
     }
 
     public function checkSize($ProductID, $size)

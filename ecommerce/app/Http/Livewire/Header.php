@@ -11,29 +11,29 @@ class Header extends Component
     use TraitsCart;
 
     public $keyword = '';
+    public $cartQty;
+    public $productsSearch;
 
     public $listeners = [
         'addToCart' => 'addToCart',
         'refreshCart' => '$refresh'
     ];
 
-
     public function render()
     {
         if (strlen($this->keyword) >= 3) {
-            $products = DB::table('products')
+            $this->productsSearch = DB::table('products')
                 ->join('categories', 'products.category_id', 'categories.id')
                 ->select('products.id', 'products.product_id', 'products.name AS ProductName', 'categories.name AS CategoryName')
                 ->where('products.name', 'LIKE', '%' . $this->keyword . '%')
                 ->take(3)->get();
         } else {
-            $products = "";
+            $this->productsSearch = "";
         }
 
-        return view('livewire.header', [
-            'cartQty' => $this->cart(),
-            'productsSearch' => $products
-        ]);
+        $this->cartQty = $this->cart();
+
+        return view('livewire.header');
     }
 
     public function addToCart($productId, $size, $qty)

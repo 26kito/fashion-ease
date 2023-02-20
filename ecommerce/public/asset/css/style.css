@@ -355,7 +355,8 @@ ol {
 }
 
 .header-top {
-    padding: 18px 0 14px;
+    /* padding: 18px 0 14px; */
+    padding-top: 30px;
 }
 
 .site-logo {
@@ -463,6 +464,7 @@ a#dropdownUser {
 
 .main-navbar {
     background: #282828;
+    margin-top: 30px;
 }
 
 .slicknav_menu {
