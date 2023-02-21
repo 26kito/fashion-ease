@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\OrderItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RajaOngkirController;
+use App\Http\Controllers\Api\OrderItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // url: localhost:8000/api/order/.../
-Route::prefix('order')->group(function() {
+Route::prefix('order')->group(function () {
     // Get Data By Order
     Route::get('{order_id}', [OrderItemController::class, 'index']);
     // Get Data By Order Items
@@ -33,3 +34,6 @@ Route::prefix('order')->group(function() {
     Route::get('{order_id}/order_items/{id}', [OrderItemController::class, 'edit']);
     Route::put('{order_id}/order_items/{id}', [OrderItemController::class, 'update']);
 });
+
+Route::get('/get-province', [RajaOngkirController::class, 'getProvince']);
+Route::get('/get-city/{province}', [RajaOngkirController::class, 'getCity']);
