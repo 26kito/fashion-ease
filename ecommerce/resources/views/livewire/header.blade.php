@@ -8,7 +8,7 @@
                 </a>
             </div>
             <div class="col-xl-6 col-lg-5">
-                <div class="header-search-form form-group">
+                <div class="header-search-form form-group ">
                     <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)" class="form-control">
                     <button id="search-btn"><i class="flaticon-search"></i></button>
                 </div>
@@ -16,7 +16,7 @@
                 <div class="header-search-result">
                     @if (count($productsSearch) > 0)
                     @foreach ($productsSearch as $row)
-                    <div>
+                    <div class="search-result-items-wrap">
                         <a href="{{ url('product/'. $row->product_id) }}" class="search-result-items">
                             <i class="flaticon-search"></i>
                             {{ $row->ProductName }}
