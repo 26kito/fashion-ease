@@ -37,3 +37,4 @@ Route::prefix('order')->group(function () {
 
 Route::get('/get-province', [RajaOngkirController::class, 'getProvince']);
 Route::get('/get-city/{province}', [RajaOngkirController::class, 'getCity']);
+Route::post('/check-cost', [RajaOngkirController::class, 'checkCost']);

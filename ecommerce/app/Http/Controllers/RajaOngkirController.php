@@ -76,4 +76,42 @@ class RajaOngkirController extends Controller
 
         return response()->json($response);
     }
+
+    public function checkCost(Request $request)
+    {
+        $origin = $request->origin;
+        $destination = $request->destination;
+        $weight = $request->weight;
+        $courierCode = $request->courierCode;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "$this->rajaOngkirUrl/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=$origin&destination=$destination&weight=$weight&courier=$courierCode",
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded",
+                "key: $this->rajaOngkirKey"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            $response = "cURL Error #:" . $err;
+        } else {
+            $response = $response->rajaongkir->results;
+        }
+
+        return response()->json($response);
+    }
 }
