@@ -1,15 +1,4 @@
 <div class="cart-table-warp">
-    {{-- Modal --}}
-    <div class="modal" id="wishlistModal" tabindex="-1" role="dialog" wire:ignore>
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End of Modal --}}
-
     <table id="cartform">
         @foreach ( $wishlists as $key => $row )
         <tr>

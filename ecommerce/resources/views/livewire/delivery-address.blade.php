@@ -6,7 +6,7 @@
                 <div class="modal-body">
                     <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
                     <div class="form-group">
-                        <label for="inputAddress" class="mb-2">Address</label>
+                        <label for="inputAddress" class="mb-2">Alamat</label>
                         <input type="text" class="form-control" id="inputAddress" placeholder="Masukkan alamat kamu">
                     </div>
                     <div class="row mb-4">
@@ -38,15 +38,15 @@
     {{-- End of Modal --}}
 
     <div class="cf-title">Alamat Pengiriman</div>
-    <div class="row m-0 p-0">
-        <p class="m-0 p-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
-        <p class="m-0 p-0">{{ $userInfo->phone_number }}</p>
+    <div class="row m-0">
         @if ($userInfo->address !== null)
-        <p class="p-0">{{ $userInfo->address }}</p>
+        <p class="m-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
+        <p class="m-0">{{ $userInfo->phone_number }}</p>
+        <p class="mb-4">{{ $userInfo->address }}</p>
         @endif
     </div>
     @if ($userInfo->address === null)
-    <a class="btn btn-outline-dark btn-sm mt-3 mb-3" role="button" data-bs-toggle="modal"
+    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" role="button" data-bs-toggle="modal"
         data-bs-target="#addressModal">Tambah alamat</a>
     @endif
 </div>
@@ -65,13 +65,14 @@
         let provinceID = $('#province').val()
 
         $('#city').prop('disabled', false);
-        $('#city').html('<option value="null">Pilih kota kamu</option>');
 
         $.ajax({
             type: "GET",
             url: `/api/get-city/${provinceID}`,
             success: function(result) {
-                $('#city').append(cityDropdown(result));
+                $('#city').html(
+                    "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
+                );
             }
         })
     })
@@ -96,16 +97,45 @@
         return res;
     }
 
-    $('#saveDeliveryAddress').on('click', () => {
+    $(document).on('click', '#saveDeliveryAddress', () => {
         let address = $('#inputAddress').val();
         let province = $('#province').val();
         let city = $('#city').val();
         let data = {'address': address, 'province': province, 'city': city};
-
-        Livewire.emit('saveDeliveryAddress', data);
+    
+        if (!address) {
+            let event = new CustomEvent('toastr', {
+                'detail': {
+                    'status': 'info', 
+                    'message': 'Masukin alamat kamu dulu ya, biar kurirnya tidak tersesat:)'
+                }
+            });
+    
+            window.dispatchEvent(event);
+        } else if (!province) {
+            let event = new CustomEvent('toastr', {
+                'detail': {
+                    'status': 'info', 
+                    'message': 'Jangan lupa isi provinsi:)'
+                }
+            });
+    
+            window.dispatchEvent(event);
+        } else if (!city) {
+            let event = new CustomEvent('toastr', {
+                'detail': {
+                    'status': 'info', 
+                    'message': 'Jangan lupa isi kota nya juga ya!'
+                }
+            });
+    
+            window.dispatchEvent(event);
+        } else {
+            Livewire.emit('saveDeliveryAddress', data);
+        }
     })
 
-    window.livewire.on('saveDeliveryAddress', () => {
+    window.livewire.on('saveDeliveryAddress', (status) => {
         $('#addressModal').modal('hide');
     })
 </script>

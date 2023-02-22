@@ -17,8 +17,8 @@ class CreateUserAddressesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('address');
-            $table->string('province');
-            $table->string('city');
+            $table->integer('province');
+            $table->integer('city');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
