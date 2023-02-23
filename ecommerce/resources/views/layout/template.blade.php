@@ -62,12 +62,27 @@
 					"positionClass": "toast-top-center",
 				};
 				toastr.success(event.detail.message);
-			} else {
+			}
+			if (status == 'error') {
 				toastr.options = {
 					"preventDuplicates": true,
 					"positionClass": "toast-top-center",
 				};
 				toastr.error(event.detail.message);
+			}
+			if (status == 'warning') {
+				toastr.options = {
+					"preventDuplicates": true,
+					"positionClass": "toast-top-center",
+				};
+				toastr.warning(event.detail.message);
+			}
+			if (status == 'info') {
+				toastr.options = {
+					"preventDuplicates": true,
+					"positionClass": "toast-top-center",
+				};
+				toastr.info(event.detail.message);
 			}
 		})
 	</script>

@@ -20,7 +20,7 @@
 <!-- Page info end -->
 
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="POST">
+<form action="{{ route('checkout') }}" method="POST" style="margin-top: 50px">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
