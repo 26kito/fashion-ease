@@ -27,6 +27,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex flex-column">
+                        <a type="button" id="saveDeliveryService" class="btn btn-primary mb-2">Gunakan</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,16 +43,18 @@
 @push('js')
 <script>
     let custAddress = @js($custAddress);
-    let cityID = null;
+    let cityID = "";
+    let shipmentFee = 0;
 
     document.addEventListener('addressChanged', (e) => {
-        e.detail.forEach(element => {
-            cityID = element.city;
+        e.detail.forEach(data => {
+            custAddress = data;
+            cityID = data.city;
         });
     })
 
-    custAddress.forEach(element => {
-        cityID = element.city;
+    custAddress.forEach(data => {
+        cityID = data.city;
     });
 
     $(document).on('click', '#deliveryService', () => {
@@ -87,7 +92,6 @@
             },
             success: function(result) {
                 $('#service').html(serviceName(result));
-                console.log(serviceName(result))
             }
         })
     })
@@ -97,16 +101,35 @@
 
         data.forEach((d) => {
             let services = d.costs.values();
-            for (let service of services ) {
-                if (d.costs.length > 0) {
-                    res += `<option>${service.service} ongkir ${service.cost[0].value} estimasi sampai ${service.cost[0].etd} hari</option>`;
-                } else {
-                    res += `<option value="null" disabled>Tidak tersedia pengiriman</option>`;
+            if (d.costs.length > 0) {
+                for (let service of services ) {
+                    let etd = service.cost[0].etd.toLowerCase().replace('hari', '');
+                    let ongkir = service.cost[0].value;
+                    res += `<option value="${ongkir}">${service.service} ongkir ${ongkir} estimasi sampai ${etd} hari</option>`;
                 }
+            } else {
+                res += `<option value="null" selected disabled>Tidak tersedia pengiriman</option>`;
             }
         })
 
         return res;
     }
+
+    $(document).on('click', '#saveDeliveryService', () => {
+        let shipmentFee = $('#service').val();
+        if (shipmentFee == null) {
+            let event = new CustomEvent('toastr', {
+                'detail': {
+                    'status': 'info', 
+                    'message': 'Layanan pengiriman tidak tersedia:('
+                }
+            });
+    
+            window.dispatchEvent(event);
+        } else {
+            Livewire.emit('setShippingFee', shipmentFee);
+            $('#deliveryModal').modal('hide');
+        }
+    })
 </script>
 @endpush
