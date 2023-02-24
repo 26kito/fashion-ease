@@ -21,6 +21,7 @@ class CheckoutController extends Controller
                     ->whereIn('carts.id', $cartItemsID)
                     ->select(
                         'carts.id AS CartID',
+                        'carts.user_id',
                         'products.id AS ProductID',
                         'products.product_id',
                         'products.name AS ProdName',
@@ -38,5 +39,66 @@ class CheckoutController extends Controller
                 return redirect()->back()->with('error', $status);
             }
         };
+    }
+
+    public function saveOrder(Request $request)
+    {
+        DB::transaction(function () use($request) {
+            $data = $request->data;
+            $orderDate = date('Y-m-d');
+            $shipmentDate = date('Y-m-d');
+            $total = 0;
+            $shipmentFee = $request->shippingCost;
+            $grandTotal = 0;
+
+            foreach ($data as $row) {
+                $userID = $row['user_id'];
+                $total += $row['Price'];
+            }
+
+            $grandTotal = $total + $shipmentFee;
+
+            $getMaxOrderID = DB::table('orders')
+                ->max('order_id');
+
+            if ($getMaxOrderID == null) {
+                $num = '000001';
+            } else {
+                $num = substr($getMaxOrderID, -6);
+                $num = intval($num + 1);
+            }
+
+            $orderID = 'PO' . '-' . date('Ymdhi') . $userID . substr('000000' . $num, strlen($num));
+
+            DB::table('orders')
+                ->insert([
+                    'order_id' => $orderID,
+                    'user_id' => $userID,
+                    'order_date' => $orderDate,
+                    'shipment_date' => $shipmentDate,
+                    'total' => $total,
+                    'shipment_fee' => $shipmentFee,
+                    'grand_total' => $grandTotal
+                ]);
+
+            foreach ($data as $row) {
+                DB::table('order_items')
+                    ->insert([
+                        'order_id' => $orderID,
+                        'product_id' => $row['ProductID'],
+                        'size' => $row['size'],
+                        'price' => $row['Price'],
+                        'qty' => $row['qty']
+                    ]);
+
+                DB::table('carts')
+                    ->where('product_id', $row['ProductID'])
+                    ->where('size', $row['size'])
+                    ->where('user_id', $userID)
+                    ->delete();
+            }
+        });
+
+        return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat'], 200);
     }
 }

@@ -10,6 +10,7 @@ class DeliveryInfo extends Component
 {
     public $serviceDelivery;
     public $custAddress;
+    public $delivery;
 
     protected $listeners = ['setAddress' => '$refresh'];
     

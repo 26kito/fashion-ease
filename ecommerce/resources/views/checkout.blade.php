@@ -19,7 +19,7 @@
 						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}" alt=""></a></li>
 						<li>Pay when you get the package</li>
 					</ul>
-					<a class="site-btn submit-order-btn">Place Order</a>
+					<a class="site-btn submit-order-btn" id="placeOrder">Place Order</a>
 				</div>
 			</div>
 			<div class="col-lg-4 order-1 order-lg-2">
@@ -44,3 +44,46 @@
 </section>
 <!-- checkout section end -->
 @endsection
+
+@push('js')
+	<script>
+		$(document).on('click', '#placeOrder', () => {
+			let orderItems = {!! json_encode($orderItems->toArray()) !!};
+
+			let shippingCost = $('#shippingCost').attr('data-shipping-fee');
+
+			if (shippingCost) {
+				$.ajax({
+					type: "POST",
+					url: `/save-order`,
+					dataType: 'json',
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					data: {
+						'data': orderItems,
+						'shippingCost': shippingCost
+					},
+					success: function(result) {
+						window.livewire.emit('refreshCart');
+						let event = new CustomEvent('toastr', {
+							'detail': {
+								'status': 'success', 
+								'message': result.message
+							}
+						});
+				
+						window.dispatchEvent(event);
+					}
+				})
+			} else {
+				let event = new CustomEvent('toastr', {
+					'detail': {
+						'status': 'info', 
+						'message': 'Pilih layanan pengiriman dulu ya'
+					}
+				});
+		
+				window.dispatchEvent(event);
+			}
+		})
+	</script>
+@endpush

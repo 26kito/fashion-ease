@@ -42,6 +42,7 @@ Route::middleware('is_user')->group(function () {
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
     Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
 
     Route::get('/product/{product_id}', [ProductsController::class, 'index']);
 

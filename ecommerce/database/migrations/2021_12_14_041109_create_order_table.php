@@ -20,8 +20,9 @@ class CreateOrderTable extends Migration
             $table->date('order_date');
             $table->date('shipment_date')->nullable();
             $table->integer('total');
+            $table->integer('shipment_fee');
             $table->integer('discount')->nullable();
-            $table->timestamps();
+            $table->integer('grand_total');
 
             $table->foreign('user_id')->references('id')->on('users');
         });
