@@ -48,11 +48,37 @@
 @push('js')
 	<script>
 		$(document).on('click', '#placeOrder', () => {
-			let orderItems = {!! json_encode($orderItems->toArray()) !!};
-
+			let orderItems = @json($orderItems);
+			let address = $('.user-address').attr('data-user-address');
 			let shippingCost = $('#shippingCost').attr('data-shipping-fee');
 
-			if (shippingCost) {
+			if (!address) {
+				let event = new CustomEvent('toastr', {
+					'detail': {
+						'status': 'info', 
+						'message': 'Isi alamatmu dluu yuk'
+					}
+				});
+				
+				window.dispatchEvent(event);
+				
+				setTimeout(() => {
+					$('#addressModal').modal('show');
+				}, 1000);
+			} else if (!shippingCost) {
+				let event = new CustomEvent('toastr', {
+					'detail': {
+						'status': 'info', 
+						'message': 'Pilih layanan pengiriman dulu ya'
+					}
+				});
+		
+				window.dispatchEvent(event);
+
+				setTimeout(() => {
+					$('#deliveryModal').modal('show');
+				}, 1000);
+			} else {
 				$.ajax({
 					type: "POST",
 					url: `/save-order`,
@@ -74,15 +100,6 @@
 						window.dispatchEvent(event);
 					}
 				})
-			} else {
-				let event = new CustomEvent('toastr', {
-					'detail': {
-						'status': 'info', 
-						'message': 'Pilih layanan pengiriman dulu ya'
-					}
-				});
-		
-				window.dispatchEvent(event);
 			}
 		})
 	</script>

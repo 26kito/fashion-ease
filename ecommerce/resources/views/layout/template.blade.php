@@ -56,33 +56,25 @@
 	<script>
 		window.addEventListener('toastr', event => {
 			let status = event.detail.status;
-			if (status == 'success') {
-				toastr.options = {
-					"preventDuplicates": true,
-					"positionClass": "toast-top-center",
-				};
-				toastr.success(event.detail.message);
-			}
-			if (status == 'error') {
-				toastr.options = {
-					"preventDuplicates": true,
-					"positionClass": "toast-top-center",
-				};
-				toastr.error(event.detail.message);
-			}
-			if (status == 'warning') {
-				toastr.options = {
-					"preventDuplicates": true,
-					"positionClass": "toast-top-center",
-				};
-				toastr.warning(event.detail.message);
-			}
-			if (status == 'info') {
-				toastr.options = {
-					"preventDuplicates": true,
-					"positionClass": "toast-top-center",
-				};
-				toastr.info(event.detail.message);
+			toastr.options = {
+				"preventDuplicates": true,
+				"positionClass": "toast-top-center",
+			};
+			switch (status) {
+				case 'success':
+					toastr.success(event.detail.message);
+					break;
+				case 'error':
+					toastr.error(event.detail.message);
+					break;
+				case 'warning':
+					toastr.warning(event.detail.message);
+					break;
+				case 'info':
+					toastr.info(event.detail.message);
+					break;
+				default:
+					break;
 			}
 		})
 	</script>
