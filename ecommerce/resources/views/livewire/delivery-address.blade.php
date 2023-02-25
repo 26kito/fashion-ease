@@ -42,7 +42,7 @@
         @if ($userInfo->address !== null)
         <p class="m-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
         <p class="m-0">{{ $userInfo->phone_number }}</p>
-        <p class="mb-4">{{ $userInfo->address }}</p>
+        <p class="mb-4 user-address" data-user-address={{ $userInfo->address }}>{{ $userInfo->address }}</p>
         @endif
     </div>
     @if ($userInfo->address === null)
@@ -73,6 +73,7 @@
                 $('#city').html(
                     "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
                 );
+                console.log(cityDropdown(result))
             }
         })
     })
@@ -91,7 +92,7 @@
         let res = '';
         
         data.forEach((d) => {
-            res += `<option value="${d.city_id}">${d.city_name}</option>`;
+            res += `<option value="${d.city_id}">${d.city_name} (${d.type})</option>`;
         });
 
         return res;
