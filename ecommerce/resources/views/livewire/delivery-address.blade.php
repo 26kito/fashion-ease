@@ -73,7 +73,6 @@
                 $('#city').html(
                     "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
                 );
-                console.log(cityDropdown(result))
             }
         })
     })

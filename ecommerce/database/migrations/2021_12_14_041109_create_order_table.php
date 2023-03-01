@@ -23,8 +23,10 @@ class CreateOrderTable extends Migration
             $table->integer('shipment_fee');
             $table->integer('discount')->nullable();
             $table->integer('grand_total');
+            $table->unsignedBigInteger('payment_method_id');
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('payment_method_id')->references('id')->on('payment_method');
         });
     }
 

@@ -1,7 +1,7 @@
 @extends('layout.template')
 
 @section('title')
-	{{$title}}
+{{$title}}
 @endsection
 
 @section('content')
@@ -16,7 +16,8 @@
 					<div class="cf-title">Payment</div>
 					<ul class="payment-list">
 						<li>Paypal<a href="#"><img src="{{ asset('asset/img/paypal.png') }}" alt=""></a></li>
-						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}" alt=""></a></li>
+						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}"
+									alt=""></a></li>
 						<li>Pay when you get the package</li>
 					</ul>
 					<a class="site-btn submit-order-btn" id="placeOrder">Place Order</a>
@@ -46,61 +47,61 @@
 @endsection
 
 @push('js')
-	<script>
-		$(document).on('click', '#placeOrder', () => {
-			let orderItems = @json($orderItems);
-			let address = $('.user-address').attr('data-user-address');
-			let shippingCost = $('#shippingCost').attr('data-shipping-fee');
+<script>
+	$(document).on('click', '#placeOrder', () => {
+		let orderItems = @json($orderItems);
+		let address = $('.user-address').attr('data-user-address');
+		let shippingCost = $('#shippingCost').attr('data-shipping-fee');
 
-			if (!address) {
-				let event = new CustomEvent('toastr', {
-					'detail': {
-						'status': 'info', 
-						'message': 'Isi alamatmu dluu yuk'
-					}
-				});
-				
-				window.dispatchEvent(event);
-				
-				setTimeout(() => {
-					$('#addressModal').modal('show');
-				}, 1000);
-			} else if (!shippingCost) {
-				let event = new CustomEvent('toastr', {
-					'detail': {
-						'status': 'info', 
-						'message': 'Pilih layanan pengiriman dulu ya'
-					}
-				});
-		
-				window.dispatchEvent(event);
+		if (!address) {
+			let event = new CustomEvent('toastr', {
+				'detail': {
+					'status': 'info', 
+					'message': 'Isi alamatmu dluu yuk'
+				}
+			});
+			
+			window.dispatchEvent(event);
+			
+			setTimeout(() => {
+				$('#addressModal').modal('show');
+			}, 1000);
+		} else if (!shippingCost) {
+			let event = new CustomEvent('toastr', {
+				'detail': {
+					'status': 'info', 
+					'message': 'Pilih layanan pengiriman dulu ya'
+				}
+			});
+	
+			window.dispatchEvent(event);
 
-				setTimeout(() => {
-					$('#deliveryModal').modal('show');
-				}, 1000);
-			} else {
-				$.ajax({
-					type: "POST",
-					url: `/save-order`,
-					dataType: 'json',
-					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-					data: {
-						'data': orderItems,
-						'shippingCost': shippingCost
-					},
-					success: function(result) {
-						window.livewire.emit('refreshCart');
-						let event = new CustomEvent('toastr', {
-							'detail': {
-								'status': 'success', 
-								'message': result.message
-							}
-						});
-				
-						window.dispatchEvent(event);
-					}
-				})
-			}
-		})
-	</script>
+			setTimeout(() => {
+				$('#deliveryModal').modal('show');
+			}, 1000);
+		} else {
+			$.ajax({
+				type: "POST",
+				url: `/save-order`,
+				dataType: 'json',
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				data: {
+					'data': orderItems,
+					'shippingCost': shippingCost
+				},
+				success: function(result) {
+					window.livewire.emit('refreshCart');
+					let event = new CustomEvent('toastr', {
+						'detail': {
+							'status': 'success', 
+							'message': result.message
+						}
+					});
+			
+					window.dispatchEvent(event);
+				}
+			})
+		}
+	})
+</script>
 @endpush
