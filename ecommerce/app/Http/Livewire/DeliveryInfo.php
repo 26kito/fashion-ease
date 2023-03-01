@@ -11,9 +11,15 @@ class DeliveryInfo extends Component
     public $serviceDelivery;
     public $custAddress;
     public $delivery;
+    public $choosenServiceName;
+    public $choosenServiceFee;
+    public $choosenServiceEtd;
 
-    protected $listeners = ['setAddress' => '$refresh'];
-    
+    protected $listeners = [
+        'setAddress' => '$refresh',
+        'setDeliveryService' => 'setDeliveryService',
+    ];
+
     public function render()
     {
         $this->serviceDelivery = DB::table('couriers')->get();
@@ -21,12 +27,22 @@ class DeliveryInfo extends Component
         $this->custAddress = DB::table('user_addresses')
             ->where('user_id', Auth::id())
             ->get();
-        
+
         return view('livewire.delivery-info');
     }
 
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('addressChanged', $this->custAddress);
+    }
+
+    public function setDeliveryService($data)
+    {
+        $temp = json_decode($data);
+        $this->choosenServiceName = $temp->serviceName;
+        $this->choosenServiceFee = $temp->serviceFee;
+        $this->choosenServiceEtd = $temp->etd;
+
+        $this->emit('setShippingFee', $this->choosenServiceFee);
     }
 }

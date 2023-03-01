@@ -37,6 +37,19 @@
     {{-- End of Modal --}}
 
     <div class="cf-title">Pilih Pengiriman</div>
+    <div class="row m-0">
+        @if ($choosenServiceName && $choosenServiceFee && $choosenServiceEtd)
+        <p class="m-0">
+            Jenis layanan: <span class="fw-bold">{{ $choosenServiceName }}</span>
+        </p>
+        <p class="m-0">
+            Ongkir: <span class="fw-bold">{{ rupiah($choosenServiceFee) }}</span>
+        </p>
+        <p class="mb-4">
+            Perkiraan sampai: <span class="fw-bold">{{ $choosenServiceEtd }} hari</span>
+        </p>
+        @endif
+    </div>
     <a id="deliveryService" class="btn btn-outline-dark btn-sm ms-3 mb-3" role="button">Pilih pengiriman</a>
 </div>
 
@@ -105,7 +118,8 @@
                 for (let service of services ) {
                     let etd = service.cost[0].etd.toLowerCase().replace('hari', '');
                     let ongkir = service.cost[0].value;
-                    res += `<option value="${ongkir}">${service.service} ongkir ${ongkir} estimasi sampai ${etd} hari</option>`;
+
+                    res += `<option value='{"serviceName":"${service.service}", "serviceFee":"${ongkir}", "etd":"${etd}"}'>${service.service} ongkir ${ongkir} estimasi sampai ${etd} hari</option>`;
                 }
             } else {
                 res += `<option value="null" selected disabled>Tidak tersedia pengiriman</option>`;
@@ -116,8 +130,8 @@
     }
 
     $(document).on('click', '#saveDeliveryService', () => {
-        let shipmentFee = $('#service').val();
-        if (shipmentFee == null) {
+        let deliveryService = $('#service').val();
+        if (deliveryService == null) {
             let event = new CustomEvent('toastr', {
                 'detail': {
                     'status': 'info', 
@@ -127,7 +141,8 @@
     
             window.dispatchEvent(event);
         } else {
-            Livewire.emit('setShippingFee', shipmentFee);
+            Livewire.emit('setDeliveryService', deliveryService);
+            // Livewire.emit('setShippingFee', deliveryService);
             $('#deliveryModal').modal('hide');
         }
     })

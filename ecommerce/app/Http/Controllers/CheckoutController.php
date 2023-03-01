@@ -32,7 +32,10 @@ class CheckoutController extends Controller
                     )
                     ->get();
 
-                return view('checkout', ['title' => $title, 'orderItems' => $orderItems, 'cartItemsID' => $cartItemsID]);
+                $paymentMethod = DB::table('payment_method')
+                    ->get();
+
+                return view('checkout', ['title' => $title, 'orderItems' => $orderItems, 'cartItemsID' => $cartItemsID, 'paymentMethod' => $paymentMethod]);
             } else {
                 $status = 400;
 
@@ -43,7 +46,7 @@ class CheckoutController extends Controller
 
     public function saveOrder(Request $request)
     {
-        DB::transaction(function () use($request) {
+        DB::transaction(function () use ($request) {
             $data = $request->data;
             $orderDate = date('Y-m-d');
             $shipmentDate = date('Y-m-d');
@@ -78,7 +81,8 @@ class CheckoutController extends Controller
                     'shipment_date' => $shipmentDate,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
-                    'grand_total' => $grandTotal
+                    'grand_total' => $grandTotal,
+                    'payment_method_id' => 1
                 ]);
 
             foreach ($data as $row) {
