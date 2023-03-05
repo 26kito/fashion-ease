@@ -13,13 +13,24 @@
 				<div class="checkout-form">
 					@livewire('delivery-address')
 					@livewire('delivery-info')
-					<div class="cf-title">Payment</div>
+					{{-- <div class="cf-title">Payment</div>
 					<ul class="payment-list">
 						<li>Paypal<a href="#"><img src="{{ asset('asset/img/paypal.png') }}" alt=""></a></li>
 						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}"
 									alt=""></a></li>
 						<li>Pay when you get the package</li>
-					</ul>
+					</ul> --}}
+					<div class="cf-title">Payment</div>
+					<div>
+						<ul>
+							@foreach ($paymentMethod as $row)
+							<li class="form-check">
+								<input type="radio" name="paymentMethod" id="payment{{ $row->id }}" value="{{ $row->id }}">
+								<label for="payment{{ $row->id }}">{{ $row->name }}</label>
+							</li>
+							@endforeach
+						</ul>
+					</div>
 					<a class="site-btn submit-order-btn" id="placeOrder">Place Order</a>
 				</div>
 			</div>
@@ -52,6 +63,7 @@
 		let orderItems = @json($orderItems);
 		let address = $('.user-address').attr('data-user-address');
 		let shippingCost = $('#shippingCost').attr('data-shipping-fee');
+		let paymentMethodID = $('input[name="paymentMethod"]:checked').val();
 
 		if (!address) {
 			let event = new CustomEvent('toastr', {
@@ -79,6 +91,15 @@
 			setTimeout(() => {
 				$('#deliveryModal').modal('show');
 			}, 1000);
+		} else if (!paymentMethodID) {
+			let event = new CustomEvent('toastr', {
+				'detail': {
+					'status': 'info', 
+					'message': 'Pilih metode pembayaran dulu ya'
+				}
+			});
+	
+			window.dispatchEvent(event);
 		} else {
 			$.ajax({
 				type: "POST",
@@ -87,7 +108,8 @@
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				data: {
 					'data': orderItems,
-					'shippingCost': shippingCost
+					'shippingCost': shippingCost,
+					'paymentMethodID': paymentMethodID
 				},
 				success: function(result) {
 					window.livewire.emit('refreshCart');
