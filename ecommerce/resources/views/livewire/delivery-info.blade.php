@@ -38,7 +38,10 @@
 
     <div class="cf-title">Pilih Pengiriman</div>
     <div class="row m-0">
-        @if ($choosenServiceName && $choosenServiceFee && $choosenServiceEtd)
+        @if ($choosenDeliveryCourier && $choosenServiceName && $choosenServiceFee && $choosenServiceEtd)
+        <p class="m-0">
+            Nama Kurir: <span class="fw-bold">{{ $choosenDeliveryCourier }}</span>
+        </p>
         <p class="m-0">
             Jenis layanan: <span class="fw-bold">{{ $choosenServiceName }}</span>
         </p>
@@ -57,7 +60,6 @@
 <script>
     let custAddress = @js($custAddress);
     let cityID = "";
-    let shipmentFee = 0;
 
     document.addEventListener('addressChanged', (e) => {
         e.detail.forEach(data => {
@@ -131,6 +133,8 @@
 
     $(document).on('click', '#saveDeliveryService', () => {
         let deliveryService = $('#service').val();
+        let courierCode = $('#courier').val();
+
         if (deliveryService == null) {
             let event = new CustomEvent('toastr', {
                 'detail': {
@@ -141,8 +145,8 @@
     
             window.dispatchEvent(event);
         } else {
+            Livewire.emit('setDeliveryCourier', courierCode);
             Livewire.emit('setDeliveryService', deliveryService);
-            // Livewire.emit('setShippingFee', deliveryService);
             $('#deliveryModal').modal('hide');
         }
     })
