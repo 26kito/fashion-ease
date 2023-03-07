@@ -21,7 +21,7 @@
 						<li>Pay when you get the package</li>
 					</ul> --}}
 					<div class="cf-title">Payment</div>
-					<div>
+					<div class="row m-0">
 						<ul>
 							@foreach ($paymentMethod as $row)
 							<li class="form-check">

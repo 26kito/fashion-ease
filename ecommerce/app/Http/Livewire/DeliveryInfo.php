@@ -11,6 +11,7 @@ class DeliveryInfo extends Component
     public $serviceDelivery;
     public $custAddress;
     public $delivery;
+    public $choosenDeliveryCourier;
     public $choosenServiceName;
     public $choosenServiceFee;
     public $choosenServiceEtd;
@@ -18,6 +19,7 @@ class DeliveryInfo extends Component
     protected $listeners = [
         'setAddress' => '$refresh',
         'setDeliveryService' => 'setDeliveryService',
+        'setDeliveryCourier' => 'setDeliveryCourier',
     ];
 
     public function render()
@@ -44,5 +46,10 @@ class DeliveryInfo extends Component
         $this->choosenServiceEtd = $temp->etd;
 
         $this->emit('setShippingFee', $this->choosenServiceFee);
+    }
+
+    public function setDeliveryCourier($data)
+    {
+        $this->choosenDeliveryCourier = strtoupper($data);
     }
 }
