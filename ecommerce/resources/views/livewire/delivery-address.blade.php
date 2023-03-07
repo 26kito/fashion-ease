@@ -42,17 +42,51 @@
         @if ($userInfo->address !== null)
         <p class="m-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
         <p class="m-0">{{ $userInfo->phone_number }}</p>
-        <p class="mb-4 user-address" data-user-address={{ $userInfo->address }}>{{ $userInfo->address }}</p>
+        <p class="mb-4 user-address" data-user-address={{ $userInfo->address }}>
+            {{ "$userInfo->address, $userInfo->province_name, $userInfo->city_name" }}
+            <b>{{ ($userInfo->is_default == 1) ? "(Alamat Utama)" : "" }}</b>
+        </p>
         @endif
     </div>
     @if ($userInfo->address === null)
-    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" role="button" data-bs-toggle="modal"
-        data-bs-target="#addressModal">Tambah alamat</a>
+    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="addAddress" role="button" data-bs-toggle="modal" data-bs-target="#addressModal">
+        Tambah alamat
+    </a>
+    @else
+    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="changeAddress" role="button" data-bs-toggle="modal" data-bs-target="#addressModal">
+        Ubah alamat
+    </a>
     @endif
 </div>
 
 @push('js')
 <script>
+    $(document).on('click', '#changeAddress', () => {
+        $('.modal-body').html(`
+            <h5 class="text-center mt-3 mb-4">Alamat</h5>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        `)
+    })
+
     $.ajax({
         type: "GET",
         url: `/api/get-province`,

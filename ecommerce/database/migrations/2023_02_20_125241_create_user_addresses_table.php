@@ -19,8 +19,10 @@ class CreateUserAddressesTable extends Migration
             $table->string('address');
             $table->integer('province');
             $table->integer('city');
+            $table->tinyInteger('is_default');
             $table->timestamps();
 
+            $table->unique(['user_id', 'city']);
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
