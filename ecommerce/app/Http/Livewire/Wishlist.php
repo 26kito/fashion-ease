@@ -81,4 +81,18 @@ class Wishlist extends Component
             ]);
         }
     }
+
+    public function remove($wishlistID, $productID)
+    {
+        DB::table('wishlists')
+            ->where('user_id', Auth::id())
+            ->where('id', $wishlistID)
+            ->where('product_id', $productID)
+            ->delete();
+
+        return $this->dispatchBrowserEvent('toastr', [
+            'status' => 'success',
+            'message' => 'Berhasil menghapus produk dari wishlist kamu'
+        ]);
+    }
 }

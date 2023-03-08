@@ -38,6 +38,7 @@ Log In
                         name="password" autocomplete="current-password" placeholder="Password">
                     <div class="input-group-append">
                         <div class="input-group-text">
+                            <a role="button" id="seePassword" class="me-2 text-decoration-none">Lihat</a>
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
@@ -77,3 +78,15 @@ Log In
     </div>
 </div>
 @endsection
+
+@push('js')
+    <script>
+        $('#seePassword').on('click', () => {
+            if ($('#password').attr('type') == 'password') {
+                $('#password').attr('type', 'text')
+            } else {
+                $('#password').attr('type', 'password')
+            }
+        })
+    </script>
+@endpush

@@ -31,7 +31,11 @@ class CartController extends Controller
 
             $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
 
-            return view('cart', ['title' => $title, 'orderItems' => $orderItems, 'totalOrders' => $totalOrders]);
+            $wishlist = DB::table('wishlists')
+                ->where('user_id', Auth::id())
+                ->count();
+
+            return view('cart', ['title' => $title, 'orderItems' => $orderItems, 'totalOrders' => $totalOrders, 'wishlist' => $wishlist]);
         } else {
             return redirect('login');
         }
