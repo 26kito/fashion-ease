@@ -5,22 +5,8 @@
 @endsection
 
 @section('content')
-<!-- Page info -->
-<div class="page-top-info">
-	<div class="container">
-		<h4>Your Cart</h4>
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb site-pagination">
-				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Cart</li>
-			</ol>
-		</nav>
-	</div>
-</div>
-<!-- Page info end -->
-
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="POST" style="margin-top: 50px">
+<form action="{{ route('checkout') }}" method="POST" style="margin-top: 220px">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
@@ -32,10 +18,15 @@
 						@livewire('cart', ['page' => request()->fullUrl()])
 						@livewire('total-price-cart')
 						@else
-						<h3 class="text-center">Duh, keranjangmu kosong nih:(</h3>
+						<h3 class="text-center">{{ "Duh, keranjangmu kosong nih:(" }}</h3>
+						@if ( $wishlist > 0 )
 						<p class="text-center">Yuk isi keranjangmu dengan barang-barang impianmu!</p>
 						@endif
+						@endif
 					</div>
+					@if ( $wishlist > 0 )
+					@livewire('wishlist-section')
+					@endif
 				</div>
 				<div class="col-lg-4 card-right">
 					@livewire('promo')
@@ -61,7 +52,7 @@
 @endif
 @if (Session::has('status'))
 <script>
-    let status = {{ Session::get('status') }}
+	let status = {{ Session::get('status') }}
 
     if (status == 200) {
         let event = new CustomEvent('toastr', {
