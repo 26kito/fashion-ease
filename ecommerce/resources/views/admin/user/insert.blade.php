@@ -92,7 +92,7 @@
     </div><!-- /.container-fluid -->
 @endsection
 
-@push('js')
+@push('adminscript')
     <!-- jquery-validation -->
     <script src="{{asset('asset/adminlte/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
     <script src="{{asset('asset/adminlte/plugins/jquery-validation/additional-methods.min.js')}}"></script>

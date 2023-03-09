@@ -59,7 +59,7 @@
     @endif
 </div>
 
-@push('js')
+@push('script')
 <script>
     $(document).on('click', '#changeAddress', () => {
         $('.modal-body').html(`

@@ -40,7 +40,7 @@
     </table>
 </div>
 
-@push('js')
+@push('script')
 <script>
     $('select').on('change', function() {
         let size = this.value;

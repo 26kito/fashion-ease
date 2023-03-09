@@ -24,7 +24,7 @@
     <button type="button" id="enterPromo" class="btn btn-success mt-5 mb-4">Makin hemat pakai promo</button>
 </div>
 
-@push('js')
+@push('script')
 <script>
     $('#enterPromo').on('click', () => {
         $('#modalpromo').modal('show');

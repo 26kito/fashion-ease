@@ -42,7 +42,7 @@ class CheckoutController extends Controller
             } else {
                 $status = 400;
 
-                return redirect()->back()->with('error', $status);
+                return redirect()->back()->with('status', $status);
             }
         };
     }

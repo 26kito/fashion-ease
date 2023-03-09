@@ -1,3 +1,7 @@
+@push('stylesheet')
+<link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}">
+@endpush
+
 <div>
     <h4 class="mt-5">Wishlist</h4>
     <div class="owl-carousel owl-theme owl-loaded owl-drag">
@@ -23,11 +27,12 @@
     </div>
 </div>
 
-@push('js')
+@push('script')
+<script src="{{asset('asset/js/owl.carousel.min.js')}}"></script>
 <script>
     $('.owl-carousel').owlCarousel({
-            margin: 20,
-            items: 4
-        })
+        margin: 20,
+        items: 4
+    })
 </script>
 @endpush

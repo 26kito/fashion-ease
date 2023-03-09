@@ -6,7 +6,7 @@
 
 @section('content')
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="POST" style="margin-top: 220px">
+<form action="{{ route('checkout') }}" method="POST" style="margin-top: 20px">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
@@ -44,31 +44,29 @@
 <!-- cart section end -->
 @endsection
 
-@push('js')
-@if (Session::has('error'))
-<script>
-	let status = 400;
-</script>
-@endif
+@push('script')
 @if (Session::has('status'))
 <script>
-	let status = {{ Session::get('status') }}
+	let statusCode = {{ Session::get('status') }};
+	let status = "";
+	let message = "";
 
-    if (status == 200) {
-        let event = new CustomEvent('toastr', {
-            'detail': {
-                'status': 'success', 
-                'message': 'Pesanan berhasil dihapus'
-            }
-        });
-
-        window.dispatchEvent(event);
+	if (statusCode == 200) {
+		message = 'Pesanan berhasil dihapus';
+		status = 'success';
+	} else {
+		message = 'Pilih pesanan yang mau di checkout dulu yaa';
+		status = 'info';
 	}
+
+	let event = new CustomEvent('toastr', {
+		'detail': {
+			'status': status, 
+			'message': message
+		}
+	});
+		
+	window.dispatchEvent(event);
 </script>
 @endif
-<script>
-	if (status == 400) {
-		toastr.info('Pilih pesanan yang mau di checkout dulu yaa')
-	}
-</script>
 @endpush

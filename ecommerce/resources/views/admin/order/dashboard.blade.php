@@ -64,7 +64,7 @@
 </div>
 @endsection
 
-@push('js')
+@push('adminscript')
 <!-- DataTables  & Plugins -->
 <script src="{{asset('asset/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('asset/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>

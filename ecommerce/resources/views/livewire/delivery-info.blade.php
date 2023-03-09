@@ -56,7 +56,7 @@
     <a id="deliveryService" class="btn btn-outline-dark btn-sm ms-3 mb-3" role="button">Pilih pengiriman</a>
 </div>
 
-@push('js')
+@push('script')
 <script>
     let custAddress = @js($custAddress);
     let cityID = "";

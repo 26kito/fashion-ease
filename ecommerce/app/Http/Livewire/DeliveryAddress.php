@@ -12,12 +12,11 @@ class DeliveryAddress extends Component
 
     public function render()
     {
-        $userInfo = DB::table('users')
+        $getUserAddress = DB::table('users')
             ->leftJoin('user_addresses', 'users.id', 'user_addresses.user_id')
             ->leftJoin('provinces', 'user_addresses.province', 'provinces.province_id')
             ->leftJoin('cities', 'user_addresses.city', 'cities.city_id')
             ->where('users.id', Auth::id())
-            ->where('is_default', 1)
             ->select(
                 'users.id',
                 'users.first_name',
@@ -28,8 +27,15 @@ class DeliveryAddress extends Component
                 'user_addresses.is_default',
                 'provinces.province_name',
                 'cities.city_name'
-            )
-            ->first();
+            );
+
+        $checkAddress = $getUserAddress->first();
+
+        if (!$checkAddress->address) {
+            $userInfo = $getUserAddress->first();
+        } else {
+            $userInfo = $getUserAddress->where('is_default', 1)->first();
+        }
 
         return view('livewire.delivery-address', ['userInfo' => $userInfo]);
     }

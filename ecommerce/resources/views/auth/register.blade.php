@@ -114,8 +114,9 @@ Register
 </div>
 @endsection
 
-@push('js')
+@push('script')
     <script>
+        alert('ok')
         $('#seePassword').on('click', () => {
             if ($('#password').attr('type') == 'password') {
                 $('#password').attr('type', 'text')
