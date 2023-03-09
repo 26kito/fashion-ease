@@ -1,5 +1,5 @@
 @extends('layout.adminlte.template')
-@push('css')
+@push('adminstylesheet')
 <!-- DataTables -->
 <link rel="stylesheet" href="{{asset('asset/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet"
@@ -80,7 +80,7 @@
 </div>
 @endsection
 
-@push('js')
+@push('adminscript')
 <!-- DataTables  & Plugins -->
 <script src="{{asset('asset/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('asset/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>

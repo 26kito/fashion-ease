@@ -4,6 +4,10 @@
 {{$title}}
 @endsection
 
+@push('stylesheet')
+<link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}">
+@endpush
+
 @section('content')
 <!-- Hero section -->
 <section class="hero-section">
@@ -100,3 +104,7 @@
 </section>
 <!-- Banner section end  -->
 @endsection
+
+@push('script')
+<script src="{{asset('asset/js/owl.carousel.min.js')}}"></script>
+@endpush

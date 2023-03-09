@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title')</title>
   @include('layout.adminlte.stylesheet')
-  @stack('css')
+  @stack('adminstylesheet')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed {{request()->is('admin/') ? '' : 'sidebar-collapse' }} ">
@@ -245,9 +245,9 @@
     </aside>
     <!-- /.control-sidebar -->
   </div>
-  <!-- ./wrapper -->
+
   @include('layout.adminlte.js')
-  @stack('js')
+  @stack('adminscript')
 </body>
 
 </html>

@@ -71,23 +71,7 @@
     </table>
 </div>
 
-@push('js')
-@if (Session::has('status'))
-<script>
-    let status = {{ Session::get('status') }}
-
-    if (status == 200) {
-        let event = new CustomEvent('toastr', {
-            'detail': {
-                'status': 'success', 
-                'message': 'Pesanan berhasil dihapus'
-            }
-        });
-
-        window.dispatchEvent(event);
-	}
-</script>
-@endif
+@push('script')
 <script>
     $('.delete-all-cart-items').on('click', () => {
         $('.modal-body').html(`
@@ -105,9 +89,13 @@
     $('.removeCartItem').on('click', () => {
         $('.modal-body').html(`
             <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
-            <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
+            <p class="text-center mb-4">
+                Produk yang kamu pilih akan dihapus dari keranjang.
+            </p>
             <div class="d-flex flex-column">
-                <button type="button" id="removeCartItem" class="btn btn-primary mb-2">Hapus Barang</button>
+                <button type="button" id="removeCartItem" class="btn btn-primary mb-2">
+                    Hapus Barang
+                </button>
                 <button type="button" id="addCartItemToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
                     Pindahkan ke Wishlist
                 </button>

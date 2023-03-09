@@ -77,7 +77,7 @@
     </div>
 </div>
 
-@push('js')
+@push('script')
     <script>
         $('#search-input').focus(() => {
             $('.overlay-black').show();

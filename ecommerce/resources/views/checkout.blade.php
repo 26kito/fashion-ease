@@ -6,7 +6,7 @@
 
 @section('content')
 <!-- checkout section  -->
-<section class="checkout-section spad" style="margin-top: 200px">
+<section class="checkout-section spad mt-5">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 order-2 order-lg-1">
@@ -57,7 +57,7 @@
 <!-- checkout section end -->
 @endsection
 
-@push('js')
+@push('script')
 <script>
 	$(document).on('click', '#placeOrder', () => {
 		let orderItems = @json($orderItems);

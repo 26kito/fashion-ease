@@ -12,6 +12,6 @@
 
   @include('layout.adminlte.js')
 
-  @stack('js')
+  @stack('script')
 </body>
 </html>

@@ -130,7 +130,7 @@
 </div>
 @endsection
 
-@push('js')
+@push('adminscript')
 <script src="{{asset('asset/bootstrap-growl/jquery.bootstrap-growl.min.js')}}"></script>
 <script>
     let order_id = $('#order_id').val();

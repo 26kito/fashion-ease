@@ -4,7 +4,7 @@
     {{$title}}
 @endsection
 
-@push('css')
+@push('adminstylesheet')
     <!-- daterange picker -->
     <link rel="stylesheet" href="{{asset('asset/adminlte/plugins/daterangepicker/daterangepicker.css')}}">
 @endpush
@@ -84,7 +84,7 @@
     </div>
 @endsection
 
-@push('js')
+@push('adminscript')
     <!-- Page specific script -->
     <script>
         $('#tanggal_order').daterangepicker({

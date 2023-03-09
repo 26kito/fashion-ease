@@ -79,7 +79,7 @@ Log In
 </div>
 @endsection
 
-@push('js')
+@push('script')
     <script>
         $('#seePassword').on('click', () => {
             if ($('#password').attr('type') == 'password') {
