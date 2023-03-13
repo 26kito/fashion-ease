@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-Log In
-@endsection
+@section('title') Log In @endsection
 
 @section('content')
 <div class="login-box">
@@ -93,10 +91,10 @@ Log In
         $('#seePassword').on('click', () => {
             if ($('#password').attr('type') == 'password') {
                 $('#password').attr('type', 'text');
-                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
+                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
             } else {
                 $('#password').attr('type', 'password');
-                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
+                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
             }
         })
     </script>
