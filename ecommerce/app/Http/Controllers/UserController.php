@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     public function usersList()
     {
@@ -13,5 +14,12 @@ class UsersController extends Controller
         $users = User::where('role_id', 2)->paginate(30);
 
         return view('admin.user.list', ['title' => $title, 'users' => $users]);
+    }
+
+    public function getUserAddress()
+    {
+        $data = Auth::user();
+
+        return response()->json($data);
     }
 }

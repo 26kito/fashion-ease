@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UsersController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 
 /*
@@ -50,6 +50,10 @@ Route::middleware('is_user')->group(function () {
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
 
     Route::get('/contact', [ContactController::class, 'index']);
+
+    Route::group(['prefix' => 'user'], function() {
+        Route::get('/address', [UserController::class, 'getUserAddress']);
+    });
 });
 
 Route::middleware(['is_admin'])->group(function () {
@@ -57,7 +61,7 @@ Route::middleware(['is_admin'])->group(function () {
         Route::get('/', [HomeController::class, 'admin'])->name('admin');
 
         Route::prefix('tables')->group(function () {
-            Route::get('/user', [UsersController::class, 'usersList']);
+            Route::get('/user', [UserController::class, 'usersList']);
             Route::get('/productsList', [AdminProductController::class, 'index']);
         });
 

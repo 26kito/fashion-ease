@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-Log In
-@endsection
+@section('title') Log In @endsection
 
 @section('content')
 <div class="login-box">
@@ -35,10 +33,12 @@ Log In
                 <!-- Password -->
                 <div class="input-group mb-3">
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                        name="password" autocomplete="current-password" placeholder="Password">
+                        name="password" autocomplete="current-password" placeholder="Password" onkeypress="return noSpaces()">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <a role="button" id="seePassword" class="me-2 text-decoration-none">Lihat</a>
+                            <a class="mr-2" id="seePassword" role="button">
+                                <img src="{{ asset('asset/img/hide.png') }}" width="20" height="20" id="seePasswordIcon">
+                            </a>
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
@@ -81,11 +81,20 @@ Log In
 
 @push('script')
     <script>
+        function noSpaces() {
+            if (event.keyCode == 32) {
+                event.returnValue = false;
+                return false;
+            }
+        }
+
         $('#seePassword').on('click', () => {
             if ($('#password').attr('type') == 'password') {
-                $('#password').attr('type', 'text')
+                $('#password').attr('type', 'text');
+                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
             } else {
-                $('#password').attr('type', 'password')
+                $('#password').attr('type', 'password');
+                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
             }
         })
     </script>

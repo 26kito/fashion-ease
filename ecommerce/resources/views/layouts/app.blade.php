@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -7,6 +8,7 @@
   <title>@yield('title')</title>
   @include('layout.adminlte.stylesheet')
 </head>
+
 <body class="hold-transition login-page">
   @yield('content')
 
@@ -14,4 +16,5 @@
 
   @stack('script')
 </body>
+
 </html>
