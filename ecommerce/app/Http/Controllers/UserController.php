@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -18,8 +19,12 @@ class UserController extends Controller
 
     public function getUserAddress()
     {
-        $data = Auth::user();
+        $data = DB::table('user_addresses')
+            ->where('user_id', Auth::id())
+            ->select('id', 'address', 'is_default')
+            ->orderBy('is_default', 'DESC')
+            ->get();
 
-        return response()->json($data);
+        return response()->json(['data' => $data]);
     }
 }

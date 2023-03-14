@@ -1,8 +1,6 @@
 @extends('layout.template')
 
-@section('title')
-	{{$title}}
-@endsection
+@section('title'){{ $title }}@endsection
 
 @section('content')
 <!-- Page info -->
