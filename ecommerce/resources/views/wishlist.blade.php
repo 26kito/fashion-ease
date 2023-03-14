@@ -1,11 +1,9 @@
 @extends('layout.template')
 
-@section('title')
-{{$title}}
-@endsection
+@section('title'){{ $title }}@endsection
 
 @section('content')
-<section class="cart-section spad" style="margin-top: 200px">
+<section class="cart-section spad" style="margin-top: 20px">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">

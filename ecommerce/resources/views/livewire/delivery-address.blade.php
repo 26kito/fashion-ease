@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
+                    {{-- <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
                     <div class="form-group">
                         <label for="inputAddress" class="mb-2">Alamat</label>
                         <input type="text" class="form-control" id="inputAddress" placeholder="Masukkan alamat kamu">
@@ -30,7 +30,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <a type="button" id="saveDeliveryAddress" class="btn btn-primary mb-2">Simpan</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -62,54 +62,78 @@
 @push('script')
 <script>
     $(document).on('click', '#changeAddress', () => {
+        $.ajax({
+            type: "GET",
+            url: '/user/address',
+            success: (result) => {
+                let content = getUserAddresses(result.data);
+
+                $('.modal-body').html(`
+                <h5 class="text-center mt-3 mb-4">Alamat</h5>
+                <div class="row">
+                    ${content}
+                </div>
+                `);
+            }
+        });
+    })
+
+    $(document).on('click', '#addAddress', () => {
         $('.modal-body').html(`
-            <h5 class="text-center mt-3 mb-4">Alamat</h5>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
+            <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
+            <div class="form-group">
+                <label for="inputAddress" class="mb-2">Alamat</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="Masukkan alamat kamu">
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="province" class="mb-2">Provinsi</label>
+                        <select class="form-control" id="province">
+                            <option value="null" selected disabled>Pilih provinsi kamu</option>
+                        </select>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label for="city" class="mb-2">Kota</label>
+                        <select class="form-control" id="city" disabled>
+                            <option value="null" selected disabled>Pilih kota kamu</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        `)
-    })
-
-    $.ajax({
-        type: "GET",
-        url: `/api/get-province`,
-        success: function(result) {
-            $('#province').append(provinceDropdown(result));
-        }
-    })
-
-    $('#province').on('change', () => {
-        let provinceID = $('#province').val()
-
-        $('#city').prop('disabled', false);
+            <div class="d-flex flex-column">
+                <a type="button" id="saveDeliveryAddress" class="btn btn-primary mb-2">Simpan</a>
+            </div>
+        `);
 
         $.ajax({
             type: "GET",
-            url: `/api/get-city/${provinceID}`,
-            success: function(result) {
-                $('#city').html(
-                    "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
-                );
+            url: `/api/get-province`,
+            success: (result) => {
+                $('#province').append(provinceDropdown(result));
             }
         })
+
+        $('#province').on('change', () => {
+            let provinceID = $('#province').val()
+    
+            $('#city').prop('disabled', false);
+    
+            $.ajax({
+                type: "GET",
+                url: `/api/get-city/${provinceID}`,
+                success: function(result) {
+                    $('#city').html(
+                        "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
+                    );
+                }
+            })
+        })
     })
+
 
     function provinceDropdown(data) {
         let res = '';
@@ -127,6 +151,31 @@
         data.forEach((d) => {
             res += `<option value="${d.city_id}">${d.city_name} (${d.type})</option>`;
         });
+
+        return res;
+    }
+
+    function getUserAddresses(data) {
+        let res = '';
+        let length = data.length;
+
+        data.forEach((d) => {
+            let isDefault = d.is_default;
+
+            res += `
+                <div class="col-sm-${(length == 2) ? 6 : 12}">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title ${(length != 2) ? 'text-center' : ''}">Alamat ${(isDefault == 1) ? '(Utama)' : ''}</h5>
+                        <p class="card-text ${(length != 2) ? 'text-center' : ''}">${d.address}</p>
+                        <div class="${(length != 2) ? 'text-center' : ''}">
+                            <a href="#" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            `;
+        })
 
         return res;
     }
