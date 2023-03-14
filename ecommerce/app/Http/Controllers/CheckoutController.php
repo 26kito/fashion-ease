@@ -37,7 +37,12 @@ class CheckoutController extends Controller
                 if ($orderItems->isEmpty()) {
                     return redirect()->back();
                 } else {
-                    return view('checkout', ['title' => $title, 'orderItems' => $orderItems, 'cartItemsID' => $cartItemsID, 'paymentMethod' => $paymentMethod]);
+                    return view('checkout', [
+                        'title' => $title,
+                        'orderItems' => $orderItems,
+                        'cartItemsID' => $cartItemsID,
+                        'paymentMethod' => $paymentMethod,
+                    ]);
                 }
             } else {
                 $status = 400;
@@ -56,6 +61,7 @@ class CheckoutController extends Controller
             $paymentMethodID = $request->paymentMethodID;
             $total = 0;
             $shipmentFee = $request->shippingCost;
+            $shippingTo = $request->shippingTo;
             $grandTotal = 0;
 
             foreach ($data as $row) {
@@ -85,6 +91,7 @@ class CheckoutController extends Controller
                     'shipment_date' => $shipmentDate,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
+                    'shipping_to' => $shippingTo,
                     'grand_total' => $grandTotal,
                     'payment_method_id' => $paymentMethodID
                 ]);

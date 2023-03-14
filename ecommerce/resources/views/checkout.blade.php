@@ -11,13 +11,6 @@
 				<div class="checkout-form">
 					@livewire('delivery-address')
 					@livewire('delivery-info')
-					{{-- <div class="cf-title">Payment</div>
-					<ul class="payment-list">
-						<li>Paypal<a href="#"><img src="{{ asset('asset/img/paypal.png') }}" alt=""></a></li>
-						<li>Credit / Debit card<a href="#"><img src="{{ asset('asset/img/mastercart.png') }}"
-									alt=""></a></li>
-						<li>Pay when you get the package</li>
-					</ul> --}}
 					<div class="cf-title">Payment</div>
 					<div class="row m-0">
 						<ul>
@@ -107,6 +100,7 @@
 				data: {
 					'data': orderItems,
 					'shippingCost': shippingCost,
+					'shippingTo': address,
 					'paymentMethodID': paymentMethodID
 				},
 				success: function(result) {
