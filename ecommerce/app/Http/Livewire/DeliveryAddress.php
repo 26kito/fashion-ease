@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class DeliveryAddress extends Component
 {
-    protected $listeners = ['saveDeliveryAddress' => 'saveDeliveryAddress'];
+    protected $userAddressID;
+
+    protected $listeners = [
+        'saveDeliveryAddress' => 'saveDeliveryAddress',
+        'changeDeliveryAddress' => 'changeDeliveryAddress',
+    ];
 
     public function render()
     {
@@ -18,7 +23,6 @@ class DeliveryAddress extends Component
             ->leftJoin('cities', 'user_addresses.city', 'cities.city_id')
             ->where('users.id', Auth::id())
             ->select(
-                'users.id',
                 'users.first_name',
                 'users.last_name',
                 'users.phone_number',
@@ -26,6 +30,7 @@ class DeliveryAddress extends Component
                 'user_addresses.address',
                 'user_addresses.is_default',
                 'provinces.province_name',
+                'user_addresses.city AS cityID',
                 'cities.city_name'
             );
 
@@ -34,7 +39,11 @@ class DeliveryAddress extends Component
         if (!$checkAddress->address) {
             $userInfo = $getUserAddress->first();
         } else {
-            $userInfo = $getUserAddress->where('is_default', 1)->first();
+            if ($this->userAddressID == null) {
+                $userInfo = $getUserAddress->where('is_default', 1)->first();
+            } else {
+                $userInfo = $getUserAddress->where('user_addresses.id', $this->userAddressID)->first();
+            }
         }
 
         return view('livewire.delivery-address', ['userInfo' => $userInfo]);
@@ -61,5 +70,10 @@ class DeliveryAddress extends Component
             'status' => 'success',
             'message' => 'Berhasil menambahkan alamat!'
         ]);
+    }
+
+    public function changeDeliveryAddress($data)
+    {
+        $this->userAddressID = $data;
     }
 }
