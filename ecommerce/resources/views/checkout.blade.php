@@ -57,40 +57,40 @@
 		let paymentMethodID = $('input[name="paymentMethod"]:checked').val();
 
 		if (!address) {
-			let event = new CustomEvent('toastr', {
+			let toastr = new CustomEvent('toastr', {
 				'detail': {
 					'status': 'info', 
 					'message': 'Isi alamatmu dluu yuk'
 				}
 			});
 			
-			window.dispatchEvent(event);
+			window.dispatchEvent(toastr);
 			
 			setTimeout(() => {
 				$('#addressModal').modal('show');
 			}, 1000);
 		} else if (!shippingCost) {
-			let event = new CustomEvent('toastr', {
+			let toastr = new CustomEvent('toastr', {
 				'detail': {
 					'status': 'info', 
 					'message': 'Pilih layanan pengiriman dulu ya'
 				}
 			});
 	
-			window.dispatchEvent(event);
+			window.dispatchEvent(toastr);
 
 			setTimeout(() => {
 				$('#deliveryModal').modal('show');
 			}, 1000);
 		} else if (!paymentMethodID) {
-			let event = new CustomEvent('toastr', {
+			let toastr = new CustomEvent('toastr', {
 				'detail': {
 					'status': 'info', 
 					'message': 'Pilih metode pembayaran dulu ya'
 				}
 			});
 	
-			window.dispatchEvent(event);
+			window.dispatchEvent(toastr);
 		} else {
 			$.ajax({
 				type: "POST",
@@ -105,14 +105,14 @@
 				},
 				success: function(result) {
 					window.livewire.emit('refreshCart');
-					let event = new CustomEvent('toastr', {
+					let toastr = new CustomEvent('toastr', {
 						'detail': {
 							'status': 'success', 
 							'message': result.message
 						}
 					});
 			
-					window.dispatchEvent(event);
+					window.dispatchEvent(toastr);
 				}
 			})
 		}

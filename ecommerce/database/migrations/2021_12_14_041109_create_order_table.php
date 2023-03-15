@@ -21,6 +21,7 @@ class CreateOrderTable extends Migration
             $table->date('shipment_date')->nullable();
             $table->integer('total');
             $table->integer('shipment_fee');
+            $table->integer('shipping_to');
             $table->integer('discount')->nullable();
             $table->integer('grand_total');
             $table->unsignedBigInteger('payment_method_id');
