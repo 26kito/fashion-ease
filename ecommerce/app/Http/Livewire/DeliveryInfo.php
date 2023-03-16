@@ -10,7 +10,6 @@ class DeliveryInfo extends Component
 {
     public $serviceDelivery;
     public $custAddress;
-    public $delivery;
     public $choosenDeliveryCourier;
     public $choosenServiceName;
     public $choosenServiceFee;
@@ -18,6 +17,7 @@ class DeliveryInfo extends Component
 
     protected $listeners = [
         'setAddress' => '$refresh',
+        'refreshDeliveryService' => 'refreshDeliveryService',
         'setDeliveryService' => 'setDeliveryService',
         'setDeliveryCourier' => 'setDeliveryCourier',
     ];
@@ -51,5 +51,10 @@ class DeliveryInfo extends Component
     public function setDeliveryCourier($data)
     {
         $this->choosenDeliveryCourier = strtoupper($data);
+    }
+
+    public function refreshDeliveryService()
+    {
+        $this->reset('choosenServiceName');
     }
 }

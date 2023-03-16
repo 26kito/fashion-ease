@@ -57,6 +57,7 @@
 </div>
 
 @push('script')
+<script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
     let custAddress = @js($custAddress);
     let cityID = "";
@@ -74,12 +75,7 @@
 
     $(document).on('click', '#deliveryService', () => {
         if (custAddress.length == 0) {
-            let event = new CustomEvent('toastr', {
-                'detail': {
-                    'status': 'info', 
-                    'message': 'Isi alamatmu dluu yuk'
-                }
-            });
+	        let event = customNotif.notif('info', 'Isi alamatmu dluu yuk');
             
             window.dispatchEvent(event);
             
@@ -91,7 +87,7 @@
         }
     })
 
-    $('#courier').on('change', () => {
+    $(document).on('change', '#courier', () => {
         let courierCode = $('#courier').val();
         $('#service').prop('disabled', false);
 
@@ -136,12 +132,7 @@
         let courierCode = $('#courier').val();
 
         if (deliveryService == null) {
-            let event = new CustomEvent('toastr', {
-                'detail': {
-                    'status': 'info', 
-                    'message': 'Layanan pengiriman tidak tersedia:('
-                }
-            });
+	        let event = customNotif.notif('info', 'Layanan pengiriman tidak tersedia:(');
     
             window.dispatchEvent(event);
         } else {

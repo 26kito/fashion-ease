@@ -44,6 +44,7 @@
 
 @push('script')
 @if (Session::has('status'))
+<script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
 	let statusCode = {{ Session::get('status') }};
 	let status = "";
@@ -57,12 +58,7 @@
 		status = 'info';
 	}
 
-	let event = new CustomEvent('toastr', {
-		'detail': {
-			'status': status, 
-			'message': message
-		}
-	});
+	let event = customNotif.notif(status, message);
 		
 	window.dispatchEvent(event);
 </script>
