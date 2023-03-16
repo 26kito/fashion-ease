@@ -15,18 +15,21 @@
         @if ($userInfo->address !== null)
         <p class="m-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
         <p class="m-0">{{ $userInfo->phone_number }}</p>
-        <p class="mb-4 user-address" data-user-address={{ $userInfo->cityID }}>
+        <p class="mb-4 user-address" data-user-address={{ $userInfo->cityID }} data-selected-user-address={{
+            $userInfo->id }}>
             {{ "$userInfo->address, $userInfo->province_name, $userInfo->city_name" }}
             <b>{{ ($userInfo->is_default == 1) ? "(Alamat Utama)" : "" }}</b>
         </p>
         @endif
     </div>
     @if ($userInfo->address === null)
-    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="addAddress" role="button" data-bs-toggle="modal" data-bs-target="#addressModal">
+    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="addAddress" role="button" data-bs-toggle="modal"
+        data-bs-target="#addressModal">
         Tambah alamat
     </a>
     @else
-    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="changeAddress" role="button" data-bs-toggle="modal" data-bs-target="#addressModal">
+    <a class="btn btn-outline-dark btn-sm ms-3 mb-3" id="changeAddress" role="button" data-bs-toggle="modal"
+        data-bs-target="#addressModal">
         Ubah alamat
     </a>
     @endif
@@ -34,6 +37,8 @@
 
 @push('script')
 <script>
+    addressModalContent();
+
     $(document).on('click', '#changeAddress', () => {
         $.ajax({
             type: "GET",
@@ -49,62 +54,6 @@
                 `);
             }
         });
-    })
-
-    $(document).on('click', '#addAddress', () => {
-        $('.addressModalBody').html(`
-            <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
-            <div class="form-group">
-                <label for="inputAddress" class="mb-2">Alamat</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="Masukkan alamat kamu">
-            </div>
-            <div class="row mb-4">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="province" class="mb-2">Provinsi</label>
-                        <select class="form-control" id="province">
-                            <option value="null" selected disabled>Pilih provinsi kamu</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="form-group">
-                        <label for="city" class="mb-2">Kota</label>
-                        <select class="form-control" id="city" disabled>
-                            <option value="null" selected disabled>Pilih kota kamu</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex flex-column">
-                <a type="button" id="saveDeliveryAddress" class="btn btn-primary mb-2">Simpan</a>
-            </div>
-        `);
-
-        $.ajax({
-            type: "GET",
-            url: `/api/get-province`,
-            success: (result) => {
-                $('#province').append(provinceDropdown(result));
-            }
-        })
-
-        $('#province').on('change', () => {
-            let provinceID = $('#province').val()
-    
-            $('#city').prop('disabled', false);
-    
-            $.ajax({
-                type: "GET",
-                url: `/api/get-city/${provinceID}`,
-                success: function(result) {
-                    $('#city').html(
-                        "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
-                    );
-                }
-            })
-        })
     })
 
     $(document).on('click', '#saveDeliveryAddress', () => {
@@ -146,17 +95,79 @@
     })
 
     $(document).on('click', '#addressModal', (event) => {
-        if (event.target.tagName == 'A') {
-            event.preventDefault();
-    
-            let data = event.target.getAttribute('data-address-id');
-    
-            Livewire.emit('changeDeliveryAddress', data);
-            Livewire.emit('setAddress');
+        let userAddress = event.target.getAttribute('data-address-id');
+        let selectedUserAdressID = $('.user-address').attr('data-selected-user-address');
 
-            $('#addressModal').modal('hide');
+        if (event.target.tagName == 'A' && $(event.target).attr('id') == 'changeDeliveryAddress') {
+            if (userAddress != selectedUserAdressID) {
+                event.preventDefault();
+                Livewire.emit('changeDeliveryAddress', userAddress);
+                Livewire.emit('refreshDeliveryService');
+                
+                $('#courier').val('null');
+                $('#service').empty().prop('disabled', true);
+                $('#addressModal').modal('hide');
+            } else {
+                $('#addressModal').modal('hide');
+            }
         }
     })
+
+    function addressModalContent() {
+        $('.addressModalBody').html(`
+            <h5 class="text-center mt-3 mb-4">Tambah alamat</h5>
+            <div class="form-group">
+                <label for="inputAddress" class="mb-2">Alamat</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="Masukkan alamat kamu">
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="province" class="mb-2">Provinsi</label>
+                        <select class="form-control" id="province">
+                            <option value="null" selected disabled>Pilih provinsi kamu</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        <label for="city" class="mb-2">Kota</label>
+                        <select class="form-control" id="city" disabled>
+                            <option value="null" selected disabled>Pilih kota kamu</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <a type="button" id="saveDeliveryAddress" class="btn btn-primary mb-2">Simpan</a>
+            </div>
+        `);
+    
+        $.ajax({
+            type: "GET",
+            url: `/api/get-province`,
+            success: (result) => {
+                $('#province').append(provinceDropdown(result));
+            }
+        })
+    
+        $('#province').on('change', () => {
+            let provinceID = $('#province').val()
+    
+            $('#city').prop('disabled', false);
+    
+            $.ajax({
+                type: "GET",
+                url: `/api/get-city/${provinceID}`,
+                success: function(result) {
+                    $('#city').html(
+                        "<option value='null' selected disabled>Pilih kota kamu</option>"+cityDropdown(result)
+                    );
+                }
+            })
+        })
+    }
 
     function provinceDropdown(data) {
         let res = '';
@@ -192,7 +203,7 @@
                         <h5 class="card-title ${(length != 2) ? 'text-center' : ''}">Alamat ${(isDefault == 1) ? '(Utama)' : ''}</h5>
                         <p class="card-text ${(length != 2) ? 'text-center' : ''}">${d.address}</p>
                         <div class="${(length != 2) ? 'text-center' : ''}">
-                            <a href="#" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
+                            <a href="#" id="changeDeliveryAddress" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
                         </div>
                     </div>
                     </div>
