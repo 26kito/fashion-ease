@@ -14,8 +14,11 @@ class Cart extends Component
     public $page;
     public $carts = [];
     public $stock;
+    public $availStock;
     public $cartID;
     public $productID;
+    public $selected = [];
+    public $selectAll = false;
 
     public $listeners = [
         'addAllCartItemsToWishlist' => 'addAllCartItemsToWishlist',
@@ -50,6 +53,9 @@ class Cart extends Component
                 'carts.qty'
             )
             ->get();
+        $this->availStock = $this->carts->filter(function ($carts) {
+            return $carts->AvailStock;
+        });
 
         return view('livewire.cart');
     }
@@ -144,6 +150,27 @@ class Cart extends Component
         if ($availSize > 0 && $qty <= $availSize && $qty > 0) {
             DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
             $this->emit('refreshTotalPrice');
+        }
+    }
+
+    public function updatedSelectAll($value)
+    {
+        if ($value) {
+            $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+            $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+        } else {
+            $this->reset('selected');
+        }
+    }
+
+    public function updatedSelected($value)
+    {
+        $availStock = $this->availStock->count();
+
+        if (count($this->selected) == $availStock) {
+            $this->selectAll = true;
+        } else {
+            $this->reset('selectAll');
         }
     }
 }

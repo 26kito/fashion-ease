@@ -1873,7 +1873,7 @@ a#dropdownUser {
 
 .select-all .delete-all-cart-items {
     cursor: pointer;
-    display: none;
+    /* display: none; */
     margin-left: 70% !important;
 }
 
