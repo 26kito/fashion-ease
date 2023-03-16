@@ -36,6 +36,7 @@
 </div>
 
 @push('script')
+<script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
     addressModalContent();
 
@@ -63,30 +64,15 @@
         let data = {'address': address, 'province': province, 'city': city};
     
         if (!address) {
-            let event = new CustomEvent('toastr', {
-                'detail': {
-                    'status': 'info', 
-                    'message': 'Masukin alamat kamu dulu ya, biar kurirnya tidak tersesat:)'
-                }
-            });
+	        let event = customNotif.notif('info', 'Masukin alamat kamu dulu ya, biar kurirnya tidak tersesat:)');
     
             window.dispatchEvent(event);
         } else if (!province) {
-            let event = new CustomEvent('toastr', {
-                'detail': {
-                    'status': 'info', 
-                    'message': 'Jangan lupa isi provinsi:)'
-                }
-            });
+	        let event = customNotif.notif('info', 'Jangan lupa isi provinsi:)');
     
             window.dispatchEvent(event);
         } else if (!city) {
-            let event = new CustomEvent('toastr', {
-                'detail': {
-                    'status': 'info', 
-                    'message': 'Jangan lupa isi kota nya juga ya!'
-                }
-            });
+	        let event = customNotif.notif('info', 'Jangan lupa isi kota nya juga ya!');
     
             window.dispatchEvent(event);
         } else {

@@ -16,7 +16,8 @@
 						<ul>
 							@foreach ($paymentMethod as $row)
 							<li class="form-check">
-								<input type="radio" name="paymentMethod" id="payment{{ $row->id }}" value="{{ $row->id }}">
+								<input type="radio" name="paymentMethod" id="payment{{ $row->id }}"
+									value="{{ $row->id }}">
 								<label for="payment{{ $row->id }}">{{ $row->name }}</label>
 							</li>
 							@endforeach
@@ -49,6 +50,7 @@
 @endsection
 
 @push('script')
+<script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
 	$(document).on('click', '#placeOrder', () => {
 		let orderItems = @json($orderItems);
@@ -57,40 +59,25 @@
 		let paymentMethodID = $('input[name="paymentMethod"]:checked').val();
 
 		if (!address) {
-			let toastr = new CustomEvent('toastr', {
-				'detail': {
-					'status': 'info', 
-					'message': 'Isi alamatmu dluu yuk'
-				}
-			});
+			let event = customNotif.notif('info', 'Isi alamatmu dluu yuk');
 			
-			window.dispatchEvent(toastr);
+			window.dispatchEvent(event);
 			
 			setTimeout(() => {
 				$('#addressModal').modal('show');
 			}, 1000);
 		} else if (!shippingCost) {
-			let toastr = new CustomEvent('toastr', {
-				'detail': {
-					'status': 'info', 
-					'message': 'Pilih layanan pengiriman dulu ya'
-				}
-			});
-	
-			window.dispatchEvent(toastr);
+			let event = customNotif.notif('info', 'Pilih layanan pengiriman dulu ya');
+
+			window.dispatchEvent(event);
 
 			setTimeout(() => {
 				$('#deliveryModal').modal('show');
 			}, 1000);
 		} else if (!paymentMethodID) {
-			let toastr = new CustomEvent('toastr', {
-				'detail': {
-					'status': 'info', 
-					'message': 'Pilih metode pembayaran dulu ya'
-				}
-			});
+			let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
 	
-			window.dispatchEvent(toastr);
+			window.dispatchEvent(event);
 		} else {
 			$.ajax({
 				type: "POST",
@@ -105,14 +92,10 @@
 				},
 				success: function(result) {
 					window.livewire.emit('refreshCart');
-					let toastr = new CustomEvent('toastr', {
-						'detail': {
-							'status': 'success', 
-							'message': result.message
-						}
-					});
+
+					let event = customNotif.notif('success', result.message);
 			
-					window.dispatchEvent(toastr);
+					window.dispatchEvent(event);
 				}
 			})
 		}

@@ -39,10 +39,10 @@ class DeliveryAddress extends Component
         if (!$checkAddress->address) {
             $userInfo = $getUserAddress->first();
         } else {
-            if ($this->userAddressID == null) {
-                $userInfo = $getUserAddress->where('is_default', 1)->first();
-            } else {
+            if ($this->userAddressID != null) {
                 $userInfo = $getUserAddress->where('user_addresses.id', $this->userAddressID)->first();
+            } else {
+                $userInfo = $getUserAddress->first();
             }
         }
 
