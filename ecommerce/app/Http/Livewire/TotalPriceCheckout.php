@@ -18,16 +18,15 @@ class TotalPriceCheckout extends Component
     public function render()
     {
         $total = DB::table('carts')
-            ->join('products', 'carts.product_id', 'products.id')
-            ->where('carts.user_id', Auth::id())
+            ->join('products', 'carts.product_id', '=', 'products.id')
             ->whereIn('carts.id', $this->cartItemsID)
-            ->selectRaw("SUM(products.price * carts.qty) AS price")
-            ->first();
+            ->where('carts.user_id', '=', Auth::id())
+            ->sum(DB::raw('products.price * carts.qty'));
 
-        $this->total = rupiah($total->price);
+        $this->total = rupiah($total);
 
         if ($this->shippingFee) {
-            $grandTotal = $total->price + $this->shippingFee;
+            $grandTotal = $total + $this->shippingFee;
             $this->grandTotal = rupiah($grandTotal);
         } else {
             $this->grandTotal = $this->total;
@@ -35,6 +34,7 @@ class TotalPriceCheckout extends Component
 
         return view('livewire.total-price-checkout');
     }
+
 
     public function setShippingFee($data)
     {

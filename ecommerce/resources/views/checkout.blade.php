@@ -60,13 +60,17 @@
 
 		if (!address) {
 			let event = customNotif.notif('info', 'Isi alamatmu dluu yuk');
-			
+
 			window.dispatchEvent(event);
-			
+
 			setTimeout(() => {
 				$('#addressModal').modal('show');
 			}, 1000);
-		} else if (!shippingCost) {
+
+			return;
+		} 
+		
+		if (!shippingCost) {
 			let event = customNotif.notif('info', 'Pilih layanan pengiriman dulu ya');
 
 			window.dispatchEvent(event);
@@ -74,31 +78,37 @@
 			setTimeout(() => {
 				$('#deliveryModal').modal('show');
 			}, 1000);
-		} else if (!paymentMethodID) {
-			let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
-	
-			window.dispatchEvent(event);
-		} else {
-			$.ajax({
-				type: "POST",
-				url: `/save-order`,
-				dataType: 'json',
-				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-				data: {
-					'data': orderItems,
-					'shippingCost': shippingCost,
-					'shippingTo': address,
-					'paymentMethodID': paymentMethodID
-				},
-				success: function(result) {
-					window.livewire.emit('refreshCart');
 
-					let event = customNotif.notif('success', result.message);
-			
-					window.dispatchEvent(event);
-				}
-			})
+			return;
+		} 
+		
+		if (!paymentMethodID) {
+			let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
+
+			window.dispatchEvent(event);
+
+			return;
 		}
+
+		$.ajax({
+			type: "POST",
+			url: `/save-order`,
+			dataType: 'json',
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+			data: {
+				'data': orderItems,
+				'shippingCost': shippingCost,
+				'shippingTo': address,
+				'paymentMethodID': paymentMethodID
+			},
+			success: function(result) {
+				window.livewire.emit('refreshCart');
+
+				let event = customNotif.notif('success', result.message);
+		
+				window.dispatchEvent(event);
+			}
+		})
 	})
 </script>
 @endpush

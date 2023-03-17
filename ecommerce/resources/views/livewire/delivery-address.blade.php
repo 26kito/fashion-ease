@@ -15,8 +15,7 @@
         @if ($userInfo->address !== null)
         <p class="m-0 fw-bold">{{ "$userInfo->first_name $userInfo->last_name" }}</p>
         <p class="m-0">{{ $userInfo->phone_number }}</p>
-        <p class="mb-4 user-address" data-user-address={{ $userInfo->cityID }} data-selected-user-address={{
-            $userInfo->id }}>
+        <p class="mb-4 user-address" data-user-address={{ $userInfo->cityID }} data-selected-user-address={{ $userInfo->id }}>
             {{ "$userInfo->address, $userInfo->province_name, $userInfo->city_name" }}
             <b>{{ ($userInfo->is_default == 1) ? "(Alamat Utama)" : "" }}</b>
         </p>
@@ -61,23 +60,37 @@
         let address = $('#inputAddress').val();
         let province = $('#province').val();
         let city = $('#city').val();
-        let data = {'address': address, 'province': province, 'city': city};
-    
+        let data = {
+            'address': address, 
+            'province': province, 
+            'city': city
+        };
+
         if (!address) {
-	        let event = customNotif.notif('info', 'Masukin alamat kamu dulu ya, biar kurirnya tidak tersesat:)');
-    
+            let event = customNotif.notif('info', 'Masukin alamat kamu dulu ya, biar kurirnya tidak tersesat:)');
+
             window.dispatchEvent(event);
-        } else if (!province) {
-	        let event = customNotif.notif('info', 'Jangan lupa isi provinsi:)');
-    
-            window.dispatchEvent(event);
-        } else if (!city) {
-	        let event = customNotif.notif('info', 'Jangan lupa isi kota nya juga ya!');
-    
-            window.dispatchEvent(event);
-        } else {
-            Livewire.emit('saveDeliveryAddress', data);
+
+            return;
         }
+
+        if (!province) {
+            let event = customNotif.notif('info', 'Jangan lupa isi provinsi:)');
+
+            window.dispatchEvent(event);
+
+            return;
+        }
+
+        if (!city) {
+            let event = customNotif.notif('info', 'Jangan lupa isi kota nya juga ya!');
+
+            window.dispatchEvent(event);
+
+            return;
+        }
+
+        Livewire.emit('saveDeliveryAddress', data);
     })
 
     $(document).on('click', '#addressModal', (event) => {
@@ -93,9 +106,10 @@
                 $('#courier').val('null');
                 $('#service').empty().prop('disabled', true);
                 $('#addressModal').modal('hide');
-            } else {
-                $('#addressModal').modal('hide');
+                return;
             }
+
+            $('#addressModal').modal('hide');
         }
     })
 

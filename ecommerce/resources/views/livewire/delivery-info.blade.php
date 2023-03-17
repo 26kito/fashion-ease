@@ -59,22 +59,10 @@
 @push('script')
 <script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
-    let custAddress = @js($custAddress);
-    let cityID = "";
-
-    document.addEventListener('addressChanged', (e) => {
-        e.detail.forEach(data => {
-            custAddress = data;
-            cityID = data.city;
-        });
-    })
-
-    custAddress.forEach(data => {
-        cityID = data.city;
-    });
-
     $(document).on('click', '#deliveryService', () => {
-        if (custAddress.length == 0) {
+        let cityID = $('.user-address').attr('data-user-address');
+
+        if (cityID == null) {
 	        let event = customNotif.notif('info', 'Isi alamatmu dluu yuk');
             
             window.dispatchEvent(event);
@@ -88,6 +76,7 @@
     })
 
     $(document).on('change', '#courier', () => {
+        let cityID = $('.user-address').attr('data-user-address');
         let courierCode = $('#courier').val();
         $('#service').prop('disabled', false);
 
