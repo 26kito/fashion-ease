@@ -9,7 +9,8 @@
             </div>
             <div class="col-xl-6 col-lg-5">
                 <div class="header-search-form form-group ">
-                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)" class="form-control">
+                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)"
+                        class="form-control">
                     <button id="search-btn"><i class="flaticon-search"></i></button>
                 </div>
                 @if ($productsSearch)
@@ -78,28 +79,28 @@
 </div>
 
 @push('script')
-    <script>
-        $('#search-input').focus(() => {
-            $('.overlay-black').show();
-            $('.header-search-result').show();
-        })
+<script>
+    $('#search-input').focus(() => {
+        $('.overlay-black').show();
+        $('.header-search-result').show();
+    })
 
-        $('.overlay-black').click(() => {
-            $('.header-search-result').hide();
-            $('.overlay-black').hide();
-        })
+    $('.overlay-black').click(() => {
+        $('.header-search-result').hide();
+        $('.overlay-black').hide();
+    })
 
-        $('#search-btn').click(() => {
-            let keyword = $('#search-input').val();
+    $('#search-btn').click(() => {
+        let keyword = $('#search-input').val();
 
-            if (keyword == '') {
-		        toastr.info('Ketik apa yang mau kamu cari di kolom pencarian yaa')
-                toastr.options = {
-                    "preventDuplicates": true,
-                };
-            } else {
-                window.location.href = `/search/${keyword}`;
-            }
-        })
-    </script>
+        if (keyword == '') {
+            toastr.info('Ketik apa yang mau kamu cari di kolom pencarian yaa')
+            toastr.options = {
+                "preventDuplicates": true,
+            };
+        } else {
+            window.location.href = `/search/${keyword}`;
+        }
+    })
+</script>
 @endpush

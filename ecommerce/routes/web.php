@@ -36,8 +36,6 @@ Route::middleware('is_user')->group(function () {
     Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    Route::get('/cart/get', [CartController::class, 'getOrderItems']);
-    Route::delete('/cart/remove-cart-item/orderID/{orderID}/orderItemsID/{orderItemsID}', [CartController::class, 'removeCartItem']);
 
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 

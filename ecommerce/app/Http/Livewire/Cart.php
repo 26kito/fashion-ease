@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Cart as CartModel;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,6 @@ class Cart extends Component
 
     public $page;
     public $carts = [];
-    public $stock;
     public $availStock;
     public $cartID;
     public $productID;
@@ -38,7 +38,7 @@ class Cart extends Component
             ->join('products', 'carts.product_id', 'products.id')
             ->leftJoin('detail_products', function ($join) {
                 $join->on('carts.product_id', 'detail_products.dp_id')
-                    ->on('detail_products.size', 'carts.size');
+                    ->whereColumn('detail_products.size', 'carts.size');
             })
             ->where('carts.user_id', Auth::id())
             ->select(
@@ -46,19 +46,19 @@ class Cart extends Component
                 'products.id AS ProductID',
                 'products.product_id',
                 'products.name AS ProdName',
-                DB::raw("IFNULL(detail_products.stock, 0) AS AvailStock"),
+                DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
                 'products.image',
-                DB::raw("products.price * carts.qty AS price"),
+                DB::raw('products.price * carts.qty AS price'),
                 'carts.size',
                 'carts.qty'
             )
             ->get();
-        $this->availStock = $this->carts->filter(function ($carts) {
-            return $carts->AvailStock;
-        });
+
+        $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
 
         return view('livewire.cart');
     }
+
 
     public function initProp($cartID, $productID)
     {
@@ -73,9 +73,7 @@ class Cart extends Component
 
     public function removeAllCartItems()
     {
-        DB::table('carts')
-            ->where('carts.user_id', Auth::id())
-            ->delete();
+        CartModel::where('user_id', Auth::id())->delete();
 
         $this->emit('refreshTotalPrice');
         $this->emit('refreshCart');
@@ -90,18 +88,13 @@ class Cart extends Component
 
     public function removeCartItem()
     {
-        $data = DB::table('carts')
-            ->where('carts.id', $this->cartID)
-            ->where('carts.user_id', Auth::id())
-            ->where('carts.product_id', $this->productID)
+        $cart = CartModel::where('id', $this->cartID)
+            ->where('user_id', Auth::id())
+            ->where('product_id', $this->productID)
             ->first();
 
-        if ($data) {
-            DB::table('carts')
-                ->where('carts.id', $this->cartID)
-                ->where('carts.user_id', Auth::id())
-                ->where('carts.product_id', $this->productID)
-                ->delete();
+        if ($cart) {
+            $cart->delete();
 
             $this->emit('refreshTotalPrice');
             $this->emit('refreshCart');

@@ -18,24 +18,28 @@ class ProductsList extends Component
     public function render()
     {
         $categoryID = $this->category;
-        $totalProducts = Product::count();
 
-        if ($this->category == NULL) {
-            $products = $this->products =
-                Product::take($this->amount)->get();
-        } else {
-            $products = $this->products =
-                Product::where('category_id', $categoryID)->take($this->amount)->get();
+        $query = Product::query();
+        $query->take($this->amount);
 
-            $totalProducts = Product::where('category_id', $categoryID)->count();
+        if ($categoryID !== null) {
+            $query->where('category_id', $categoryID);
         }
+
+        $products = $this->products = $query->get();
+        $totalProducts = $query->count();
 
         $productCategories = DB::table('categories')
             ->select('id', 'name')
             ->take(6)->get();
 
-        return view('livewire.products-list', ['products' => $products, 'totalProducts' => $totalProducts, 'productCategories' => $productCategories]);
+        return view('livewire.products-list', [
+            'products' => $products,
+            'totalProducts' => $totalProducts,
+            'productCategories' => $productCategories,
+        ]);
     }
+
 
     public function addToCart($id)
     {

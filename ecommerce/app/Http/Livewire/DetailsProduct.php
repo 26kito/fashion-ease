@@ -60,69 +60,67 @@ class DetailsProduct extends Component
 
     public function increment()
     {
-        if ($this->size) {
-            if ($this->stock != '0') {
-                if ($this->qty < $this->stock) {
-                    $this->qty++;
-
-                    if ($this->qty >= 5) {
-                        return $this->qty = 5;
-                    }
-                }
-            } else {
-                $this->reset('qty');
-                return $this->dispatchBrowserEvent('toastr', [
-                    'status' => 'error',
-                    'message' => 'Size yang kmu pilih habis nih :('
-                ]);
-            }
-        } else {
+        if (!$this->size) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
                 'message' => 'Kamu belum memilih size nih'
             ]);
         }
+
+        if ($this->stock == 0) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Size yang kamu pilih habis nih :('
+            ]);
+        }
+
+        if ($this->qty >= 5) {
+            return $this->qty = 5;
+        }
+
+        if ($this->qty < $this->stock) {
+            $this->qty++;
+        }
     }
 
     public function decrement()
     {
-        if ($this->size) {
-            if ($this->qty) {
-                if ($this->stock != '0') {
-                    $this->qty--;
-
-                    if ($this->qty <= 1) {
-                        return $this->qty = 1;
-                    }
-                } else {
-                    $this->reset('qty');
-                    return $this->dispatchBrowserEvent('toastr', [
-                        'status' => 'error',
-                        'message' => 'Size yang kmu pilih habis nih :('
-                    ]);
-                }
-            }
-        } else {
+        if (!$this->size) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
                 'message' => 'Kamu belum memilih size nih'
             ]);
+        }
+
+        if (!$this->qty) {
+            return;
+        }
+
+        if ($this->stock == 0) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Size yang kamu pilih habis nih :('
+            ]);
+        }
+
+        $this->qty--;
+
+        if ($this->qty <= 1) {
+            return $this->qty = 1;
         }
     }
 
     public function checkSize($defaultSize)
     {
         $this->reset('qty');
+
         $productID = $this->products->id;
+
         $stock = DB::table('detail_products')
             ->where('dp_id', $productID)
             ->where('size', $defaultSize)
             ->sum('stock');
 
-        if ($stock === 0) {
-            $this->stock = '0';
-        } else {
-            $this->stock = $stock;
-        }
+        $this->stock = $stock === 0 ? '0' : $stock;
     }
 }

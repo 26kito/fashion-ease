@@ -21,14 +21,14 @@ class Header extends Component
 
     public function render()
     {
+        $this->productsSearch = '';
+
         if (strlen($this->keyword) >= 3) {
             $this->productsSearch = DB::table('products')
                 ->join('categories', 'products.category_id', 'categories.id')
                 ->select('products.id', 'products.product_id', 'products.name AS ProductName', 'categories.name AS CategoryName')
                 ->where('products.name', 'LIKE', '%' . $this->keyword . '%')
                 ->take(3)->get();
-        } else {
-            $this->productsSearch = "";
         }
 
         $this->cartQty = $this->cart();

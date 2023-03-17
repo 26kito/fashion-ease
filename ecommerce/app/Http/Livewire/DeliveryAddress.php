@@ -64,8 +64,6 @@ class DeliveryAddress extends Component
                 'is_default' => 1
             ]);
 
-        $this->emit('setAddress');
-
         return $this->dispatchBrowserEvent('toastr', [
             'status' => 'success',
             'message' => 'Berhasil menambahkan alamat!'
@@ -75,5 +73,7 @@ class DeliveryAddress extends Component
     public function changeDeliveryAddress($data)
     {
         $this->userAddressID = $data;
+
+        $this->emit('updatedCityIDFromDeliveryAddress', $data);
     }
 }

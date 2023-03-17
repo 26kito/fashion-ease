@@ -9,14 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class DeliveryInfo extends Component
 {
     public $serviceDelivery;
-    public $custAddress;
     public $choosenDeliveryCourier;
     public $choosenServiceName;
     public $choosenServiceFee;
     public $choosenServiceEtd;
 
     protected $listeners = [
-        'setAddress' => '$refresh',
         'refreshDeliveryService' => 'refreshDeliveryService',
         'setDeliveryService' => 'setDeliveryService',
         'setDeliveryCourier' => 'setDeliveryCourier',
@@ -26,16 +24,11 @@ class DeliveryInfo extends Component
     {
         $this->serviceDelivery = DB::table('couriers')->get();
 
-        $this->custAddress = DB::table('user_addresses')
+        $this->cityID = DB::table('user_addresses')
             ->where('user_id', Auth::id())
             ->get();
 
         return view('livewire.delivery-info');
-    }
-
-    public function dehydrate()
-    {
-        $this->dispatchBrowserEvent('addressChanged', $this->custAddress);
     }
 
     public function setDeliveryService($data)

@@ -18,16 +18,23 @@ class Category extends Component
     {
         $totalProducts = Product::count();
 
-        if (!$this->categoryId) {
-            $products = Product::take($this->amount)->get();
-        } else {
-            $products = Product::where('category_id', '=', $this->categoryId)->take($this->amount)->get();
+        $products = Product::when($this->categoryId, function ($query) {
+            return $query->where('category_id', $this->categoryId);
+        })
+            ->take($this->amount)
+            ->get();
+
+        if ($this->categoryId) {
             $totalProducts = Product::where('category_id', '=', $this->categoryId)->count();
         }
 
         $category = ModelsCategory::get();
 
-        return view('livewire.category', ['products' => $products, 'category' => $category, 'totalProducts' => $totalProducts]);
+        return view('livewire.category', [
+            'products' => $products,
+            'category' => $category,
+            'totalProducts' => $totalProducts
+        ]);
     }
 
     public function load()

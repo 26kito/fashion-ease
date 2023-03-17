@@ -1,8 +1,8 @@
 const customNotif = {
-    notif(status, message) {
+	notif(status, message) {
 		let toastr = new CustomEvent('toastr', {
 			'detail': {
-				'status': status, 
+				'status': status,
 				'message': message
 			}
 		});
