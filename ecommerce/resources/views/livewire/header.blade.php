@@ -9,9 +9,9 @@
             </div>
             <div class="col-xl-6 col-lg-5">
                 <div class="header-search-form form-group ">
-                    <input wire:model='keyword' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)"
+                    <input wire:model='keyword' wire:keydown.enter='search' id="search-input" placeholder="Ketik nama produk yang ingin km cari :)"
                         class="form-control">
-                    <button id="search-btn"><i class="flaticon-search"></i></button>
+                    <button wire:click='search' id="search-btn"><i class="flaticon-search"></i></button>
                 </div>
                 @if ($productsSearch)
                 <div class="header-search-result">
@@ -88,19 +88,6 @@
     $('.overlay-black').click(() => {
         $('.header-search-result').hide();
         $('.overlay-black').hide();
-    })
-
-    $('#search-btn').click(() => {
-        let keyword = $('#search-input').val();
-
-        if (keyword == '') {
-            toastr.info('Ketik apa yang mau kamu cari di kolom pencarian yaa')
-            toastr.options = {
-                "preventDuplicates": true,
-            };
-        } else {
-            window.location.href = `/search/${keyword}`;
-        }
     })
 </script>
 @endpush

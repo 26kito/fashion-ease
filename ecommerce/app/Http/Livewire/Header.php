@@ -40,4 +40,16 @@ class Header extends Component
     {
         ['addToCart' => $this->addToCartTrait($productId, $size, $qty)];
     }
+
+    public function search()
+    {
+        if ($this->keyword == '') {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'info',
+                'message' => 'Ketik apa yang mau kamu cari di kolom pencarian yaa'
+            ]);
+        }
+
+        return redirect()->to("/search/$this->keyword");
+    }
 }

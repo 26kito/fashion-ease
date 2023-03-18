@@ -35,13 +35,12 @@ Route::middleware('is_user')->group(function () {
 
     Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware('auth');
 
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
-    Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
-    Route::get('/save-order', [CheckoutController::class, 'saveOrder']);
 
     Route::get('/product/{product_id}', [ProductsController::class, 'index']);
 
