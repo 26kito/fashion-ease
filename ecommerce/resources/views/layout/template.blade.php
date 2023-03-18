@@ -14,7 +14,7 @@
 	@stack('stylesheet')
 	<!-- Stylesheets -->
 	{{-- <link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}"> --}}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/fontawesome.min.css">
+	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/fontawesome.min.css"> --}}
 	<link rel="stylesheet" href="{{asset('asset/css/flaticon.css')}}">
 	<link rel="stylesheet" href="{{asset('asset/css/slicknav.min.css')}}">
 	<link rel="stylesheet" href="{{asset('asset/css/jquery-ui.min.css')}}">

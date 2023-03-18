@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    public function searchResult(Request $request)
+    public function searchResult()
     {
         // Get param from url
         $keyword = request()->keyword;

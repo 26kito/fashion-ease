@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $cartItemsID = $request->input('cartid');
+        $cartItemsID = request()->cartid;
 
         if (!is_array($cartItemsID) || empty($cartItemsID)) {
             return redirect()->back()->with('status', 400);
@@ -42,7 +42,6 @@ class CheckoutController extends Controller
             ->whereIn('carts.id', $cartItemsID)
             ->get();
     }
-
 
     public function saveOrder(Request $request)
     {

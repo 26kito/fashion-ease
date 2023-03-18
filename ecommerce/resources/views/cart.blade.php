@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="POST" style="margin-top: 20px">
+<form action="{{ route('checkout') }}" method="GET" style="margin-top: 20px">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
