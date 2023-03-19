@@ -11,6 +11,7 @@ class SearchResult extends Component
     use addToWishlist;
 
     public $categoryID;
+    public $message = "";
     public $keyword;
     public $amount = 6;
     public $totalProduct;
@@ -25,46 +26,45 @@ class SearchResult extends Component
 
         $baseProducts = DB::table('products')->where('name', 'LIKE', "%$keyword%");
 
-        $totalAllProduct = DB::table('products')
-            ->where('name', 'LIKE', "%$keyword%")
-            ->count();
+        $products = $baseProducts->get();
 
-        $products = (clone $baseProducts)->get();
+        $this->totalProduct = DB::table('products')->where('name', 'LIKE', "%$keyword%")->count();
 
-        $productCategoryID = [];
-        foreach ($products as $row) {
-            array_push($productCategoryID, $row->category_id);
-        }
-        $this->totalProduct = $totalAllProduct;
-
-        $category = DB::table('categories')
-            ->whereIn('id', $productCategoryID)
-            ->get();
+        $category = collect($products)->pluck('category_id')->unique();
+        $category = DB::table('categories')->whereIn('id', $category)->get();
 
         if ($products->isEmpty()) {
-            $message = "Produk yang kamu cari gaada nih:(";
-        } else {
-            $message = "";
+            $this->message = "Produk yang kamu cari gaada nih:(";
         }
 
-        $categoryID = $this->categoryID;
-        if ($categoryID) {
-            $products = (clone $baseProducts)
-                ->where('category_id', $categoryID)
+        if ($this->categoryID) {
+            $products = $baseProducts
+                ->where('category_id', $this->categoryID)
                 ->take($this->amount)
                 ->get();
 
-            $totalProductByCategory = (clone $baseProducts)
-                ->where('category_id', $categoryID)
-                ->count();
-            $this->totalProduct = $totalProductByCategory;
-        } else {
-            $products = (clone $baseProducts)->take($this->amount)->get();
+            $this->totalProduct = $products->count();
         }
+
+        if ($this->minPriceFilter || $this->maxPriceFilter) {
+            $products = $baseProducts;
+
+            if ($this->minPriceFilter) {
+                $minPriceFilter = intval($this->minPriceFilter);
+                $products = $products->where('price', '>=', $minPriceFilter);
+            }
+
+            if ($this->maxPriceFilter) {
+                $maxPriceFilter = intval($this->maxPriceFilter);
+                $products = $products->where('price', '<=', $maxPriceFilter);
+            }
+
+            $products = $products->take($this->amount)->get();
+        }
+
         return view('livewire.search-result', [
             'products' => $products,
-            'category' => $category,
-            'message' => $message
+            'category' => $category
         ]);
     }
 
