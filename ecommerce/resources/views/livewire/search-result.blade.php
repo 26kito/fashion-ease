@@ -1,7 +1,3 @@
-@push('stylesheet')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-@endpush
-
 <div class="row">
     {{-- Klo gaada produk tampilkan pesan error --}}
     @if ($message)
@@ -12,6 +8,7 @@
             <form action="" method="GET">
                 <div class="accordion" id="filter-accordion">
                     <h5>Filter</h5>
+                    {{-- Category Fiter --}}
                     <div class="card">
                         <div class="card-header" id="category-heading">
                             <div class="mb-0 d-flex justify-content-between">
@@ -38,6 +35,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- Price Filter --}}
                     <div class="card">
                         <div class="card-header" id="price-range-heading">
                             <div class="mb-0">
@@ -45,8 +43,7 @@
                                     <span class="price-label pt-1">Harga</span>
                                     <a role="button" wire:click="setPriceCollapse" data-bs-toggle="collapse"
                                         data-bs-target="#price-collapse" aria-controls="price-collapse">
-                                        <i class="fa {{ $priceCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark"
-                                            aria-hidden="true"></i>
+                                        <i class="fa {{ $priceCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>
@@ -73,6 +70,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="input-group mb-2 my-2">
+                                <ul class="price-menu">
+                                    <li class="form-check">
+                                        <input type="radio" name="priceOption" id="lowestPrice" wire:click="setSortByPrice('lowest')">
+                                        <label for="lowestPrice">Harga Terendah</label>
+                                    </li>
+                                    <li class="form-check">
+                                        <input type="radio" name="priceOption" id="highestPrice" wire:click="setSortByPrice('highest')">
+                                        <label for="highestPrice">Harga Tertinggi</label>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -81,66 +90,48 @@
     </div>
     <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
-            <p>Menampilkan 1 - {{ ($amount < $totalProduct) ? $amount : $totalProduct }} barang dari total {{
-                    $totalProduct }} untuk "<b>{{ $keyword }}</b>" </p>
-                    @foreach ($products as $row)
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <a href="{{ url('product/'.$row->product_id) }}">
-                                    <img src="{{ asset('storage/products-images/'.$row->image) }}"
-                                        alt="{{ 'image of '.$row->name }}">
-                                </a>
-                                <div class="pi-links">
-                                    <a href="{{ url('product/'.$row->product_id) }}" class="add-card">
-                                        <i class="flaticon-bag"></i><span>ADD TO CART</span>
-                                    </a>
-                                    <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
-                                        <i class="flaticon-heart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="pi-text">
-                                <h6>{{ rupiah($row->price) }}</h6>
-                                <p>{{ $row->name }}</p>
-                            </div>
+            <p>Menampilkan 1 - {{ ($amount < $totalProduct) ? $amount : $totalProduct }} barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>" </p>
+            @foreach ($products as $row)
+            <div class="col-lg-4 col-sm-6">
+                <div class="product-item">
+                    <div class="pi-pic">
+                        <a href="{{ url('product/'.$row->product_id) }}">
+                            <img src="{{ asset('storage/products-images/'.$row->image) }}"
+                                alt="{{ 'image of '.$row->name }}">
+                        </a>
+                        <div class="pi-links">
+                            <a href="{{ url('product/'.$row->product_id) }}" class="add-card">
+                                <i class="flaticon-bag"></i><span>ADD TO CART</span>
+                            </a>
+                            <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
+                                <i class="flaticon-heart"></i>
+                            </a>
                         </div>
                     </div>
-                    @endforeach
+                    <div class="pi-text">
+                        <h6>{{ rupiah($row->price) }}</h6>
+                        <p>{{ $row->name }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
-        @if (count($products) < $totalProduct) <div class="text-center w-100 pt-3">
+        @if (count($products) < $totalProduct) 
+        <div class="text-center w-100 pt-3">
             <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
+        </div>
+        @endif
     </div>
     @endif
-</div>
-@endif
 </div>
 
 @push('script')
 <script>
-    const numericInput = document.querySelector('input[type="number"]');
-
-    numericInput.addEventListener('keydown', function(e) {
-        // If the 'e' key is pressed, prevent the default action
-        if (e.key === 'e') {
-            e.preventDefault();
-        }
-    });
-
-    $('.price-input-filter').on('input', function() {
-        const max = parseInt($(this).attr('max'));
-        const value = parseInt($(this).val());
-        
-        if (value > max) {
-            $(this).val(max);
-        }
-    });
-    
-    $('.price-input-filter').on('keydown', function(event) {
+    $('input.price-input-filter').on('keydown', (event) => {
         const max = parseInt($(this).attr('max'));
         const value = parseInt($(this).val() + event.key);
-        
-        if (value > max) {
+
+        if (event.key === 'e' || isNaN(value) || value.toString().length >= max.toString().length) {
             event.preventDefault();
         }
     });
