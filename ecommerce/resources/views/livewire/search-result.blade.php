@@ -3,6 +3,7 @@
     @if ($message)
     <h1>{{ $message }}</h1>
     @else
+    {{-- Filter --}}
     <div class="col-lg-3 order-2 order-lg-1">
         <div class="border p-3">
             <form action="" method="GET">
@@ -15,8 +16,7 @@
                                 <span class="category-label pt-1">Kategori</span>
                                 <a role="button" wire:click="setCategoryCollapse" data-bs-toggle="collapse"
                                     data-bs-target="#category-collapse" aria-controls="category-collapse">
-                                    <i class="fa {{ $categoryCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark"
-                                        aria-hidden="true"></i>
+                                    <i class="fa {{ $categoryCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                                 <ul class="category-menu">
                                     @foreach ($category as $row)
                                     <li class="form-check">
-                                        <input wire:model='categoryID' wire:click='refresh' type="radio" name="category"
+                                        <input wire:model='categoryID' wire:click="setSelectedFilter('category')" wire:click='refresh' type="radio" name="category"
                                             id="category( {{ $row->id }} )" value="{{ $row->id }}">
                                         <label for="category( {{ $row->id }} )">{{ $row->name }}</label>
                                     </li>
@@ -73,11 +73,11 @@
                             <div class="input-group mb-2 my-2">
                                 <ul class="price-menu">
                                     <li class="form-check">
-                                        <input type="radio" name="priceOption" id="lowestPrice" wire:click="setSortByPrice('lowest')">
+                                        <input wire:click="setSelectedFilter('lowest price')" type="radio" name="priceOption" id="lowestPrice" wire:click="setSortByPrice('lowest')">
                                         <label for="lowestPrice">Harga Terendah</label>
                                     </li>
                                     <li class="form-check">
-                                        <input type="radio" name="priceOption" id="highestPrice" wire:click="setSortByPrice('highest')">
+                                        <input wire:click="setSelectedFilter('highest price')" type="radio" name="priceOption" id="highestPrice" wire:click="setSortByPrice('highest')">
                                         <label for="highestPrice">Harga Tertinggi</label>
                                     </li>
                                 </ul>
@@ -88,9 +88,23 @@
             </form>
         </div>
     </div>
+    {{-- End of Filter --}}
+    {{-- Content --}}
     <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
             <p>Menampilkan 1 - {{ ($amount < $totalProduct) ? $amount : $totalProduct }} barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>" </p>
+            @if ($selectedFilters)
+            <div class="filters mb-3">
+                @foreach($selectedFilters as $index => $row)
+                    <div class="border rounded p-2 d-inline-block" wire:key='{{ $index }}'>
+                        {{ $row }}
+                        <a wire:click="removeFilter('{{ $row }}')" role="button">
+                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            @endif
             @foreach ($products as $row)
             <div class="col-lg-4 col-sm-6">
                 <div class="product-item">
@@ -122,6 +136,7 @@
         </div>
         @endif
     </div>
+    {{-- End of Content --}}
     @endif
 </div>
 
