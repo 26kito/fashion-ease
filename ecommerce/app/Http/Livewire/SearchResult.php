@@ -21,6 +21,7 @@ class SearchResult extends Component
     public $minPriceFilter;
     public $maxPriceFilter;
     public $sortByPrice;
+    public $selectedFilters = [];
 
     public function render()
     {
@@ -34,10 +35,13 @@ class SearchResult extends Component
 
         if ($this->categoryID) {
             $this->products = $this->getProductsByCategory($baseProducts);
+            $this->setSelectedFilter('Kategori');
         }
 
         if ($this->minPriceFilter || $this->maxPriceFilter) {
             $this->products = $this->getProductsByPriceFilter($baseProducts);
+            $this->setSelectedFilter('Harga Minimum');
+            $this->setSelectedFilter('Harga Maksimum');
         }
 
         if ($this->sortByPrice) {
@@ -133,5 +137,44 @@ class SearchResult extends Component
     public function setSortByPrice($sortBy)
     {
         $this->sortByPrice = ($sortBy == 'lowest') ? 'ASC' : 'DESC';
+    }
+
+    public function setSelectedFilter($filter)
+    {
+        $filterExists = in_array($filter, $this->selectedFilters);
+
+        if ($filter == 'Harga Minimum' && $this->minPriceFilter !== null && !$filterExists) {
+            $this->selectedFilters[] = 'Harga Minimum';
+        }
+        if ($filter == 'Harga Maksimum' && $this->maxPriceFilter !== null && !$filterExists) {
+            $this->selectedFilters[] = 'Harga Maksimum';
+        }
+        if ($filter == 'Kategori' && $this->categoryID !== null && !$filterExists) {
+            $this->selectedFilters[] = 'Kategori';
+        }
+    }
+
+    public function removeFilter($filter)
+    {
+        $index = array_search($filter, $this->selectedFilters);
+
+        if ($index === false) {
+            return; // exit early if filter not found
+        }
+
+        unset($this->selectedFilters[$index]);
+        $this->selectedFilters = array_values($this->selectedFilters);
+
+        switch ($filter) {
+            case 'Kategori':
+                $this->reset('categoryID');
+                break;
+            case 'Harga Minimum':
+                $this->reset('minPriceFilter');
+                break;
+            case 'Harga Maksimum':
+                $this->reset('maxPriceFilter');
+                break;
+        }
     }
 }
