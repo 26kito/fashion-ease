@@ -20,6 +20,10 @@ class SearchResult extends Component
     public $priceCollapse = false;
     public $minPriceFilter;
     public $maxPriceFilter;
+    public $sortByPriceOptions = [
+        'lowest' => 'Harga Terendah',
+        'highest' => 'Harga Tertinggi',
+    ];
     public $sortByPrice;
     public $selectedFilters = [];
 
@@ -35,17 +39,19 @@ class SearchResult extends Component
 
         if ($this->categoryID) {
             $this->products = $this->getProductsByCategory($baseProducts);
-            $this->setSelectedFilter('Kategori');
+            $this->setSelectedFilter('CategoryFilter');
         }
 
         if ($this->minPriceFilter || $this->maxPriceFilter) {
             $this->products = $this->getProductsByPriceFilter($baseProducts);
-            $this->setSelectedFilter('Harga Minimum');
-            $this->setSelectedFilter('Harga Maksimum');
+            $this->setSelectedFilter('MinimumPriceFilter');
+            $this->setSelectedFilter('MaximumPriceFilter');
         }
 
         if ($this->sortByPrice) {
-            $this->products = $this->getProductsSortByPrice($baseProducts);
+            $sortBy = ($this->sortByPrice == 'lowest') ? 'ASC' : 'DESC';
+            $this->products = $this->getProductsSortByPrice($baseProducts, $sortBy);
+            $this->setSelectedFilter('SortByPrice');
         }
 
         $this->totalProduct = $this->products->count();
@@ -104,9 +110,9 @@ class SearchResult extends Component
         return $products->get();
     }
 
-    protected function getProductsSortByPrice($baseProducts)
+    protected function getProductsSortByPrice($baseProducts, $sortBy)
     {
-        return $baseProducts->orderBy('price', $this->sortByPrice)->get();
+        return $baseProducts->orderBy('price', $sortBy)->get();
     }
 
     public function load()
@@ -134,23 +140,21 @@ class SearchResult extends Component
         $this->priceCollapse = !$this->priceCollapse;
     }
 
-    public function setSortByPrice($sortBy)
-    {
-        $this->sortByPrice = ($sortBy == 'lowest') ? 'ASC' : 'DESC';
-    }
-
     public function setSelectedFilter($filter)
     {
         $filterExists = in_array($filter, $this->selectedFilters);
 
-        if ($filter == 'Harga Minimum' && $this->minPriceFilter !== null && !$filterExists) {
+        if ($filter == 'MinimumPriceFilter' && $this->minPriceFilter && !$filterExists && !in_array('Harga Minimum', $this->selectedFilters)) {
             $this->selectedFilters[] = 'Harga Minimum';
         }
-        if ($filter == 'Harga Maksimum' && $this->maxPriceFilter !== null && !$filterExists) {
+        if ($filter == 'MaximumPriceFilter' && $this->maxPriceFilter && !$filterExists && !in_array('Harga Maksimum', $this->selectedFilters)) {
             $this->selectedFilters[] = 'Harga Maksimum';
         }
-        if ($filter == 'Kategori' && $this->categoryID !== null && !$filterExists) {
+        if ($filter == 'CategoryFilter' && $this->categoryID && !$filterExists && !in_array('Kategori', $this->selectedFilters)) {
             $this->selectedFilters[] = 'Kategori';
+        }
+        if (($filter == 'SortByPrice') && $this->sortByPrice !== null && !in_array('Urutkan Berdasarkan Harga', $this->selectedFilters)) {
+            $this->selectedFilters[] = 'Urutkan Berdasarkan Harga';
         }
     }
 
@@ -174,6 +178,9 @@ class SearchResult extends Component
                 break;
             case 'Harga Maksimum':
                 $this->reset('maxPriceFilter');
+                break;
+            case 'Urutkan Berdasarkan Harga':
+                $this->reset('sortByPrice');
                 break;
         }
     }
