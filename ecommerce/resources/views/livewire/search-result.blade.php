@@ -16,7 +16,8 @@
                                 <span class="category-label pt-1">Kategori</span>
                                 <a role="button" wire:click="setCategoryCollapse" data-bs-toggle="collapse"
                                     data-bs-target="#category-collapse" aria-controls="category-collapse">
-                                    <i class="fa {{ $categoryCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark" aria-hidden="true"></i>
+                                    <i class="fa {{ $categoryCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark"
+                                        aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
@@ -26,7 +27,8 @@
                                 <ul class="category-menu">
                                     @foreach ($category as $row)
                                     <li class="form-check">
-                                        <input wire:model='categoryID' wire:click="setSelectedFilter('category')" wire:click='refresh' type="radio" name="category"
+                                        <input wire:model='categoryID' wire:click="setSelectedFilter('category')"
+                                            wire:click='refresh' type="radio" name="category"
                                             id="category( {{ $row->id }} )" value="{{ $row->id }}">
                                         <label for="category( {{ $row->id }} )">{{ $row->name }}</label>
                                     </li>
@@ -43,7 +45,8 @@
                                     <span class="price-label pt-1">Harga</span>
                                     <a role="button" wire:click="setPriceCollapse" data-bs-toggle="collapse"
                                         data-bs-target="#price-collapse" aria-controls="price-collapse">
-                                        <i class="fa {{ $priceCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark" aria-hidden="true"></i>
+                                        <i class="fa {{ $priceCollapse ? 'fa-angle-down' : 'fa-angle-up'}} fa-2x text-dark"
+                                            aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>
@@ -72,14 +75,13 @@
                             </div>
                             <div class="input-group mb-2 my-2">
                                 <ul class="price-menu">
+                                    @foreach ($sortByPriceOptions as $key => $label)
                                     <li class="form-check">
-                                        <input wire:click="setSelectedFilter('lowest price')" type="radio" name="priceOption" id="lowestPrice" wire:click="setSortByPrice('lowest')">
-                                        <label for="lowestPrice">Harga Terendah</label>
+                                        <input wire:model="sortByPrice" type="radio" name="priceOption"
+                                            id="{{ $key }}Price" value="{{ $key }}">
+                                        <label for="{{ $key }}Price">{{ $label }}</label>
                                     </li>
-                                    <li class="form-check">
-                                        <input wire:click="setSelectedFilter('highest price')" type="radio" name="priceOption" id="highestPrice" wire:click="setSortByPrice('highest')">
-                                        <label for="highestPrice">Harga Tertinggi</label>
-                                    </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -90,18 +92,18 @@
     </div>
     {{-- End of Filter --}}
     {{-- Content --}}
-    <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
+    <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row">
             <p>Menampilkan 1 - {{ ($amount < $totalProduct) ? $amount : $totalProduct }} barang dari total {{ $totalProduct }} untuk "<b>{{ $keyword }}</b>" </p>
             @if ($selectedFilters)
             <div class="filters mb-3">
                 @foreach($selectedFilters as $index => $row)
-                    <div class="border rounded p-2 d-inline-block" wire:key='{{ $index }}'>
-                        {{ $row }}
-                        <a wire:click="removeFilter('{{ $row }}')" role="button">
-                            <i class="fa fa-times-circle" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                <div class="border rounded p-2 d-inline-block" wire:key='{{ $index }}'>
+                    {{ $row }}
+                    <a wire:click="removeFilter('{{ $row }}')" role="button">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                    </a>
+                </div>
                 @endforeach
             </div>
             @endif
@@ -130,25 +132,12 @@
             </div>
             @endforeach
         </div>
-        @if (count($products) < $totalProduct) 
+        @if (count($products) < $totalProduct)
         <div class="text-center w-100 pt-3">
             <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
         </div>
         @endif
     </div>
-    {{-- End of Content --}}
-    @endif
+{{-- End of Content --}}
+@endif
 </div>
-
-@push('script')
-<script>
-    $('input.price-input-filter').on('keydown', (event) => {
-        const max = parseInt($(this).attr('max'));
-        const value = parseInt($(this).val() + event.key);
-
-        if (event.key === 'e' || isNaN(value) || value.toString().length >= max.toString().length) {
-            event.preventDefault();
-        }
-    });
-</script>
-@endpush

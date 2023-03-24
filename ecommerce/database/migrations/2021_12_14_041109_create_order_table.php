@@ -18,6 +18,7 @@ class CreateOrderTable extends Migration
             $table->string('order_id')->unique();
             $table->unsignedBigInteger('user_id');
             $table->date('order_date');
+            $table->unsignedBigInteger('status_order_id');
             $table->date('shipment_date')->nullable();
             $table->integer('total');
             $table->integer('shipment_fee');
@@ -28,6 +29,7 @@ class CreateOrderTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('payment_method_id')->references('id')->on('payment_method');
+            $table->foreign('status_order_id')->references('id')->on('status_order');
         });
     }
 
