@@ -79,6 +79,7 @@ class CheckoutController extends Controller
                     'order_id' => $orderID,
                     'user_id' => $userID,
                     'order_date' => $orderDate,
+                    'status_order_id' => 1,
                     'shipment_date' => $shipmentDate,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
