@@ -13,11 +13,13 @@ class CheckoutController extends Controller
     {
         $cartItemsID = request()->cartid;
 
+
         if (!is_array($cartItemsID) || empty($cartItemsID)) {
             return redirect()->back()->with('status', 400);
         }
 
         $orderItems = $this->getOrderItems($cartItemsID);
+
         $paymentMethod = DB::table('payment_method')->get();
         $title = 'Checkout';
 
@@ -46,30 +48,22 @@ class CheckoutController extends Controller
     public function saveOrder(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $data = $request->data;
-            $orderDate = date('Y-m-d');
-            $shipmentDate = date('Y-m-d');
-            $paymentMethodID = $request->paymentMethodID;
-            $total = 0;
+            $total = collect($request->data)->sum('Price');
             $shipmentFee = $request->shippingCost;
-            $shippingTo = $request->shippingTo;
-            $grandTotal = 0;
-
-            foreach ($data as $row) {
-                $userID = $row['user_id'];
-                $total += $row['Price'];
-            }
-
             $grandTotal = $total + $shipmentFee;
 
-            $getMaxOrderID = DB::table('orders')
-                ->max('order_id');
+            $userID = $request->data[0]['user_id'];
+            $orderDate = $shipmentDate = date('Y-m-d');
+            $paymentMethodID = $request->paymentMethodID;
+            $shippingTo = $request->shippingTo;
 
-            if ($getMaxOrderID == null) {
+            $getMaxOrderID = DB::table('orders')->max('order_id');
+            $latestNum = substr($getMaxOrderID, -6);
+
+            if ($getMaxOrderID == null || $latestNum == '999999') {
                 $num = '000001';
             } else {
-                $num = substr($getMaxOrderID, -6);
-                $num = intval($num + 1);
+                $num = strval($latestNum + 1);
             }
 
             $orderID = 'PO' . '-' . date('Ymdhi') . $userID . substr('000000' . $num, strlen($num));
@@ -88,7 +82,7 @@ class CheckoutController extends Controller
                     'payment_method_id' => $paymentMethodID
                 ]);
 
-            foreach ($data as $row) {
+            foreach ($request->data as $row) {
                 DB::table('order_items')
                     ->insert([
                         'order_id' => $orderID,

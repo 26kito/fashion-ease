@@ -27,12 +27,12 @@
 					@endif
 				</div>
 				<div class="col-lg-4 card-right">
-					@livewire('promo')
 					<div>
 						@if ( $totalOrders > 0 )
+						@livewire('promo')
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif
-						<a href="{{ route('home') }}" class="site-btn sb-dark">Continue Shopping</a>
+						<a href="{{ route('home') }}" class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
 					</div>
 				</div>
 			</div>
@@ -46,9 +46,8 @@
 @if (Session::has('status'))
 <script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
-	let statusCode = {{ Session::get('status') }};
-	let status = "";
-	let message = "";
+	const statusCode = {{ Session::get('status') }};
+	let status, message;
 
 	if (statusCode == 200) {
 		message = 'Pesanan berhasil dihapus';
