@@ -1,6 +1,6 @@
 <div class="promo-code-form">
     {{-- Modal --}}
-    <div id="modalpromo" class="modal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div id="modalPromo" class="modal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -21,13 +21,5 @@
     </div>
     {{-- End of Modal --}}
 
-    <button type="button" id="enterPromo" class="btn btn-success mt-5 mb-4">Makin hemat pakai promo</button>
+    <button type="button" id="enterPromo" class="btn btn-success mt-5 mb-4" data-bs-toggle="modal" data-bs-target="#modalPromo">Makin hemat pakai promo</button>
 </div>
-
-@push('script')
-<script>
-    $('#enterPromo').on('click', () => {
-        $('#modalpromo').modal('show');
-    })
-</script>
-@endpush
