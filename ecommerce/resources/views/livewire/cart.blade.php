@@ -3,7 +3,7 @@
     <div class="modal" id="modalCart" tabindex="-1" role="dialog" wire:ignore>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="cart-modal-body modal-body">
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                         <img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}">
                     </a>
                     <div class="pc-title">
-                        <h4>{{ $row->ProdName }}</h4>
+                        <h4 class="cart-product-name">{{ $row->ProdName }}</h4>
                         <p class="text-danger">{{ "Sisa stok: ". $row->AvailStock }}</p>
                     </div>
                 </td>
@@ -78,7 +78,7 @@
 @push('script')
 <script>
     $(document).on('click', '.delete-all-cart-items', () => {
-        $('.modal-body').html(`
+        $('.cart-modal-body').html(`
             <h5 class="text-center mt-3 mb-4">Hapus semua barang?</h5>
             <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
             <div class="d-flex flex-column">
@@ -91,7 +91,7 @@
     })
 
     $(document).on('click', '.removeCartItem', () => {
-        $('.modal-body').html(`
+        $('.cart-modal-body').html(`
             <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
             <p class="text-center mb-4">
                 Produk yang kamu pilih akan dihapus dari keranjang.

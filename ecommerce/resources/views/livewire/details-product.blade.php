@@ -35,10 +35,10 @@
             <div id="accordion" class="accordion-area">
                 <div class="panel">
                     <div class="panel-header" id="headingOne">
-                        <button class="panel-link active" data-toggle="collapse" data-target="#collapse1"
+                        <button class="panel-link active" data-bs-toggle="collapse" data-bs-target="#collapse1"
                             aria-expanded="true" aria-controls="collapse1">information</button>
                     </div>
-                    <div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
                         <div class="panel-body">
                             <p>{{ $products->description }}</p>
                             <p>{{ 'Stock: '.$stock }}</p>
@@ -48,10 +48,10 @@
                 </div>
                 <div class="panel">
                     <div class="panel-header" id="headingTwo">
-                        <button class="panel-link" data-toggle="collapse" data-target="#collapse2" aria-expanded="false"
+                        <button class="panel-link" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false"
                             aria-controls="collapse2">care details </button>
                     </div>
-                    <div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
                         <div class="panel-body">
                             <img src="{{asset('asset/img/cards.png')}}" alt="">
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales.

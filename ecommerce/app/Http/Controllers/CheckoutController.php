@@ -13,7 +13,6 @@ class CheckoutController extends Controller
     {
         $cartItemsID = request()->cartid;
 
-
         if (!is_array($cartItemsID) || empty($cartItemsID)) {
             return redirect()->back()->with('status', 400);
         }

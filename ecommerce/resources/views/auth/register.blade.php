@@ -136,16 +136,11 @@
 @push('script')
 <script>
     function noSpaces() {
-            if (event.keyCode == 32) {
-                event.returnValue = false;
-                return false;
-            }
+        if (event.keyCode == 32) {
+            event.returnValue = false;
+            return false;
         }
-
-    // $(document).on('click', '.terms', () => {
-    //     $('#exampleModalLong').modal('show');
-    //     // $('#exampleModalLong').modal('show', {backdrop: 'static', keyboard: false});
-    // })
+    }
 
     $('#seePassword').on('click', () => {
         if ($('#password').attr('type') == 'password') {
