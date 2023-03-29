@@ -6,23 +6,29 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Traits\addToWishlist;
 
-class LatestProducts extends Component
+class LatestProductsHome extends Component
 {
     use addToWishlist;
 
-    public $latestProducts;
+    public $products;
 
     public function render()
     {
-        $this->latestProducts = DB::table('products')
+        $this->products = DB::table('products')
             ->join('detail_products', 'products.id', 'detail_products.dp_id')
             ->groupBy('products.id')
             ->havingRaw("SUM(detail_products.stock) != 0")
             ->orderByDesc('products.created_at')
-            ->take(4)
+            ->take(5)
             ->get()->toArray();
 
-        return view('livewire.latest-products');
+        return view('livewire.latest-products-home');
+    }
+
+    public function addToCart($id)
+    {
+        // Emit u/ lempar function, param 1 = nama, param 2 opsional
+        $this->emit('addToCart', $id);
     }
 
     public function addToWishlist($productID)

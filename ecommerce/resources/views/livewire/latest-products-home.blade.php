@@ -1,9 +1,9 @@
 @push('stylesheet')
-<link rel="stylesheet" href="{{ asset('asset/css/owl.carousel.min.css') }}">
+<link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}">
 @endpush
 
-<div class="latest-product-slider owl-carousel owl-loaded">
-    @foreach ( $latestProducts as $row )
+<div class="product-slider owl-carousel owl-loaded">
+    @foreach ( $products as $row )
     <div class="product-item">
         <div class="pi-pic">
             <div class="tag-new">NEW</div>
@@ -11,7 +11,7 @@
                 <img src="{{ asset('storage/products-images/'.$row->image) }}" alt="{{ 'image of '.$row->name }}">
             </a>
             <div class="pi-links">
-                <a href="{{ url('product/'.$row->product_id) }}" class="add-card add-card-s add-to-cart">
+                <a href="{{ url('product/'.$row->product_id) }}" class="add-card add-to-cart">
                     <i class="flaticon-bag"></i><span>ADD TO CART</span>
                 </a>
                 <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
@@ -28,14 +28,13 @@
 </div>
 
 @push('script')
-<script src="{{ asset('asset/js/owl.carousel.min.js') }}"></script>
+<script src="{{asset('asset/js/owl.carousel.min.js')}}"></script>
 <script>
-    $('.latest-product-slider').owlCarousel({
-        autoplay: false,
+    $('.product-slider').owlCarousel({
         margin: 20,
-        loop: false,
+        loop: true,
         items: 4,
-        nav: false,
+        nav: true,
     })
 </script>
 @endpush

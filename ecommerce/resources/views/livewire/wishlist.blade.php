@@ -1,5 +1,5 @@
-<div class="cart-table-warp">
-    <table id="cartform">
+<div class="wishlist-table-warp">
+    <table id="wishlistform">
         @foreach ( $wishlists as $key => $row )
         <tr>
             <td class="product-col">
@@ -7,7 +7,7 @@
                     <img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}">
                 </a>
                 <div class="pc-title">
-                    <h4>{{ $row->ProdName }}</h4>
+                    <h4 class="wishlist-product-name">{{ $row->ProdName }}</h4>
                     <p>{{ rupiah($row->price) }}</p>
                     <p>{{ "Tanggal dimasukkan: ". $row->created_at }}</p>
                 </div>

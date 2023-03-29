@@ -12,11 +12,11 @@
 				<div class="col-lg-8">
 					<div class="cart-table">
 						@if ( $totalOrders > 0 )
-						<h3>Your Cart</h3>
+						<h4 class="cart-table-heading">Keranjang Kamu</h4>
 						@livewire('cart', ['page' => request()->fullUrl()])
 						@livewire('total-price-cart')
 						@else
-						<h3 class="text-center">{{ "Duh, keranjangmu kosong nih:(" }}</h3>
+						<h3 class="text-center mt-5">Duh, keranjangmu kosong nih:(</h3>
 						@if ( $wishlist > 0 )
 						<p class="text-center">Yuk isi keranjangmu dengan barang-barang impianmu!</p>
 						@endif
@@ -32,7 +32,8 @@
 						@livewire('promo')
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif
-						<a href="{{ route('home') }}" class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
+						<a href="{{ route('home') }}"
+							class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
 					</div>
 				</div>
 			</div>
@@ -40,6 +41,21 @@
 	</section>
 </form>
 <!-- cart section end -->
+<div class="container">
+	<div class="row mb-3">
+		<div class="col-lg-4 ps-4">
+			<h4>Produk Terbaru</h4>
+		</div>
+		<div class="col-lg-4 text-lg-end">
+			<a class="h4 text-reset" href="">Lihat Semua</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8">
+			@livewire('latest-products')
+		</div>
+	</div>
+</div>
 @endsection
 
 @push('script')

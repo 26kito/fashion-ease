@@ -138,6 +138,6 @@
         </div>
         @endif
     </div>
-{{-- End of Content --}}
+    {{-- End of Content --}}
 @endif
 </div>

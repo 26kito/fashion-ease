@@ -73,7 +73,7 @@
 		<div class="section-title">
 			<h2>LATEST PRODUCTS</h2>
 		</div>
-		@livewire('latest-products')
+		@livewire('latest-products-home')
 	</div>
 </section>
 <!-- latest product section end -->
