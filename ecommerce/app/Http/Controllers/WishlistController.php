@@ -14,8 +14,9 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        $data['title'] = 'My Wishlist';
-        return view('wishlist', $data);
+        $title = 'My Wishlist';
+
+        return view('wishlist', ['title' => $title]);
     }
 
     /**

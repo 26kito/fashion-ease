@@ -16,6 +16,7 @@ class LatestProductsHome extends Component
     {
         $this->products = DB::table('products')
             ->join('detail_products', 'products.id', 'detail_products.dp_id')
+            ->selectRaw("products.*, MAX(detail_products.size) AS size, MAX(detail_products.stock) AS stock")
             ->groupBy('products.id')
             ->havingRaw("SUM(detail_products.stock) != 0")
             ->orderByDesc('products.created_at')
@@ -23,12 +24,6 @@ class LatestProductsHome extends Component
             ->get()->toArray();
 
         return view('livewire.latest-products-home');
-    }
-
-    public function addToCart($id)
-    {
-        // Emit u/ lempar function, param 1 = nama, param 2 opsional
-        $this->emit('addToCart', $id);
     }
 
     public function addToWishlist($productID)
