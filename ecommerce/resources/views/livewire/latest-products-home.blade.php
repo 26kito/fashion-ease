@@ -1,5 +1,5 @@
 @push('stylesheet')
-<link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}">
+<link rel="stylesheet" href="{{ asset('asset/css/owl.carousel.min.css') }}">
 @endpush
 
 <div class="product-slider owl-carousel owl-loaded">

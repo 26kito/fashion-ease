@@ -9,9 +9,9 @@ class HomeController extends Controller
 {
     public function admin()
     {
-        $data['title'] = "Dashboard";
+        $title = "Dashboard";
 
-        return view('admin.dashboard', $data);
+        return view('admin.dashboard', $title);
     }
 
     public function home()

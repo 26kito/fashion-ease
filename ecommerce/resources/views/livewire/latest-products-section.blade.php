@@ -14,7 +14,7 @@
                 <a href="{{ url('product/'.$row->product_id) }}" class="add-card add-card-s add-to-cart">
                     <i class="flaticon-bag"></i><span>ADD TO CART</span>
                 </a>
-                <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
+                <a wire:click.prevent='addToWishlist({{ $row->id }})' class="wishlist-btn">
                     <i class="flaticon-heart"></i>
                 </a>
             </div>

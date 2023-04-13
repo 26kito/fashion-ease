@@ -3,7 +3,7 @@
 @endpush
 
 <div>
-    <h4 class="mt-5">Wishlist</h4>
+    {{-- <h4 class="mt-5">Wishlist</h4> --}}
     <div class="owl-carousel owl-theme owl-loaded owl-drag">
         @foreach ($wishlists as $row)
         <div class="product-item">

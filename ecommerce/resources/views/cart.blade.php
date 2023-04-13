@@ -22,9 +22,6 @@
 						@endif
 						@endif
 					</div>
-					@if ( $wishlist > 0 )
-					@livewire('wishlist-section')
-					@endif
 				</div>
 				<div class="col-lg-4 card-right">
 					<div>
@@ -41,18 +38,35 @@
 	</section>
 </form>
 <!-- cart section end -->
+@if ( $wishlist > 0 )
+<div class="container">
+	<div class="row mb-3">
+		<div class="col-lg-4 ps-4">
+			<h4>Wishlist</h4>
+		</div>
+		<div class="col-lg-4 text-lg-end">
+			<a class="h5 text-reset" href="{{ route('wishlist') }}">Lihat Semua</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8">
+			@livewire('wishlist-section')
+		</div>
+	</div>
+</div>
+@endif
 <div class="container">
 	<div class="row mb-3">
 		<div class="col-lg-4 ps-4">
 			<h4>Produk Terbaru</h4>
 		</div>
 		<div class="col-lg-4 text-lg-end">
-			<a class="h4 text-reset" href="">Lihat Semua</a>
+			<a class="h5 text-reset" href="">Lihat Semua</a>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-lg-8">
-			@livewire('latest-products')
+			@livewire('latest-products-section')
 		</div>
 	</div>
 </div>

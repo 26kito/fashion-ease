@@ -40,13 +40,6 @@ class ProductsList extends Component
         ]);
     }
 
-
-    public function addToCart($id)
-    {
-        // Emit u/ lempar function, param 1 = nama, param 2 opsional
-        $this->emit('addToCart', $id);
-    }
-
     public function addToWishlist($productID)
     {
         $this->addToWishlistTrait($productID);
