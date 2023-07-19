@@ -8,7 +8,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $data['title'] = 'Category';
-        return view('category', $data);
+        $title = 'Category';
+
+        return view('category', ['title' => $title]);
     }
 }

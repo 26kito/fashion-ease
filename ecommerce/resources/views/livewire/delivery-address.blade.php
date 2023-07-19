@@ -47,10 +47,10 @@
                 let content = getUserAddresses(result.data);
 
                 $('.addressModalBody').html(`
-                <h5 class="text-center mt-3 mb-4">Alamat</h5>
-                <div class="row">
-                    ${content}
-                </div>
+                    <h5 class="text-center mt-3 mb-4">Alamat</h5>
+                    <div class="row">
+                        ${content}
+                    </div>
                 `);
             }
         });
@@ -199,13 +199,13 @@
             res += `
                 <div class="col-sm-${(length == 2) ? 6 : 12}">
                     <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title ${(length != 2) ? 'text-center' : ''}">Alamat ${(isDefault == 1) ? '(Utama)' : ''}</h5>
-                        <p class="card-text ${(length != 2) ? 'text-center' : ''}">${d.address}</p>
-                        <div class="${(length != 2) ? 'text-center' : ''}">
-                            <a href="#" id="changeDeliveryAddress" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
+                        <div class="card-body">
+                            <h5 class="card-title ${(length != 2) ? 'text-center' : ''}">Alamat ${(isDefault == 1) ? '(Utama)' : ''}</h5>
+                            <p class="card-text ${(length != 2) ? 'text-center' : ''}">${d.address}</p>
+                            <div class="${(length != 2) ? 'text-center' : ''}">
+                                <a href="#" id="changeDeliveryAddress" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             `;

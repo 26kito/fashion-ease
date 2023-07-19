@@ -37,6 +37,7 @@
 		</div>
 	</section>
 </form>
+
 <!-- cart section end -->
 @if ( $wishlist > 0 )
 <div class="container">
@@ -61,7 +62,7 @@
 			<h4>Produk Terbaru</h4>
 		</div>
 		<div class="col-lg-4 text-lg-end">
-			<a class="h5 text-reset" href="">Lihat Semua</a>
+			<a class="h5 text-reset" href="#">Lihat Semua</a>
 		</div>
 	</div>
 	<div class="row">

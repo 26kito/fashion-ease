@@ -14,8 +14,8 @@
                 @csrf
                 <!-- Username -->
                 <div class="input-group mb-3">
-                    <input id="username" class="form-control @error('username') is-invalid @enderror" name="username"
-                        value="{{ old('username') }}" autocomplete="username" autofocus
+                    <input id="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                        value="{{ old('email') }}" autocomplete="email" autofocus
                         placeholder="Email atau Nomor HP">
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
 
-                    @error('username')
+                    @error('email')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
