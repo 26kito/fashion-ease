@@ -4,15 +4,15 @@
 
 @section('content')
 <!-- Page info -->
-<div class="page-top-info">
+<div class="page-top-info bg-white">
 	<div class="container">
 		<h4>Products Category</h4>
 		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb site-pagination">
-			  <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-			  <li class="breadcrumb-item active" aria-current="page">Products Category</li>
+			<ol class="breadcrumb site-pagination bg-transparent">
+				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Products Category</li>
 			</ol>
-		  </nav>
+		</nav>
 	</div>
 </div>
 <!-- Page info end -->

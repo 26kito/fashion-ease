@@ -97,6 +97,7 @@ class CheckoutController extends Controller
                     ->where('user_id', $userID)
                     ->delete();
             }
+
         });
 
         return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat'], 200);
