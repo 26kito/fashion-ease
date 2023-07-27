@@ -33,24 +33,25 @@
                 <h3 class="card-title">Order</h3>
             </div>
             <div class="card-body">
-                <a href="{{url('admin/order/insert')}}" class="btn btn-success">Insert</a>
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th style="text-align: center">Nama</th>
                             <th style="text-align: center">Tanggal Order</th>
-                            <th colspan="2" style="text-align: center">Action</th>
+                            <th style="text-align: center">Ship To</th>
+                            <th style="text-align: center">Total</th>
+                            <th style="text-align: center; width: 10%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($order as $row)
+                        @foreach($orders as $row)
                         <tr>
-                            <td>{{$row->name}}</td>
-                            <td>{{$row->order_date}}</td>
-                            <td><a href="{{url('admin/order/lihat-pesanan/'.$row->id)}}" class="btn btn-primary">Lihat
-                                    Pesanan</a></td>
-                            <td><a href="{{url('admin/delete/order/'.$row->id)}}" class="btn btn-danger"
-                                    onclick="return confirm('Seluruh pesanan akan di hapus. Anda yakin ingin menghapus ini?')">Hapus</a>
+                            <td>{{ "$row->first_name $row->last_name" }}</td>
+                            <td>{{ $row->order_date }}</td>
+                            <td>{{ $row->city_name }}</td>
+                            <td>{{ rupiah($row->grand_total) }}</td>
+                            <td>
+                                <a href="{{ url('admin/order/lihat-pesanan/'.$row->id) }}" class="btn btn-primary btn-sm">Lihat Pesanan</a>
                             </td>
                         </tr>
                         @endforeach

@@ -177,13 +177,51 @@
             </li>
             <li class="nav-item">
               <a href="{{ url('admin/order') }}" class="nav-link {{ request()->is('admin/order') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-store"></i>
+                <i class="nav-icon fas fa-boxes"></i>
                 <p>
                   Order
                 </p>
               </a>
             </li>
-            <li
+            <li class="nav-item {{ request()->is('admin/tables/productsList') ? 'menu-open' : '' }}">
+              <a href="{{ url('admin/tables/productsList') }}"
+                class="nav-link {{ request()->is('admin/tables/productsList') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                  Master Product
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ url('admin/tables/productsList') }}"
+                    class="nav-link {{ request()->is('admin/tables/productsList') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Product List</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item {{ request()->is('admin/tables/user') ? 'menu-open' : '' }}">
+              <a href="{{ url('admin/tables/user') }}"
+                class="nav-link {{ request()->is('admin/tables/user') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Master User
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ url('admin/tables/user') }}"
+                    class="nav-link {{ request()->is('admin/tables/user') ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>User List</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {{-- <li
               class="nav-item {{ request()->is('admin/tables/user') || request()->is('admin/tables/productsList') ? 'menu-open' : '' }}">
               <a href="{{ url('admin/tables/') }}"
                 class="nav-link {{ request()->is('admin/tables/user') || request()->is('admin/tables/productsList') ? 'active' : '' }}">
@@ -209,7 +247,7 @@
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> --}}
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

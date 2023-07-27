@@ -143,6 +143,7 @@
             }
         })
     })
+
     // Insert Data
     function insert() {
         let product_id = $('#product_id').val();
@@ -189,6 +190,7 @@
             }
         })
     }
+
     // Delete Data
     $(document).on('click', (e) => {
         let order_id = $(e.target).data('order-id');
@@ -212,6 +214,7 @@
             })
         }
     })
+
     // Show Data
     function dataTable(data) {
         let table = '';
