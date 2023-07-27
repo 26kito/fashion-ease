@@ -15,13 +15,14 @@ class OrderController extends Controller
     // Dashboard
     public function index()
     {
-        $data['title'] = 'Order Page';
-        $order = DB::table('orders')
+        $title = 'Order Page';
+        $orders = DB::table('orders')
             ->join('users', 'orders.user_id', 'users.id')
-            ->select('orders.id', 'users.first_name', 'orders.order_date')
+            ->join('cities', 'orders.shipping_to', 'cities.city_id')
+            ->select('orders.id', 'users.first_name', 'users.last_name', 'users.username', 'orders.order_date', 'orders.grand_total', 'orders.shipping_to', 'cities.city_name')
             ->get();
 
-        return view('admin.order.dashboard', compact('order'), $data);
+        return view('admin.order.dashboard', ['orders' => $orders, 'title' => $title]);
     }
 
     // Insert Data
