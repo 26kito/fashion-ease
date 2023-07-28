@@ -29,7 +29,7 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="{{ url('admin/') }}" class="nav-link">Home</a>
+          <p class="nav-link">@yield('heading-navbar')</p>
         </li>
       </ul>
 
@@ -268,6 +268,7 @@
       </section>
       <!-- /.content -->
     </div>
+
     <!-- /.content-wrapper -->
     <footer class="main-footer">
       <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>

@@ -20,6 +20,7 @@ class OrderController extends Controller
             ->join('users', 'orders.user_id', 'users.id')
             ->join('cities', 'orders.shipping_to', 'cities.city_id')
             ->select('orders.id', 'users.first_name', 'users.last_name', 'users.username', 'orders.order_date', 'orders.grand_total', 'orders.shipping_to', 'cities.city_name')
+            ->orderBy('orders.id', 'asc')
             ->get();
 
         return view('admin.order.dashboard', ['orders' => $orders, 'title' => $title]);
@@ -50,13 +51,38 @@ class OrderController extends Controller
     }
 
     // Lihat Pesanan
-    public function lihatPesanan(Request $request, $id)
+    public function lihatPesanan($id)
     {
-        $data['title'] = 'Pesanan';
-        $products = Product::all();
-        $size = ['S', 'M', 'L', 'XL'];
+        $title = 'Dashboard | Detail Order';
+        $headingNavbar = 'Detail Order';
+        $orderID = DB::table('orders')->where('id', $id)->value('order_id');
+        $orderInformation = DB::table('orders')
+            ->join('payment_method', 'orders.payment_method_id', 'payment_method.id')
+            ->join('users', 'orders.user_id', 'users.id')
+            ->join('cities', 'orders.shipping_to', 'cities.city_id')
+            ->join('provinces', 'cities.province_id', 'provinces.province_id')
+            ->select('orders.id', 'orders.order_id', 'users.first_name', 'users.last_name', 'users.username', 
+            'users.phone_number', 'users.email', 'orders.order_date', 'orders.grand_total', 'orders.shipping_to',
+            'cities.city_name', 'provinces.province_name', 'payment_method.name AS payment_method_name', 'payment_method.category AS payment_method_category')
+            ->where('orders.order_id', $orderID)
+            ->first();
 
-        return view('admin.order.orderList', compact('id', 'products', 'size'), $data);
+        $orderList = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', 'orders.order_id')
+            ->join('users', 'orders.user_id', 'users.id')
+            ->join('cities', 'orders.shipping_to', 'cities.city_id')
+            ->join('provinces', 'cities.province_id', 'provinces.province_id')
+            ->join('products', 'order_items.product_id', 'products.id')
+            ->select('orders.order_date', 'order_items.product_id', 'products.name AS product_name', 'order_items.size', 
+            'order_items.price AS product_price', 'products.image AS product_image', 'order_items.qty', 'orders.grand_total', 'orders.shipping_to', 
+            'cities.city_name', 'provinces.province_name')
+            ->where('order_items.order_id', $orderID)
+            ->orderBy('orders.id', 'asc')
+            ->get();
+
+        // dd($orderInformation);
+
+        return view('admin.order.orderList', ['title' => $title, 'headingNavbar' => $headingNavbar, 'orderInformation' => $orderInformation, 'orderList' => $orderList]);
     }
 
     public function insertOrder(Request $request)
