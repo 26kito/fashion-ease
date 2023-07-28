@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function admin()
+    public function index()
     {
         $title = "Dashboard";
 
-        return view('admin.dashboard', $title);
+        return view('admin.dashboard', ['title' => $title]);
     }
 
     public function home()

@@ -1,10 +1,10 @@
 @extends('layout.adminlte.template')
 
-@section('title')
-{{$title}}
-@endsection
+@section('title'){{ $title }}@endsection
 
-@section('content-header')
+@section('heading-navbar'){{ $headingNavbar }}@endsection
+
+{{-- @section('content-header')
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -20,7 +20,7 @@
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-@endsection
+@endsection --}}
 
 @section('content')
 <!-- Modal -->
@@ -41,89 +41,109 @@
     </div>
 </div>
 <!-- End of Modal -->
-<div class="container-fluid">
+
+{{-- <div class="container-fluid">
     <div class="row">
-        {{-- List Order --}}
         <div class="col-8">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Order List</h3>
+                    <h3 class="card-title">Order Information</h3>
+                </div>
+                <div>
+                    <p>Nama:</p>
+                    <p>Total:</p>
                 </div>
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th style="text-align: center">Product's Name</th>
+                            <th style="text-align: center">Product Name</th>
                             <th style="text-align: center">Size</th>
                             <th style="text-align: center">Qty</th>
                             <th style="text-align: center">Price</th>
-                            <th colspan="2" style="text-align: center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="orderList">
+                        @foreach ($orderList as $row)
+                        <tr>
+                            <td>{{ $row->product_name }}</td>
+                            <td>{{ $row->size }}</td>
+                            <td>{{ $row->qty }}</td>
+                            <td>{{ rupiah($row->product_price) }}</td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td>Total</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        {{-- Insert Order --}}
-        <div class="col-4">
-            <div class="card card-primary" id="actionForm">
-                <div class="card-header">
-                    <h3 class="card-title">Tambah Barang</h3>
+    </div>
+</div> --}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 ">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div class="post">
+                        <a href="{{ url()->previous() }}" class="btn btn-sm btn-light mb-2">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a><br>
+                        <div class="d-flex flex-column align-items-center">
+                            <div>
+                                <button class="btn btn-sm btn-success btn-accept-order mb-1">
+                                    <i class="fas fa-check"></i> Terima Pesanan
+                                </button>
+                                <button class="btn btn-sm btn-danger btn-cancel-order mb-1">
+                                    <i class="fas fa-times"></i> Batalkan Pesanan
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 col-md-6">
+                                <b>Order ID : </b>{{ $orderInformation->order_id }}<br>
+                                <b>Tanggal Kirim : </b>{{ date('d F Y', strtotime($orderInformation->order_date)) }}<br>
+                                <b>Shipping To : </b>{{ "$orderInformation->city_name, $orderInformation->province_name" }}<br>
+                                <b>Metode Pembayaran : </b>{{ "$orderInformation->payment_method_name
+                                ($orderInformation->payment_method_category)" }}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <b>Nama : </b>{{ "$orderInformation->first_name $orderInformation->last_name" }}<br>
+                                <b>Email : </b>{{ $orderInformation->email }}<br>
+                                <b>No. HP : </b>{{ $orderInformation->phone_number }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post">
+                        <div>
+                            @foreach ($orderList as $row)
+                            <div class="row detail-product">
+                                <div class="col-md-3 col-12 text-center align-self-center mt-2">
+                                    <img src="{{ asset('asset/img/products/'.$row->product_image) }}" alt="" width="100">
+                                    <p class="mb-0">{{ $row->product_name }}</p>
+                                </div>
+                                <div class="col-md-9 col-12 align-self-center">
+                                    <div class="row">
+                                        <div class="col-md-4 col-12">
+                                            <label class="mb-0">Kuantitas Beli</label>
+                                            <p>{{ $row->qty }}</p>
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <label class="mb-0">Harga Satuan</label>
+                                            <p class="price">{{ rupiah($row->product_price) }}</p>
+                                        </div>
+                                        <div class="col-md-4 col-12">
+                                            <label class="mb-0">Total Harga Produk</label>
+                                            <p class="font-weight-bold">{{ rupiah($row->qty * $row->product_price) }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-                <form method="POST" id="insert-order-form">
-                    @csrf
-                    <div class="card-body">
-                        <!-- Card Body -->
-                        <div class="form-group">
-                            <!-- Nama Produk -->
-                            <label for="product_id">Nama Produk:</label>
-                            <input name="order_id" type="hidden" value="{{$id}}" id="order_id">
-                            <div class="input-group">
-                                <select name="product_id" id="product_id" class="form-control">
-                                    @foreach( $products as $row )
-                                    <option value="{{$row->id}}">{{$row->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <!-- End of Nama Produk -->
-                        <!-- Size -->
-                        <div class="form-group">
-                            <label for="size">Size:</label>
-                            <div class="input-group">
-                                <select name="size" id="size" class="form-control">
-                                    @foreach ($size as $row)
-                                    <option value="{{$row}}">{{$row}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <!-- End of Size -->
-                        <div class="form-group">
-                            <!-- Jumlah -->
-                            <label for="qty">Jumlah:</label>
-                            <div class="input-group">
-                                <span class="input-group-prepend">
-                                    <button type="button" onclick="decrement()" class="btn btn-danger" data-type="minus"
-                                        data-field="quant[1]">
-                                        <span class="fa fa-minus"></span>
-                                    </button>
-                                </span>
-                                <input type="number" name="qty" id="qty" min="1" max="20" value="1"
-                                    class="qty form-control col-md-2 quantity-field border-0 text-center w-25" disabled>
-                                <span class="input-group-append">
-                                    <button type="button" onclick="increment()" class="btn btn-success" data-type="plus"
-                                        data-field="quant[1]">
-                                        <span class="fa fa-plus"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </div> <!-- End of Jumlah -->
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" onclick="insert()" name="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -132,176 +152,4 @@
 
 @push('adminscript')
 <script src="{{asset('asset/bootstrap-growl/jquery.bootstrap-growl.min.js')}}"></script>
-<script>
-    let order_id = $('#order_id').val();
-    $(document).ready(function() {
-        $.ajax({
-            type: "GET",
-            url: `/api/order/${order_id}`,
-            success: function(result) {
-                $('#orderList').html(dataTable(result.data));
-            }
-        })
-    })
-
-    // Insert Data
-    function insert() {
-        let product_id = $('#product_id').val();
-        let size = $('#size').val();
-        let qty = $('#qty').val();
-        $.ajax({
-            type: 'POST',
-            url: `/api/order/${order_id}/order_items`,
-            data: {
-                'order_id': order_id,
-                'product_id': product_id,
-                'size': size,
-                'qty': qty
-            },
-            success: (result) => {
-                if (result.success) {
-                    $('#orderList').html(dataTable(result.data));
-                    // alert
-                    $.bootstrapGrowl(result.message, {
-                        type: 'success',
-                        offset: {from: 'top', amount: 75},
-                        align: 'center',
-                        width: 400,
-                        stackup_spacing: 15
-                    });
-                } else {
-                    $.bootstrapGrowl(result.message, {
-                        type: 'danger',
-                        offset: {from: 'top', amount: 75},
-                        align: 'center',
-                        width: 400,
-                        stackup_spacing: 15
-                    });
-                }
-            },
-            error: (result) => {
-                $.bootstrapGrowl("Gagal Menambahkan Pesanan", {
-                    type: 'danger',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
-            }
-        })
-    }
-
-    // Delete Data
-    $(document).on('click', (e) => {
-        let order_id = $(e.target).data('order-id');
-        let id = $(e.target).data('id');
-        let product_id = $('#updateProduct').val();
-        if ($(e.target).hasClass('btn-delete')) {
-            $.ajax({
-                type: 'DELETE',
-                url: `/api/order/${order_id}/order_items/${id}`,
-                success: function(result) {
-                    $('#orderList').html(dataTable(result.data));
-                    // alert
-                    $.bootstrapGrowl(result.message, {
-                        type: 'danger',
-                        offset: {from: 'top', amount: 75},
-                        align: 'center',
-                        width: 400,
-                        stackup_spacing: 15
-                    });
-                }
-            })
-        }
-    })
-
-    // Show Data
-    function dataTable(data) {
-        let table = '';
-        data.forEach((d) => {
-            table += `
-                <tr>
-                    <td>${d.name}</td>
-                    <td>${d.size}</td>
-                    <td>${d.qty}</td>
-                    <td>${d.price}</td>
-                    <td>
-                        <button type="button" class="btn btn-primary btn-edit"
-                        data-order-id="${d.order_id}"
-                        data-id="${d.id}" 
-                        onclick="edit(${d.order_id}, ${d.id})">Edit</button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-delete"
-                        data-order-id="${d.order_id}"
-                        data-id="${d.id}"
-                        onclick="return confirm('Anda yakin ingin menghapus pesanan ini?')">Delete</button>
-                    </td>
-                </tr>
-            `;
-        })  
-        return table
-    }
-    // Edit
-    function edit(order_id, id) {
-        $.ajax({
-            type: 'GET',
-            url: `/api/order/${order_id}/order_items/${id}`,
-            success: function(result) {
-                $('#editModal').html(result);
-                $('#exampleModal').modal('show');
-            }
-        })
-    }
-    // Update
-    function update(order_id, id) {
-        let product_id = $('#updateProduct').val();
-        let size = $('#updateSize').val();
-        let qty = $('#updateQty').val();
-        $.ajax({
-            type: 'PUT',
-            url: `/api/order/${order_id}/order_items/${id}`,
-            data: {
-                'order_id' : order_id,
-                'product_id' : product_id,
-                'size' : size,
-                'qty' : qty
-            },
-            success: function(result) {
-                if (result.success == true) {
-                    $('#orderList').html(dataTable(result.data));
-                    $('#exampleModal').modal('hide');
-                    $.bootstrapGrowl(result.message, {
-                        type: 'success',
-                        offset: {from: 'top', amount: 75},
-                        align: 'center',
-                        width: 400,
-                        stackup_spacing: 15
-                    });
-                } else {
-                    $.bootstrapGrowl(result.message, {
-                        type: 'danger',
-                        offset: {from: 'top', amount: 75},
-                        align: 'center',
-                        width: 400,
-                        stackup_spacing: 15
-                    });
-                }
-            },
-        })
-    }
-    function increment() {
-        let num = parseInt($('.qty').val());
-        i = num+1;
-        $('.qty').val(i);
-    }
-    function decrement() {
-        let num = parseInt($('.qty').val());
-        i = num-1;
-        if ( i <= 0 ) {
-            i = 0;
-        }
-        $('.qty').val(i);
-    }
-</script>
 @endpush

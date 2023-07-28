@@ -36,6 +36,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                         <tr>
+                            <th style="text-align: center">No.</th>
                             <th style="text-align: center">Nama</th>
                             <th style="text-align: center">Tanggal Order</th>
                             <th style="text-align: center">Ship To</th>
@@ -44,8 +45,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $row)
+                        @php
+                            $counter = 1;
+                        @endphp
+                        @foreach($orders as $index => $row)
                         <tr>
+                            <td>{{ $counter }}</td>
                             <td>{{ "$row->first_name $row->last_name" }}</td>
                             <td>{{ $row->order_date }}</td>
                             <td>{{ $row->city_name }}</td>
@@ -54,6 +59,9 @@
                                 <a href="{{ url('admin/order/lihat-pesanan/'.$row->id) }}" class="btn btn-primary btn-sm">Lihat Pesanan</a>
                             </td>
                         </tr>
+                        @php
+                            $counter++;
+                        @endphp
                         @endforeach
                     </tbody>
                 </table>
