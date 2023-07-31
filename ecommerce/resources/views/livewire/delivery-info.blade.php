@@ -85,7 +85,7 @@
             url: `/api/check-cost`,
             dataType: 'json',
             data: {
-                'origin': 1,
+                'origin': 155,
                 'destination': cityID,
                 'weight': 100,
                 'courierCode': courierCode,

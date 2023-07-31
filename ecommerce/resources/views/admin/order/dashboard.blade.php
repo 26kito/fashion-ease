@@ -2,7 +2,9 @@
 
 @section('title'){{ $title }}@endsection
 
-@section('content-header')
+@section('heading-navbar'){{ $headingNavbar }}@endsection
+
+{{-- @section('content-header')
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -18,7 +20,7 @@
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-@endsection
+@endsection --}}
 
 @section('content')
 @if (session()->has('message'))
@@ -26,45 +28,47 @@
     {{session()->get('message')}}
 </div>
 @endif
-<div class="row">
-    <div class="col-12">
-        <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title">Order</h3>
-            </div>
-            <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center">No.</th>
-                            <th style="text-align: center">Nama</th>
-                            <th style="text-align: center">Tanggal Order</th>
-                            <th style="text-align: center">Ship To</th>
-                            <th style="text-align: center">Total</th>
-                            <th style="text-align: center; width: 10%">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">Order</h3>
+                </div>
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center">No.</th>
+                                <th style="text-align: center">Nama</th>
+                                <th style="text-align: center">Tanggal Order</th>
+                                <th style="text-align: center">Ship To</th>
+                                <th style="text-align: center">Total</th>
+                                <th style="text-align: center; width: 10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
                             $counter = 1;
-                        @endphp
-                        @foreach($orders as $index => $row)
-                        <tr>
-                            <td>{{ $counter }}</td>
-                            <td>{{ "$row->first_name $row->last_name" }}</td>
-                            <td>{{ $row->order_date }}</td>
-                            <td>{{ $row->city_name }}</td>
-                            <td>{{ rupiah($row->grand_total) }}</td>
-                            <td>
-                                <a href="{{ url('admin/order/lihat-pesanan/'.$row->id) }}" class="btn btn-primary btn-sm">Lihat Pesanan</a>
-                            </td>
-                        </tr>
-                        @php
+                            @endphp
+                            @foreach($orders as $index => $row)
+                            <tr>
+                                <td>{{ $counter }}</td>
+                                <td>{{ "$row->first_name $row->last_name" }}</td>
+                                <td>{{ $row->order_date }}</td>
+                                <td>{{ $row->city_name }}</td>
+                                <td>{{ rupiah($row->grand_total) }}</td>
+                                <td>
+                                    <a href="{{ url('admin/order/lihat-pesanan/'.$row->id) }}" class="btn btn-primary btn-sm">Lihat Pesanan</a>
+                                </td>
+                            </tr>
+                            @php
                             $counter++;
-                        @endphp
-                        @endforeach
-                    </tbody>
-                </table>
+                            @endphp
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
