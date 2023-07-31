@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -16,6 +17,7 @@ class OrderController extends Controller
     public function index()
     {
         $title = 'Order Page';
+        $headingNavbar = 'Order Page';
         $orders = DB::table('orders')
             ->join('users', 'orders.user_id', 'users.id')
             ->join('cities', 'orders.shipping_to', 'cities.city_id')
@@ -23,7 +25,7 @@ class OrderController extends Controller
             ->orderBy('orders.id', 'asc')
             ->get();
 
-        return view('admin.order.dashboard', ['orders' => $orders, 'title' => $title]);
+        return view('admin.order.dashboard', ['orders' => $orders, 'title' => $title, 'headingNavbar' => $headingNavbar]);
     }
 
     // Insert Data
@@ -50,7 +52,6 @@ class OrderController extends Controller
         return back()->with('message', 'Data berhasil di tambahkan');
     }
 
-    // Lihat Pesanan
     public function lihatPesanan($id)
     {
         $title = 'Dashboard | Detail Order';
@@ -61,9 +62,10 @@ class OrderController extends Controller
             ->join('users', 'orders.user_id', 'users.id')
             ->join('cities', 'orders.shipping_to', 'cities.city_id')
             ->join('provinces', 'cities.province_id', 'provinces.province_id')
+            ->join('status_order', 'orders.status_order_id', 'status_order.id')
             ->select('orders.id', 'orders.order_id', 'users.first_name', 'users.last_name', 'users.username', 
-            'users.phone_number', 'users.email', 'orders.order_date', 'orders.grand_total', 'orders.shipping_to',
-            'cities.city_name', 'provinces.province_name', 'payment_method.name AS payment_method_name', 'payment_method.category AS payment_method_category')
+            'users.phone_number', 'users.email', 'orders.order_date', 'orders.total AS sub_total', 'orders.shipment_fee', 'orders.grand_total', 'orders.shipping_to',
+            'cities.city_name', 'provinces.province_name', 'payment_method.name AS payment_method_name', 'payment_method.category AS payment_method_category', 'orders.status_order_id', 'status_order.description AS status')
             ->where('orders.order_id', $orderID)
             ->first();
 
@@ -80,9 +82,22 @@ class OrderController extends Controller
             ->orderBy('orders.id', 'asc')
             ->get();
 
-        // dd($orderInformation);
-
         return view('admin.order.orderList', ['title' => $title, 'headingNavbar' => $headingNavbar, 'orderInformation' => $orderInformation, 'orderList' => $orderList]);
+    }
+
+    public function acceptOrder(Request $request)
+    {
+        $orderID = $request->orderIDParam;
+
+        $checkOrder = DB::table('orders')->where('order_id', $orderID)->first();
+
+        if ($checkOrder) {
+            DB::table('orders')->where('order_id', $orderID)->update(['status_order_id' => 2]);
+
+            return $this->successResponse(200, 'Berhasil');
+        } else {
+            return $this->failedResponse(200, 'Gagal');
+        }
     }
 
     public function insertOrder(Request $request)
