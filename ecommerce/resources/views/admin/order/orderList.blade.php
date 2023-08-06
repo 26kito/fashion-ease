@@ -136,24 +136,33 @@
 @push('adminscript')
 <script src="{{ asset('asset/bootstrap-growl/jquery.bootstrap-growl.min.js') }}"></script>
 <script>
+    let statusMessage = localStorage.getItem("status");
+
+    if (statusMessage) {
+        $.bootstrapGrowl(statusMessage, {
+            type: 'success',
+            offset: {from: 'top', amount: 75},
+            align: 'center',
+            width: 400,
+            stackup_spacing: 15
+        });
+
+        localStorage.removeItem("status");
+    }
+
     $('.btn-accept-order').on('click', () => {
         let orderID = $('.btn-accept-order').data('orderid');
 
         $.ajax({
-            url: '/api/accept-order',
+            url: '/api/update-status-order',
             method: 'POST',
             data: {
-                orderIDParam: orderID
+                orderIDParam: orderID,
+                statusParam: 'accept'
             },
             success: function(response) {
-                // alert
-                $.bootstrapGrowl(response.message, {
-                    type: 'success',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
+                localStorage.setItem("status", "success"); // set localstorage
+                window.location.reload(); // reload page
             }
         })
     })
@@ -162,20 +171,15 @@
         let orderID = $('.btn-cancel-order').data('orderid');
 
         $.ajax({
-            url: '/api/cancel-order',
+            url: '/api/update-status-order',
             method: 'POST',
             data: {
-                orderIDParam: orderID
+                orderIDParam: orderID,
+                statusParam: 'cancel'
             },
             success: function(response) {
-                // alert
-                $.bootstrapGrowl(response.message, {
-                    type: 'success',
-                    offset: {from: 'top', amount: 75},
-                    align: 'center',
-                    width: 400,
-                    stackup_spacing: 15
-                });
+                localStorage.setItem("status", "success"); // set localstorage
+                window.location.reload(); // reload page
             }
         })
     })
