@@ -8,8 +8,12 @@
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="wishlist-table">
+					@if ( $totalWishlist > 0 )
 					<h4 class="wishlist-table-heading mb-3">Wishlist</h4>
 					@livewire('wishlist')
+					@else
+					<h3 class="text-center mt-5">Duh, wishlistmu kosong nih:(</h3>
+					@endif
 				</div>
 			</div>
 		</div>
@@ -31,3 +35,23 @@
 	</div>
 </div>
 @endsection
+
+@push('script')
+<script src="{{ asset('js/customNotif.js') }}"></script>
+<script>
+	let statusMessage = localStorage.getItem("status");
+
+	if (statusMessage) {
+		let event = customNotif.notif('success', statusMessage);
+
+		window.dispatchEvent(event);
+
+		localStorage.removeItem("status");
+	}
+
+	window.livewire.on('refreshWishlist', (status) => {
+		localStorage.setItem("status", "Berhasil menghapus item dari wishlist"); // set localstorage
+		window.location.reload(); // reload page
+	})
+</script>
+@endpush
