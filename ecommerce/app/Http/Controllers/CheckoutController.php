@@ -52,7 +52,7 @@ class CheckoutController extends Controller
             $grandTotal = $total + $shipmentFee;
 
             $userID = $request->data[0]['user_id'];
-            $orderDate = $shipmentDate = date('Y-m-d');
+            $orderDate = date('Y-m-d');
             $paymentMethodID = $request->paymentMethodID;
             $shippingTo = $request->shippingTo;
 
@@ -73,7 +73,7 @@ class CheckoutController extends Controller
                     'user_id' => $userID,
                     'order_date' => $orderDate,
                     'status_order_id' => 1,
-                    'shipment_date' => $shipmentDate,
+                    'shipment_date' => null,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
                     'shipping_to' => $shippingTo,

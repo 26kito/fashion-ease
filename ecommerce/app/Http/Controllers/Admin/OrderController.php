@@ -63,9 +63,26 @@ class OrderController extends Controller
             ->join('cities', 'orders.shipping_to', 'cities.city_id')
             ->join('provinces', 'cities.province_id', 'provinces.province_id')
             ->join('status_order', 'orders.status_order_id', 'status_order.id')
-            ->select('orders.id', 'orders.order_id', 'users.first_name', 'users.last_name', 'users.username', 
-            'users.phone_number', 'users.email', 'orders.order_date', 'orders.total AS sub_total', 'orders.shipment_fee', 'orders.grand_total', 'orders.shipping_to',
-            'cities.city_name', 'provinces.province_name', 'payment_method.name AS payment_method_name', 'payment_method.category AS payment_method_category', 'orders.status_order_id', 'status_order.description AS status')
+            ->select(
+                'orders.id',
+                'orders.order_id',
+                'users.first_name',
+                'users.last_name',
+                'users.username',
+                'users.phone_number',
+                'users.email',
+                'orders.order_date',
+                'orders.total AS sub_total',
+                'orders.shipment_fee',
+                'orders.grand_total',
+                'orders.shipping_to',
+                'cities.city_name',
+                'provinces.province_name',
+                'payment_method.name AS payment_method_name',
+                'payment_method.category AS payment_method_category',
+                'orders.status_order_id',
+                'status_order.description AS status'
+            )
             ->where('orders.order_id', $orderID)
             ->first();
 
@@ -75,9 +92,19 @@ class OrderController extends Controller
             ->join('cities', 'orders.shipping_to', 'cities.city_id')
             ->join('provinces', 'cities.province_id', 'provinces.province_id')
             ->join('products', 'order_items.product_id', 'products.id')
-            ->select('orders.order_date', 'order_items.product_id', 'products.name AS product_name', 'order_items.size', 
-            'order_items.price AS product_price', 'products.image AS product_image', 'order_items.qty', 'orders.grand_total', 'orders.shipping_to', 
-            'cities.city_name', 'provinces.province_name')
+            ->select(
+                'orders.order_date',
+                'order_items.product_id',
+                'products.name AS product_name',
+                'order_items.size',
+                'order_items.price AS product_price',
+                'products.image AS product_image',
+                'order_items.qty',
+                'orders.grand_total',
+                'orders.shipping_to',
+                'cities.city_name',
+                'provinces.province_name'
+            )
             ->where('order_items.order_id', $orderID)
             ->orderBy('orders.id', 'asc')
             ->get();
@@ -85,14 +112,21 @@ class OrderController extends Controller
         return view('admin.order.orderList', ['title' => $title, 'headingNavbar' => $headingNavbar, 'orderInformation' => $orderInformation, 'orderList' => $orderList]);
     }
 
-    public function acceptOrder(Request $request)
+    public function updateStatusOrder(Request $request)
     {
         $orderID = $request->orderIDParam;
+        $status = $request->statusParam;
 
         $checkOrder = DB::table('orders')->where('order_id', $orderID)->first();
 
-        if ($checkOrder) {
-            DB::table('orders')->where('order_id', $orderID)->update(['status_order_id' => 2]);
+        if ($checkOrder && $status) {
+            if ($status == 'accept') {
+                DB::table('orders')->where('order_id', $orderID)->update(['status_order_id' => 2]);
+            }
+
+            if ($status == 'cancel') {
+                DB::table('orders')->where('order_id', $orderID)->update(['status_order_id' => 3]);
+            }
 
             return $this->successResponse(200, 'Berhasil');
         } else {
