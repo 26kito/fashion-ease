@@ -13,7 +13,9 @@ class Wishlist extends Component
     public $ProductID;
     public $size;
 
-    public $listeners = ['setSize' => 'setSize'];
+    public $listeners = [
+        'setSize' => 'setSize',
+    ];
 
     public function render()
     {
@@ -90,9 +92,15 @@ class Wishlist extends Component
             ->where('product_id', $productID)
             ->delete();
 
-        return $this->dispatchBrowserEvent('toastr', [
-            'status' => 'success',
-            'message' => 'Berhasil menghapus produk dari wishlist kamu'
-        ]);
+        $totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
+
+        if ($totalWishlist > 0) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'success',
+                'message' => 'Berhasil menghapus produk dari wishlist kamu'
+            ]);
+        } else {
+            $this->emit('refreshWishlist');
+        }
     }
 }
