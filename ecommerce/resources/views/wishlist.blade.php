@@ -39,18 +39,18 @@
 @push('script')
 <script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
-	let statusMessage = localStorage.getItem("status");
+	let result = JSON.parse(localStorage.getItem('refreshWishlist')); // get localstorage
 
-	if (statusMessage) {
-		let event = customNotif.notif('success', statusMessage);
+	if (result) {
+		let event = customNotif.notif(result.status, result.message);
 
 		window.dispatchEvent(event);
 
-		localStorage.removeItem("status");
+		localStorage.removeItem('refreshWishlist'); // remove localstorage
 	}
 
-	window.livewire.on('refreshWishlist', (status) => {
-		localStorage.setItem("status", "Berhasil menghapus item dari wishlist"); // set localstorage
+	window.livewire.on('refreshWishlist', (e) => { // listen from livewire emit
+		localStorage.setItem('refreshWishlist', JSON.stringify(e)); // set localstorage
 		window.location.reload(); // reload page
 	})
 </script>

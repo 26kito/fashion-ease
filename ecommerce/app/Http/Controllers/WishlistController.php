@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
@@ -15,8 +17,9 @@ class WishlistController extends Controller
     public function index()
     {
         $title = 'My Wishlist';
+        $totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
 
-        return view('wishlist', ['title' => $title]);
+        return view('wishlist', ['title' => $title, 'totalWishlist' => $totalWishlist]);
     }
 
     /**
