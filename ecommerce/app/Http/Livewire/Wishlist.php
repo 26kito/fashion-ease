@@ -96,11 +96,16 @@ class Wishlist extends Component
 
         if ($totalWishlist > 0) {
             return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'success',
+                'status' => 'error',
                 'message' => 'Berhasil menghapus produk dari wishlist kamu'
             ]);
         } else {
-            $this->emit('refreshWishlist');
+            $message = 'Berhasil menghapus produk dari wishlist kamu';
+
+            $this->emit(
+                'refreshWishlist',
+                ['status' => 'error', 'message' => $message]
+            );
         }
     }
 }

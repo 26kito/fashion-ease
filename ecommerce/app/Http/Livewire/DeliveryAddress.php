@@ -38,13 +38,14 @@ class DeliveryAddress extends Component
 
         if (!$checkAddress->address) {
             $userInfo = $getUserAddress->first();
-        } else {
-            if ($this->userAddressID != null) {
-                $userInfo = $getUserAddress->where('user_addresses.id', $this->userAddressID)->first();
-            } else {
-                $userInfo = $getUserAddress->first();
-            }
         }
+
+        if ($this->userAddressID != null) {
+            $userInfo = $getUserAddress->where('user_addresses.id', $this->userAddressID)->first();
+        } else {
+            $userInfo = $getUserAddress->orderByDesc('user_addresses.is_default')->first();
+        }
+
 
         return view('livewire.delivery-address', ['userInfo' => $userInfo]);
     }
@@ -74,6 +75,6 @@ class DeliveryAddress extends Component
     {
         $this->userAddressID = $data;
 
-        $this->emit('updatedCityIDFromDeliveryAddress', $data);
+        // $this->emit('updatedCityIDFromDeliveryAddress', $data);
     }
 }
