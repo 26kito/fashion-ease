@@ -29,5 +29,12 @@ class LatestProductsSection extends Component
     public function addToWishlist($productID)
     {
         $this->addToWishlistTrait($productID);
+        
+        $message = "Berhasil menambahkan ke wishlist!";
+
+        $this->emit(
+            'refreshWishlist',
+            ['status' => 'success', 'message' => $message]
+        );
     }
 }
