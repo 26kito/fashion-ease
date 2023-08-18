@@ -55,9 +55,9 @@ class Wishlist extends Component
         return view('livewire.wishlist');
     }
 
-    public function setSize($size)
+    public function setSize($data)
     {
-        $toArr = explode(', ', $size);
+        $toArr = explode(', ', $data);
         $ProductID = $toArr[0];
         $size = $toArr[1];
         $this->ProductID = $ProductID;
@@ -93,18 +93,18 @@ class Wishlist extends Component
             ->delete();
 
         $totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
+        $status = 'error';
+        $message = 'Berhasil menghapus produk dari wishlist kamu';
 
         if ($totalWishlist > 0) {
             return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'error',
-                'message' => 'Berhasil menghapus produk dari wishlist kamu'
+                'status' => $status,
+                'message' => $message
             ]);
         } else {
-            $message = 'Berhasil menghapus produk dari wishlist kamu';
-
             $this->emit(
                 'refreshWishlist',
-                ['status' => 'error', 'message' => $message]
+                ['status' => $status, 'message' => $message]
             );
         }
     }
