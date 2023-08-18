@@ -36,10 +36,5 @@ trait addToWishlist
             ['user_id' => Auth::id(), 'product_id' => $productID],
             ['product_id' => $productID]
         );
-
-        $this->dispatchBrowserEvent('toastr', [
-            'status' => 'success',
-            'message' => 'Berhasil menambahkan ke wishlist!'
-        ]);
     }
 }
