@@ -15,15 +15,16 @@ class OrderItemController extends Controller
     {
         try {
             $data = DB::table('orders')
-                ->join('order_items', 'orders.id', 'order_items.order_id')
+                ->join('order_items', 'orders.order_id', 'order_items.order_id')
                 ->join('products', 'order_items.product_id', 'products.id')
-                ->join('users', 'users.id', 'orders.user_id')
-                ->where('order_items.order_id', $order_id)
-                ->select('orders.id AS order_id', 'order_items.id', 'products.name', 'order_items.size', 'order_items.qty', 'products.price')
+                ->where('orders.id', $order_id)
+                ->select('orders.id', 'orders.order_id', 'products.name', 'order_items.size', 'order_items.qty', 'products.price')
                 ->get();
-            if (count($data) === 0) {
+
+            if (count($data) == 0) {
                 return response()->json(['data' => 'data tidak ditemukan'], 400);
             }
+
             return response()->json(['data' => $data], 200);
         } catch (\Throwable $th) {
             throw $th;
@@ -38,10 +39,12 @@ class OrderItemController extends Controller
             'size' => 'string',
             'qty' => 'integer|min:1'
         ]);
+
         $availSize = DB::table('detail_products')
             ->where('dp_id', $request->product_id)
             ->where('size', $request->size)
             ->first();
+
         if ($availSize != null && $availSize->stock >= $request->qty && $request->qty !== 0) {
             // Setelah di validasi, tampung semua request kedalam variabel
             $data = $request->all();

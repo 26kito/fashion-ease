@@ -30,11 +30,12 @@ class LatestProductsSection extends Component
     {
         $this->addToWishlistTrait($productID);
         
+        $status = 'success';
         $message = "Berhasil menambahkan ke wishlist!";
 
         $this->emit(
             'refreshWishlist',
-            ['status' => 'success', 'message' => $message]
+            ['status' => $status, 'message' => $message]
         );
     }
 }
