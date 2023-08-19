@@ -203,7 +203,7 @@
                             <h5 class="card-title ${(length != 2) ? 'text-center' : ''}">Alamat ${(isDefault == 1) ? '(Utama)' : ''}</h5>
                             <p class="card-text ${(length != 2) ? 'text-center' : ''}">${d.address}</p>
                             <div class="${(length != 2) ? 'text-center' : ''}">
-                                <a href="#" id="changeDeliveryAddress" data-address-id=${d.id} class="btn btn-primary">Gunakan</a>
+                                <a href="#" id="changeDeliveryAddress" role="button" data-address-id=${d.id} class="btn btn-primary ${(isDefault == 1) ? '' : ''}" aria-disabled=${(isDefault == 1) ? 'false' : 'false'}>${(isDefault == 1 ? 'Digunakan' : 'Gunakan')}</a>
                             </div>
                         </div>
                     </div>
