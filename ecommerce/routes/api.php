@@ -36,7 +36,7 @@ Route::prefix('order')->group(function () {
     Route::put('{order_id}/order_items/{id}', [OrderItemController::class, 'update']);
 });
 
-Route::post('/accept-order', [OrderController::class, 'acceptOrder']);
+Route::post('/update-status-order', [OrderController::class, 'updateStatusOrder']);
 
 Route::get('/get-province', [RajaOngkirController::class, 'getProvince']);
 Route::get('/get-city/{province}', [RajaOngkirController::class, 'getCity']);

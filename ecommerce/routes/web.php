@@ -44,7 +44,7 @@ Route::middleware('is_user')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
 
-    Route::get('/product/{product_id}', [ProductsController::class, 'index']);
+    Route::get('/product/{product_name}/{product_code}/{product_id}', [ProductsController::class, 'index']);
 
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
 
@@ -97,7 +97,7 @@ Route::middleware(['is_admin'])->group(function () {
             Route::post('/insert', [OrderController::class, 'insertAction']);
 
             Route::get('/lihat-pesanan/{id}', [OrderController::class, 'lihatPesanan']);
-            Route::post('/lihat-pesanan/{id}', [OrderController::class, 'insertOrder']);
+            // Route::post('/lihat-pesanan/{id}', [OrderController::class, 'insertOrder']);
         });
     });
 });

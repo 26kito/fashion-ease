@@ -6,10 +6,10 @@ use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    public function index($productID)
+    public function index($productName, $productCode, $productID)
     {
         $title = 'Products';
-        $products = Product::with('detailsProduct')->where('product_id', $productID)->first();
+        $products = Product::with('detailsProduct')->where('product_id', $productID)->where('code', $productCode)->first();
         $relatedProducts = Product::where('category_id', $products->category_id)->get();
         $defaultSize = ['S', 'M', 'L', 'XL'];
 

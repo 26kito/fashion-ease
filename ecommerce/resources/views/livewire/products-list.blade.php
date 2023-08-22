@@ -13,11 +13,13 @@
     <div class="col-lg-3 col-sm-6">
         <div class="product-item">
             <div class="pi-pic">
-                <a href="{{ url('product/'.$item->product_id) }}">
+                {{-- <a href="{{ url('product/'.$item->product_id) }}"> --}}
+                <a href="{{ url('product/' . $item->name . '/' . $item->code . '/' . $item->product_id) }}">
                     <img src="{{ asset('asset/img/products/'.$item->image) }}" alt="{{ 'image of '.$item->name }}">
                 </a>
                 <div class="pi-links">
-                    <a href="{{ url('product/'.$item->product_id) }}" class="add-card add-to-cart">
+                    {{-- <a href="{{ url('product/'.$item->product_id) }}" class="add-card add-to-cart"> --}}
+                    <a href="{{ url('product/' . $item->name . '/' . $item->code . '/' . $item->product_id) }}" class="add-card add-to-cart">
                         <i class="flaticon-bag"></i><span>ADD TO CART</span>
                     </a>
                     <a wire:click.prevent='addToWishlist({{$item->id}})' class="wishlist-btn">

@@ -43,6 +43,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownUser">
                                 <a class="dropdown-item" href="#">My Profile</a>
                                 <a class="dropdown-item" href="{{ route('wishlist') }}">Wishlist</a>
+                                <a class="dropdown-item" href="{{ route('wishlist') }}">Pesanan</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

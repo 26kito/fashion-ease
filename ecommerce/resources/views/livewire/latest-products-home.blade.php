@@ -7,14 +7,16 @@
     <div class="product-item">
         <div class="pi-pic">
             <div class="tag-new">NEW</div>
-            <a href="{{ url('product/'.$row->product_id) }}">
+            {{-- <a href="{{ url('product/'.$row->product_id) }}"> --}}
+            <a href="{{ url('product/' . $row->name . '/' . $row->code . '/' . $row->product_id) }}">
                 <img src="{{ asset('storage/products-images/'.$row->image) }}" alt="{{ 'image of '.$row->name }}">
             </a>
             <div class="pi-links">
-                <a href="{{ url('product/'.$row->product_id) }}" class="add-card add-to-cart">
+                {{-- <a href="{{ url('product/'.$row->product_id) }}" class="add-card add-to-cart"> --}}
+                <a href="{{ url('product/' . $row->name . '/' . $row->code . '/' . $row->product_id) }}" class="add-card add-to-cart">
                     <i class="flaticon-bag"></i><span>ADD TO CART</span>
                 </a>
-                <a wire:click.prevent='addToWishlist({{$row->id}})' class="wishlist-btn">
+                <a wire:click.prevent='addToWishlist({{ $row->id }})' class="wishlist-btn">
                     <i class="flaticon-heart"></i>
                 </a>
             </div>
