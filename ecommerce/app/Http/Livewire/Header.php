@@ -19,6 +19,14 @@ class Header extends Component
         'refreshCart' => '$refresh'
     ];
 
+    public function mount()
+    {
+        if (!isset($_COOKIE['cart_id'])) {
+            $cartID = md5(uniqid(rand(), true));
+            setcookie('cart_id', $cartID, time() + (3600 * 2), '/'); // Set cookie to expire in 2 hour
+        }
+    }
+
     public function render()
     {
         $this->productsSearch = '';
@@ -32,6 +40,7 @@ class Header extends Component
         }
 
         $this->cartQty = $this->cart();
+        // dd($this->cartQty);
 
         return view('livewire.header');
     }

@@ -11,7 +11,13 @@ class CartController extends Controller
     {
         $title = 'Cart';
 
-        $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
+        if (Auth::check()) {
+            $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
+        }
+
+        if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $totalOrders = count(json_decode($_COOKIE['carts']));
+        }
 
         $wishlist = DB::table('wishlists')
             ->where('user_id', Auth::id())

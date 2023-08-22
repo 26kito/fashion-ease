@@ -37,7 +37,7 @@ Route::middleware('is_user')->group(function () {
 
     Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart')->middleware('auth');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');//->middleware('auth');
 
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
