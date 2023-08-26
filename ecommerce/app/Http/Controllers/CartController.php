@@ -10,12 +10,13 @@ class CartController extends Controller
     public function index()
     {
         $title = 'Cart';
+        $totalOrders = 0;
 
         if (Auth::check()) {
             $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
         }
 
-        if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
             $totalOrders = count(json_decode($_COOKIE['carts']));
         }
 

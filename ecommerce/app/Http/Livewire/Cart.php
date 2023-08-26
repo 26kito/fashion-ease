@@ -25,6 +25,7 @@ class Cart extends Component
         'removeAllCartItems' => 'removeAllCartItems',
         'addCartItemToWishlist' => 'addCartItemToWishlist',
         'removeCartItem' => 'removeCartItem',
+        'cartUpdated' => '$refresh',
     ];
 
     public function mount($page)
@@ -58,7 +59,7 @@ class Cart extends Component
             $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
         }
 
-        if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
             $dataArray = json_decode($_COOKIE['carts'], true);
 
             $results = DB::table('products')
@@ -91,6 +92,7 @@ class Cart extends Component
             }
 
             $this->carts = $results;
+            $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
         }
 
         return view('livewire.cart');
@@ -109,10 +111,18 @@ class Cart extends Component
 
     public function removeAllCartItems()
     {
-        CartModel::where('user_id', Auth::id())->delete();
+        if (Auth::check()) {
+            CartModel::where('user_id', Auth::id())->delete();
 
-        $this->emit('refreshTotalPrice');
-        $this->emit('refreshCart');
+            $this->emit('refreshTotalPrice');
+            $this->emit('refreshCart');
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $newArray = [];
+
+            setcookie('carts', json_encode($newArray), time() + (3600 * 2), '/');
+        }
 
         return redirect($this->page)->with('status', 200);
     }
@@ -156,7 +166,9 @@ class Cart extends Component
             }
 
             $this->emit('refreshCart');
+
             setcookie('carts', json_encode($newArray), time() + (3600 * 2), '/');
+
             return redirect($this->page)->with('status', 200);
         }
     }
@@ -173,37 +185,108 @@ class Cart extends Component
 
     public function increment($OrderItemsID, $ProductID)
     {
-        $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
-        $size = $orderItems->size;
-        $qty = $orderItems->qty + 1;
+        if (Auth::check()) {
+            $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
+            $size = $orderItems->size;
+            $qty = $orderItems->qty + 1;
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+
+            foreach ($dataArray as &$row) {
+                if ($row['product_id'] == $ProductID) {
+                    $size = $row['size'];
+                    $qty = $row['quantity'] + 1;
+                }
+            }
+        }
 
         $availSize = $this->checkSize($ProductID, $size);
 
         if ($availSize > 0 && $qty <= $availSize) {
-            DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
+            if (Auth::check()) {
+                DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
+            }
+
+            if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+                $dataArray = json_decode($_COOKIE['carts'], true);
+                
+                foreach ($dataArray as &$row) {
+                    if ($row['product_id'] == $ProductID) {
+                        $row['quantity'] = $qty;
+                    }
+                }
+
+                setcookie('carts', json_encode($dataArray), time() + (3600 * 2), '/');
+            }
+            
+            $this->emit('cartUpdated');
             $this->emit('refreshTotalPrice');
         }
     }
 
     public function decrement($OrderItemsID, $ProductID)
     {
-        $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
-        $size = $orderItems->size;
-        $qty = $orderItems->qty - 1;
+        if (Auth::check()) {
+            $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
+            $size = $orderItems->size;
+            $qty = $orderItems->qty - 1;
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+
+            foreach ($dataArray as &$row) {
+                if ($row['product_id'] == $ProductID) {
+                    $size = $row['size'];
+                    $qty = $row['quantity'] - 1;
+                }
+            }
+        }
 
         $availSize = $this->checkSize($ProductID, $size);
 
         if ($availSize > 0 && $qty <= $availSize && $qty > 0) {
-            DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
+            if (Auth::check()) {
+                DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
+            }
+
+            if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+                $dataArray = json_decode($_COOKIE['carts'], true);
+
+                foreach ($dataArray as &$row) {
+                    if ($row['product_id'] == $ProductID) {
+                        $row['quantity'] = $qty;
+                    }
+                }
+
+                setcookie('carts', json_encode($dataArray), time() + (3600 * 2), '/');
+            }
+
+            $this->emit('cartUpdated');
             $this->emit('refreshTotalPrice');
         }
     }
 
     public function updatedSelectAll($value)
     {
-        if ($value) {
+        if (Auth::check() && $value) {
             $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
             $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+        } else {
+            $this->reset('selected');
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $value) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+            $cartsID = array();
+
+            foreach ($dataArray as $data) {
+                array_push($cartsID, $data['cart_id']);
+            }
+
+            $this->selected = $this->availStock->whereIn('CartID', $cartsID)->pluck('CartID');
         } else {
             $this->reset('selected');
         }
