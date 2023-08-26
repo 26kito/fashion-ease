@@ -6,15 +6,43 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class CheckoutController extends Controller
 {
+    use TraitsCart;
+
     public function index()
     {
         $cartItemsID = request()->cartid;
+        $validateCart = session('validateCart');
 
-        if (!is_array($cartItemsID) || empty($cartItemsID)) {
+        if ((!is_array($cartItemsID) || empty($cartItemsID)) && $validateCart == null) {
             return redirect()->back()->with('status', 400);
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && (is_array($cartItemsID) || !empty($cartItemsID))) {
+            setcookie('selectedCart', json_encode($cartItemsID), time() + (3600 * 2), '/');
+            session(['validateCart' => true]);
+
+            return redirect()->route('login');
+        }
+
+        if (Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $validateCart == true) {
+            $tempCart = json_decode($_COOKIE['carts']);
+            session()->forget('validateCart');
+
+            foreach ($tempCart as $row) {
+                $productId = $row->product_id;
+                $qty = $row->quantity;
+                $size = $row->size;
+                $this->addToCartTrait($productId, $size, $qty);
+            }
+
+            // delete cookie
+            setcookie('cart_id', '', time() - 1, '/');
+            setcookie('carts', '', time() - 1, '/');
+            $cartItemsID = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
         }
 
         $orderItems = $this->getOrderItems($cartItemsID);
@@ -97,7 +125,6 @@ class CheckoutController extends Controller
                     ->where('user_id', $userID)
                     ->delete();
             }
-
         });
 
         return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat'], 200);

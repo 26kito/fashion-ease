@@ -41,4 +41,11 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            return redirect()->route('checkout');
+        }
+    }
 }

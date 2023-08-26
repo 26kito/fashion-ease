@@ -211,7 +211,7 @@ class Cart extends Component
 
             if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
                 $dataArray = json_decode($_COOKIE['carts'], true);
-                
+
                 foreach ($dataArray as &$row) {
                     if ($row['product_id'] == $ProductID) {
                         $row['quantity'] = $qty;
@@ -220,7 +220,7 @@ class Cart extends Component
 
                 setcookie('carts', json_encode($dataArray), time() + (3600 * 2), '/');
             }
-            
+
             $this->emit('cartUpdated');
             $this->emit('refreshTotalPrice');
         }
@@ -271,24 +271,28 @@ class Cart extends Component
 
     public function updatedSelectAll($value)
     {
-        if (Auth::check() && $value) {
-            $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
-            $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-        } else {
-            $this->reset('selected');
+        if (Auth::check()) {
+            if (Auth::check() && $value) {
+                $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+                $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+            } else {
+                $this->reset('selected');
+            }
         }
 
-        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $value) {
-            $dataArray = json_decode($_COOKIE['carts'], true);
-            $cartsID = array();
+        if (!Auth::check()) {
+            if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $value) {
+                $dataArray = json_decode($_COOKIE['carts'], true);
+                $cartsID = array();
 
-            foreach ($dataArray as $data) {
-                array_push($cartsID, $data['cart_id']);
+                foreach ($dataArray as $data) {
+                    array_push($cartsID, $data['cart_id']);
+                }
+
+                $this->selected = $this->availStock->whereIn('CartID', $cartsID)->pluck('CartID');
+            } else {
+                $this->reset('selected');
             }
-
-            $this->selected = $this->availStock->whereIn('CartID', $cartsID)->pluck('CartID');
-        } else {
-            $this->reset('selected');
         }
     }
 
