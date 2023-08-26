@@ -271,28 +271,20 @@ class Cart extends Component
 
     public function updatedSelectAll($value)
     {
-        if (Auth::check()) {
-            if (Auth::check() && $value) {
-                $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
-                $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-            } else {
-                $this->reset('selected');
+        if (Auth::check() && $value) {
+            $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+            $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+        } else if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $value) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+            $cartsID = array();
+
+            foreach ($dataArray as $data) {
+                array_push($cartsID, $data['cart_id']);
             }
-        }
 
-        if (!Auth::check()) {
-            if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $value) {
-                $dataArray = json_decode($_COOKIE['carts'], true);
-                $cartsID = array();
-
-                foreach ($dataArray as $data) {
-                    array_push($cartsID, $data['cart_id']);
-                }
-
-                $this->selected = $this->availStock->whereIn('CartID', $cartsID)->pluck('CartID');
-            } else {
-                $this->reset('selected');
-            }
+            $this->selected = $this->availStock->whereIn('CartID', $cartsID)->pluck('CartID');
+        } else {
+            $this->reset('selected');
         }
     }
 
