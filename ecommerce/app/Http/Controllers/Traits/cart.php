@@ -18,7 +18,7 @@ trait cart
             return $cartQty;
         }
 
-        if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
             $cartQty = count(json_decode($_COOKIE['carts']));
 
             return $cartQty;
@@ -33,13 +33,13 @@ trait cart
                 ['qty' => $qty]
             );
 
-            $this->dispatchBrowserEvent('toastr', [
-                'status' => 'success',
-                'message' => 'Berhasil menambahkan ke keranjang!'
-            ]);
+            // $this->dispatchBrowserEvent('toastr', [
+            //     'status' => 'success',
+            //     'message' => 'Berhasil menambahkan ke keranjang!'
+            // ]);
         }
 
-        if (isset($_COOKIE['cart_id'])) {
+        if (!Auth::check() & isset($_COOKIE['cart_id'])) {
             // Retrieve existing items from the cookie, if any
             $cart = isset($_COOKIE['carts']) ? json_decode($_COOKIE['carts'], true) : [];
 

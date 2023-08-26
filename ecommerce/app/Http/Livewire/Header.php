@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class Header extends Component
@@ -21,7 +22,7 @@ class Header extends Component
 
     public function mount()
     {
-        if (!isset($_COOKIE['cart_id'])) {
+        if (!Auth::check() && !isset($_COOKIE['cart_id'])) { // if user is not login and there is no cookie cart_id then set a cookie
             $cartID = md5(uniqid(rand(), true));
             setcookie('cart_id', $cartID, time() + (3600 * 2), '/'); // Set cookie to expire in 2 hour
         }
@@ -40,7 +41,6 @@ class Header extends Component
         }
 
         $this->cartQty = $this->cart();
-        // dd($this->cartQty);
 
         return view('livewire.header');
     }
