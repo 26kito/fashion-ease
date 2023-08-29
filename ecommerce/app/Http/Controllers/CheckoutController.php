@@ -30,19 +30,35 @@ class CheckoutController extends Controller
 
         if (Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $validateCart == true) {
             $tempCart = json_decode($_COOKIE['carts']);
-            session()->forget('validateCart');
+            $selectedCartsID = json_decode($_COOKIE['selectedCart']);
+            $productsID = array();
+            $productsSize = array();
 
             foreach ($tempCart as $row) {
-                $productId = $row->product_id;
-                $qty = $row->quantity;
-                $size = $row->size;
-                $this->addToCartTrait($productId, $size, $qty);
+                $tempCartID = $row->cart_id;
+
+                if (in_array($tempCartID, $selectedCartsID)) {
+                    $productId = $row->product_id;
+                    $qty = $row->quantity;
+                    $size = $row->size;
+                    array_push($productsID, $row->product_id);
+                    array_push($productsSize, $row->size);
+                    $this->addToCartTrait($productId, $size, $qty);
+                }
             }
 
+            session()->forget('validateCart');
             // delete cookie
             setcookie('cart_id', '', time() - 1, '/');
             setcookie('carts', '', time() - 1, '/');
-            $cartItemsID = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+            setcookie('selectedCart', '', time() - 1, '/');
+
+            $cartItemsID = DB::table('carts')
+                ->where('user_id', Auth::id())
+                ->whereIn('product_id', $productsID)
+                ->whereIn('size', $productsSize)
+                ->pluck('id')
+                ->toArray();
         }
 
         $orderItems = $this->getOrderItems($cartItemsID);
