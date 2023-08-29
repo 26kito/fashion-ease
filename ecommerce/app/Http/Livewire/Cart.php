@@ -183,12 +183,12 @@ class Cart extends Component
         return $res;
     }
 
-    public function increment($OrderItemsID, $ProductID)
+    public function updateQty($status, $OrderItemsID, $ProductID)
     {
         if (Auth::check()) {
             $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
             $size = $orderItems->size;
-            $qty = $orderItems->qty + 1;
+            $qty = ($status == 'increment') ? $orderItems->qty + 1 : $orderItems->qty - 1;
         }
 
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
@@ -197,50 +197,7 @@ class Cart extends Component
             foreach ($dataArray as &$row) {
                 if ($row['product_id'] == $ProductID) {
                     $size = $row['size'];
-                    $qty = $row['quantity'] + 1;
-                }
-            }
-        }
-
-        $availSize = $this->checkSize($ProductID, $size);
-
-        if ($availSize > 0 && $qty <= $availSize) {
-            if (Auth::check()) {
-                DB::table('carts')->where('id', $OrderItemsID)->update(['qty' => $qty]);
-            }
-
-            if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
-                $dataArray = json_decode($_COOKIE['carts'], true);
-
-                foreach ($dataArray as &$row) {
-                    if ($row['product_id'] == $ProductID) {
-                        $row['quantity'] = $qty;
-                    }
-                }
-
-                setcookie('carts', json_encode($dataArray), time() + (3600 * 2), '/');
-            }
-
-            $this->emit('cartUpdated');
-            $this->emit('refreshTotalPrice');
-        }
-    }
-
-    public function decrement($OrderItemsID, $ProductID)
-    {
-        if (Auth::check()) {
-            $orderItems = DB::table('carts')->where('id', $OrderItemsID)->where('product_id', $ProductID)->where('user_id', Auth::id())->first();
-            $size = $orderItems->size;
-            $qty = $orderItems->qty - 1;
-        }
-
-        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
-            $dataArray = json_decode($_COOKIE['carts'], true);
-
-            foreach ($dataArray as &$row) {
-                if ($row['product_id'] == $ProductID) {
-                    $size = $row['size'];
-                    $qty = $row['quantity'] - 1;
+                    $qty = ($status == 'increment') ? $row['quantity'] + 1 : $row['quantity'] - 1;
                 }
             }
         }
