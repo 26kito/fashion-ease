@@ -10,6 +10,13 @@ trait addToWishlist
 {
     public function addAllCartItemsToWishlistTrait()
     {
+        if (!Auth::check()) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Kamu belum login nih'
+            ]);
+        }
+
         $checkCart = DB::table('carts')
             ->where('user_id', Auth::id())
             ->get()->toArray();
@@ -32,6 +39,13 @@ trait addToWishlist
 
     public function addToWishlistTrait($productID)
     {
+        if (!Auth::check()) {
+            return $this->dispatchBrowserEvent('toastr', [
+                'status' => 'error',
+                'message' => 'Kamu belum login nih'
+            ]);
+        }
+
         Wishlist::updateOrCreate(
             ['user_id' => Auth::id(), 'product_id' => $productID],
             ['product_id' => $productID]

@@ -10,19 +10,19 @@ trait cart
 {
     public function cart()
     {
+        $cartQty = 0;
+
         if (Auth::check()) {
             $cartQty = DB::table('carts')
                 ->where('user_id', Auth::id())
                 ->count('product_id');
-
-            return $cartQty;
         }
 
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
             $cartQty = count(json_decode($_COOKIE['carts']));
-
-            return $cartQty;
         }
+
+        return $cartQty;
     }
 
     public function addToCartTrait($productId, $size, $qty)
