@@ -165,8 +165,6 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class
-                with font-awesome or any other icon font library -->
             <li class="nav-item">
               <a href="{{ url('/admin') }}" class="nav-link {{ request()->is('admin') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-home"></i>
@@ -221,33 +219,25 @@
                 </li>
               </ul>
             </li>
-            {{-- <li
-              class="nav-item {{ request()->is('admin/tables/user') || request()->is('admin/tables/productsList') ? 'menu-open' : '' }}">
-              <a href="{{ url('admin/tables/') }}"
-                class="nav-link {{ request()->is('admin/tables/user') || request()->is('admin/tables/productsList') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-edit"></i>
+            <li class="nav-item {{ request()->is('admin/voucher/*') ? 'menu-open' : '' }}">
+              <a href="{{ url('admin/voucher/*') }}"
+                class="nav-link {{ request()->is('admin/voucher/*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-ticket-alt"></i>
                 <p>
-                  Tables
+                  Master Voucher
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ url('admin/tables/user') }}"
-                    class="nav-link {{ request()->is('admin/tables/user') ? 'active' : '' }}">
+                  <a href="{{ url('admin/voucher/list') }}"
+                    class="nav-link {{ request()->is('admin/voucher/list') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>User</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ url('admin/tables/productsList') }}"
-                    class="nav-link {{ request()->is('admin/tables/productsList') ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Products</p>
+                    <p>Voucher List</p>
                   </a>
                 </li>
               </ul>
-            </li> --}}
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -286,6 +276,31 @@
   </div>
 
   @include('layout.adminlte.js')
+  <script>
+    window.addEventListener('toastr', event => {
+      let status = event.detail.status;
+      toastr.options = {
+        "preventDuplicates": true,
+        "positionClass": "toast-top-center",
+      };
+      switch (status) {
+        case 'success':
+          toastr.success(event.detail.message);
+          break;
+        case 'error':
+          toastr.error(event.detail.message);
+          break;
+        case 'warning':
+          toastr.warning(event.detail.message);
+          break;
+        case 'info':
+          toastr.info(event.detail.message);
+          break;
+        default:
+          break;
+      }
+    })
+  </script>
   @stack('adminscript')
 </body>
 

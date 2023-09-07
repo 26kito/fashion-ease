@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\VoucherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,7 @@ Route::middleware(['is_admin'])->group(function () {
                 Route::get('/insert', [AdminUserController::class, 'insert']);
                 Route::post('/insert', [AdminUserController::class, 'insertAction']);
             });
+
             Route::prefix('product')->group(function () {
                 Route::get('/insert', [AdminProductController::class, 'insert']);
                 Route::post('/insert', [AdminProductController::class, 'insertAction']);
@@ -98,6 +100,11 @@ Route::middleware(['is_admin'])->group(function () {
 
             Route::get('/lihat-pesanan/{id}', [OrderController::class, 'lihatPesanan']);
             // Route::post('/lihat-pesanan/{id}', [OrderController::class, 'insertOrder']);
+        });
+
+        Route::prefix('voucher')->group(function () {
+            Route::get('/list', [VoucherController::class, 'index']);
+            Route::get('/insert', [VoucherController::class, 'insertView']);
         });
     });
 });
