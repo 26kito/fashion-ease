@@ -105,6 +105,7 @@ Route::middleware(['is_admin'])->group(function () {
         Route::prefix('voucher')->group(function () {
             Route::get('/list', [VoucherController::class, 'index']);
             Route::get('/insert', [VoucherController::class, 'insertView']);
+            Route::post('/insert', [VoucherController::class, 'insertAction']);
         });
     });
 });
