@@ -216,6 +216,33 @@
         }
     });
 
+    $('input[name="startdate"], input[name="enddate"]').on('keydown', (e) => {
+        e.preventDefault();
+    })
+
+    $('input[name="vouchercode"]').on('keydown', (e) => {
+        // Check if the pressed key is the spacebar
+        if (e.which == 32) {
+            e.preventDefault();
+        }
+    })
+
+    $('input[name="vouchername"]').on('keydown', (e) => {
+        let input = $('#vouchername').val();
+        const inputElement = $('#vouchername')[0]; // Get the DOM element
+        const inputValue = inputElement.value; // Get the input value
+
+        // Prevent whitespace in first character
+        if (e.which == 32 && input.length == 0) {
+            e.preventDefault();
+        }
+
+        // Check if the input value starts with a space
+        if (inputValue.startsWith(' ')) {
+            inputElement.value = inputValue.trim(); // Remove leading space
+        }
+    })
+
     function numberInputValidation(inputElement, message) {
         let regex = /^(?!0)/;
 
