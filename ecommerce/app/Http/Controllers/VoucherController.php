@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class VoucherController extends Controller
 {
@@ -25,6 +26,17 @@ class VoucherController extends Controller
 
     public function insertAction(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'vouchercode' => 'unique:vouchers,code'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $title = $request->vouchername;
         $code = $request->vouchercode;
         $quota = $request->quota;

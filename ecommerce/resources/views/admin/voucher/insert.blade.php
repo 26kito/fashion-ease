@@ -1,8 +1,6 @@
 @extends('layout.adminlte.template')
 
-@section('title')
-{{$title}}
-@endsection
+@section('title'){{ $title }}@endsection
 
 @section('content-header')
 <div class="content-header">
@@ -45,7 +43,7 @@
 
 @if (session()->has('message'))
 <div class="alert alert-success">
-    {{session()->get('message')}}
+    {{ session()->get('message') }}
 </div>
 @endif
 
@@ -60,19 +58,17 @@
                 <!-- /.card-header -->
                 <!-- form start -->
                 <form action="{{ url('admin/voucher/insert') }}" method="POST" id="quickForm">
-
                     @csrf
-
                     <div class="card-body">
                         <!-- Card Body -->
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="vouchername">Voucher Name</label>
-                                <input type="text" name="vouchername" class="form-control" id="vouchername" placeholder="Enter voucher name" value="{{old('name')}}">
+                                <input type="text" name="vouchername" class="form-control" id="vouchername" placeholder="Enter voucher name" value="{{ old('vouchername') }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="vouchercode">Voucher Code</label>
-                                <input type="text" name="vouchercode" class="form-control" id="vouchercode" placeholder="Enter voucher name" value="{{old('email')}}">
+                                <input type="text" name="vouchercode" class="form-control" id="vouchercode" placeholder="Enter voucher name" value="{{ old('vouchercode') }}">
                             </div>
                         </div>
                         <div class="form-row">
@@ -86,13 +82,13 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="quota">Quota</label>
-                                <input type="number" name="quota" class="form-control" id="quota" value="{{old('email')}}" inputmode="numeric">
+                                <input type="number" name="quota" class="form-control" id="quota" inputmode="numeric" value="{{ old('quota') }}">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-5">
                                 <label for="disctype">Discount Type</label>
-                                <select id="disctype" name="disctype" class="form-control" >
+                                <select id="disctype" name="disctype" class="form-control">
                                     <option selected disabled>Choose Discount Type...</option>
                                     <option value="percentage">Percentage</option>
                                     <option value="fixed">Fixed</option>
@@ -100,11 +96,11 @@
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="discval">Discount Value</label>
-                                <input type="number" name="discval" class="form-control" id="discval" value="{{old('email')}}" inputmode="numeric">
+                                <input type="number" name="discval" class="form-control" id="discval" inputmode="numeric">
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="maxdiscount">Max Discount</label>
-                                <input type="number" name="maxdiscount" class="form-control" id="maxdiscount" value="{{old('email')}}" inputmode="numeric">
+                                <input type="number" name="maxdiscount" class="form-control" id="maxdiscount" inputmode="numeric">
                             </div>
                         </div>
                     </div> <!-- /.card-body -->
@@ -128,158 +124,178 @@
 <script src="{{ asset('js/customNotif.js') }}"></script>
 @if (Session::has('toastr'))
 <script>
-    let message = {{ Session::get('toastr') }}
+    let message = "{{ Session::get('toastr') }}"
 
     let event = customNotif.notif('success', message)
     window.dispatchEvent(event)
 </script>
 @endif
 <script>
-    $('input[name="startdate"]').daterangepicker({
-        timePicker: true,
-        timePicker24Hour: true,
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput: false,
-    });
+    $(document).ready(() => {
+        $('input[name="enddate"], #discval, #maxdiscount').prop('disabled', true);
 
-    $('input[name="startdate"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
-        $('input[name="enddate"]').prop('disabled', false);
-        let mindate = picker.startDate.format('MM/DD/YYYY'); // Format as MM/DD/YYYY
-
-        $('input[name="enddate"]').daterangepicker({
+        $('input[name="startdate"]').daterangepicker({
             timePicker: true,
             timePicker24Hour: true,
             singleDatePicker: true,
             showDropdowns: true,
             autoUpdateInput: false,
-            minDate: mindate,
         });
-    });
-
-    if ($('input[name="enddate"]').prop('disabled') == false) {
-        $('input[name="enddate"]').prop('disabled', true);
-    }
-
-    $('input[name="enddate"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
-    });
-
-    $('#quickForm').validate({
-        rules: {
-            vouchername: {
-                required: true,
-                minlength: 5
+    
+        $('input[name="startdate"]').on('apply.daterangepicker', (ev, picker) => {
+            $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+            $('input[name="enddate"]').prop('disabled', false);
+            let mindateval = picker.startDate.format('MM/DD/YYYY'); // Format as MM/DD/YYYY
+    
+            $('input[name="enddate"]').daterangepicker({
+                timePicker: true,
+                timePicker24Hour: true,
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false,
+                minDate: mindateval,
+            });
+        });
+    
+        $('input[name="enddate"]').on('apply.daterangepicker', (ev, picker) => {
+            $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+        });
+    
+        $('#quickForm').validate({
+            rules: {
+                vouchername: {
+                    required: true,
+                    minlength: 5
+                },
+                vouchercode: {
+                    required: true,
+                    minlength: 5
+                },
+                quota: {
+                    required: true,
+                    maxlength: 4,
+                },
+                startdate: {
+                    required: true,
+                },
+                enddate: {
+                    required: true,
+                },
+                discval: {
+                    required: true,
+                },
+                maxdiscount: {
+                    required: true,
+                },
             },
-            vouchercode: {
-                required: true,
-                minlength: 5
+            messages: {
+                email: {
+                    required: "Please enter a email address",
+                    email: "Please enter a vaild email address"
+                },
+                password: {
+                    required: "Please provide a password",
+                    minlength: "Your password must be at least 5 characters long"
+                },
             },
-            quota: {
-                required: true,
-                maxlength: 4,
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
             },
-            startdate: {
-                required: true,
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
             },
-            enddate: {
-                required: true,
-            },
-            discval: {
-                required: true,
-            },
-            maxdiscount: {
-                required: true,
-            },
-        },
-        messages: {
-            email: {
-                required: "Please enter a email address",
-                email: "Please enter a vaild email address"
-            },
-            password: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 5 characters long"
-            },
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-
-    $('input[name="startdate"], input[name="enddate"]').on('keydown', (e) => {
-        e.preventDefault();
-    })
-
-    $('input[name="vouchercode"]').on('keydown', (e) => {
-        // Check if the pressed key is the spacebar
-        if (e.which == 32) {
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    
+        $('input[name="startdate"], input[name="enddate"]').on('keydown', (e) => {
             e.preventDefault();
+        })
+    
+        $('#disctype').on('change', () => {
+            let selectedValue = $('#disctype').val();
+    
+            if (selectedValue == 'percentage') {
+                $('#discval, #maxdiscount').prop('disabled', false);
+            }
+    
+            if (selectedValue == 'fixed') {
+                $('#discval').prop('disabled', false);
+                $('#maxdiscount').prop('disabled', true);
+                $('#maxdiscount').val('');
+            }
+        })
+    
+        function inputValidation(inputElement, inputType, message = null) {
+            $(inputElement).on('keydown', function (e) {
+                if (inputType == 'number') {
+                    let regex = /^(?!0)/;
+
+                    if ($(this).val().length === 0 && !regex.test(e.key)) {
+                        e.preventDefault();
+                        let status = 'error';
+        
+                        let event = customNotif.notif(status, message);
+                        window.dispatchEvent(event);
+                    }
+        
+                    if (inputElement == '#quota') {
+                        if ($(this).val().length >= 4 && e.keyCode !== 8 && e.keyCode !== 46) {
+                            e.preventDefault(); // Prevent input if length is 4 or greater, except for Backspace and Delete
+                        }
+                    }
+                }
+
+                if (inputType == 'text') {
+                    if (inputElement == '#vouchercode') {
+                        // Check if the pressed key is the spacebar
+                        if (e.which == 32) {
+                            e.preventDefault();
+                        }
+                    }
+    
+                    if (inputElement == '#vouchername') {
+                        let input = $('#vouchername').val();
+                        const inputElement = $('#vouchername')[0]; // Get the DOM element
+                        const inputValue = inputElement.value; // Get the input value
+                
+                        // Prevent whitespace in first character
+                        if (e.which == 32 && input.length == 0) {
+                            e.preventDefault();
+                        }
+                
+                        // Check if the input value starts with a space
+                        if (inputValue.startsWith(' ')) {
+                            inputElement.value = inputValue.trim(); // Remove leading space
+                        }
+                    }
+                }
+            });
         }
-    })
-
-    $('input[name="vouchername"]').on('keydown', (e) => {
-        let input = $('#vouchername').val();
-        const inputElement = $('#vouchername')[0]; // Get the DOM element
-        const inputValue = inputElement.value; // Get the input value
-
-        // Prevent whitespace in first character
-        if (e.which == 32 && input.length == 0) {
-            e.preventDefault();
-        }
-
-        // Check if the input value starts with a space
-        if (inputValue.startsWith(' ')) {
-            inputElement.value = inputValue.trim(); // Remove leading space
-        }
-    })
-
-    function numberInputValidation(inputElement, message) {
-        let regex = /^(?!0)/;
-
-        $(inputElement).on('keydown', function(e) {
-            if ($(this).val().length === 0 && !regex.test(e.key)) {
-                e.preventDefault();
+    
+        // Call the function with the appropriate input elements
+        inputValidation('#quota', 'number', 'Kuota harus lebih besar dari 0!');
+        inputValidation('#discval', 'number', 'Discount value harus lebih besar dari 0!');
+        inputValidation('#maxdiscount', 'number', 'Max discount harus lebih besari dari 0!');
+        inputValidation('#vouchercode', 'text');
+        inputValidation('#vouchername', 'text');
+    
+        $(document).on('click', '#insertBtn', (e) => {
+            let disctype = $('#disctype').val()
+    
+            if (disctype == null || disctype == '') {
+                e.preventDefault()
                 let status = 'error';
-
+                let message = 'Pilih discount type terlebih dulu'
+    
                 let event = customNotif.notif(status, message);
                 window.dispatchEvent(event);
+                return;
             }
-
-            if (inputElement == '#quota') {
-                if ($(this).val().length >= 4 && e.keyCode !== 8 && e.keyCode !== 46) {
-                    e.preventDefault(); // Prevent input if length is 4 or greater, except for Backspace and Delete
-                }
-            }
-        });
-    }
-
-    // Call the function with the appropriate input elements
-    numberInputValidation('#quota', 'Kuota harus lebih besar dari 0!');
-    numberInputValidation('#discval', 'Discount value harus lebih besar dari 0!');
-    numberInputValidation('#maxdiscount', 'Max discount harus lebih besari dari 0!');
-
-    $(document).on('click', '#insertBtn', (e) => {
-        let disctype = $('#disctype').val()
-
-        if (disctype == null || disctype == '') {
-            e.preventDefault()
-            let status = 'error';
-            let message = 'Pilih discount type terlebih dulu'
-
-            let event = customNotif.notif(status, message);
-            window.dispatchEvent(event);
-            return;
-        }
+        })
     })
 </script>
 @endpush
