@@ -53,6 +53,7 @@
 	<script>
 		window.addEventListener('toastr', event => {
 			let status = event.detail.status;
+
 			toastr.options = {
 				"preventDuplicates": true,
 				"positionClass": "toast-top-center",

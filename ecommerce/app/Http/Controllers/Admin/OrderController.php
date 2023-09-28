@@ -25,6 +25,7 @@ class OrderController extends Controller
             ->orderBy('orders.id', 'asc')
             ->get();
 
+        // dd($orders);
         return view('admin.order.dashboard', ['orders' => $orders, 'title' => $title, 'headingNavbar' => $headingNavbar]);
     }
 
