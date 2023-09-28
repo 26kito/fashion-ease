@@ -62,10 +62,10 @@
                             <td>{{ $row->code }}</td>
                             <td>{{ $row->is_active }}</td>
                             <td class="row">
-                                <a href="" class="btn btn-primary col">
+                                <a href="" class="btn btn-sm btn-primary col">
                                     Edit
                                 </a>
-                                <a href="" class="btn btn-danger col"
+                                <a href="" class="btn btn-sm btn-danger col"
                                     onclick="return confirm('Are you sure want do delete this data? It cannot be undo')">
                                     Delete
                                 </a>

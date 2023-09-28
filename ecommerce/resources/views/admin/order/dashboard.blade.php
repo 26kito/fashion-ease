@@ -48,9 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                            $counter = 1;
-                            @endphp
+                            @php $counter = 1; @endphp
                             @foreach($orders as $index => $row)
                             <tr>
                                 <td>{{ $counter }}</td>
@@ -62,9 +60,7 @@
                                     <a href="{{ url('admin/order/lihat-pesanan/'.$row->id) }}" class="btn btn-primary btn-sm">Lihat Pesanan</a>
                                 </td>
                             </tr>
-                            @php
-                            $counter++;
-                            @endphp
+                            @php $counter++; @endphp
                             @endforeach
                         </tbody>
                     </table>
@@ -97,7 +93,6 @@
             "paging": true,
             "lengthChange": false,
             "searching": false,
-            "order": [[ 1, "asc" ]],
             "ordering": true,
             "info": true,
             "autoWidth": false,

@@ -16,7 +16,8 @@
             <label for="select-all" class="select-all-text form-check-label">Pilih Semua</label>
         </div>
         @if ($selectAll == true)
-        <a data-bs-toggle="modal" data-bs-target="#modalCart" wire:ignore class="delete-all-cart-items text-danger">Hapus</a>
+        <a data-bs-toggle="modal" data-bs-target="#modalCart" wire:ignore
+            class="delete-all-cart-items text-danger">Hapus</a>
         @endif
     </div>
 
@@ -35,9 +36,10 @@
             @foreach ( $carts as $row )
             <tr>
                 <td>
-                    <input type="checkbox" wire:model='selected' name="cartid[]" id="id[{{$row->CartID}}]" value="{{ $row->CartID }}"
-                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" 
-                        {{ ($row->AvailStock == 0) ? 'disabled' : '' }}>
+                    <input type="checkbox" wire:model='selected' name="cartid[]" id="id[{{$row->CartID}}]"
+                        value="{{ $row->CartID }}"
+                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{
+                        ($row->AvailStock == 0) ? 'disabled' : '' }}>
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
@@ -50,10 +52,10 @@
                 </td>
                 <td class="quy-col">
                     <div class="quantity form-group">
-                        <input wire:click="decrement('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
+                        <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
                             class="btn" value="-">
                         <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
-                        <input wire:click="increment('{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
+                        <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
                             class="btn" value="+">
                     </div>
                 </td>

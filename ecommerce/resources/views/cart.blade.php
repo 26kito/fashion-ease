@@ -29,8 +29,7 @@
 						@livewire('promo')
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif
-						<a href="{{ route('home') }}"
-							class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
+						<a href="{{ route('home') }}" class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
 					</div>
 				</div>
 			</div>
