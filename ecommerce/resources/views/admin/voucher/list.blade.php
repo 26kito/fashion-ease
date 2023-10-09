@@ -50,8 +50,8 @@
                             <th style="text-align: center">No.</th>
                             <th style="text-align: center">Nama Voucher</th>
                             <th style="text-align: center">Kode Voucher</th>
-                            <th style="text-align: center">Status</th>
-                            <th style="text-align: center">Action</th>
+                            <th style="text-align: center; width: 10%">Status</th>
+                            <th style="text-align: center; width: 20%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,15 +60,25 @@
                             <td>{{ $vouchers->firstItem() + $index }}</td>
                             <td>{{ $row->title }}</td>
                             <td>{{ $row->code }}</td>
-                            <td>{{ $row->is_active }}</td>
+                            {{-- <td>{{ $row->is_active }}</td> --}}
+                            <td>
+                                <a href="#" role="button"
+                                    class="btn btn-sm {{ ($row->is_active == 1) ? 'btn-success' : 'btn-danger'}}">{{
+                                    ($row->is_active == 1) ? 'Active' : 'Non-Active' }}</a>
+                            </td>
                             <td class="row">
-                                <a href="" class="btn btn-sm btn-primary col">
-                                    Edit
-                                </a>
-                                <a href="" class="btn btn-sm btn-danger col"
-                                    onclick="return confirm('Are you sure want do delete this data? It cannot be undo')">
-                                    Delete
-                                </a>
+                                <div class="col">
+                                    <a href="" class="btn btn-sm btn-primary col">
+                                        Edit
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="#" class="btn btn-sm btn-danger col"
+                                        onclick="return confirm('Are you sure want do delete this data? It cannot be undo')">
+                                        Delete
+                                    </a>
+
+                                </div>
                             </td>
                             {{-- <td>
                                 <a href="" class="btn btn-primary">
