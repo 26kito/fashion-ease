@@ -12,7 +12,7 @@ class VoucherController extends Controller
     {
         $title = 'Voucher List';
         $headingNavbar = 'Voucher List';
-        $data = DB::table('vouchers')->paginate(30);
+        $data = DB::table('vouchers')->orderBy('id', 'asc')->paginate(30);
 
         return view('admin.voucher.list', ['title' => $title, 'vouchers' => $data, 'headingNavbar' => $headingNavbar]);
     }
@@ -44,6 +44,7 @@ class VoucherController extends Controller
         $enddate = date("Y-m-d H:i:s", strtotime($request->enddate));
         $disctype = $request->disctype;
         $discval = $request->discval;
+        $minprice = $request->minimumprice;
         $maxdisc = $request->maxdiscount;
         $createddate = date('Y-m-d H:i:s');
 
@@ -54,6 +55,7 @@ class VoucherController extends Controller
             'is_active' => 1,
             'start_date' => $startdate,
             'end_date' => $enddate,
+            'minimum_price' => $minprice,
             'discount_type' => $disctype,
             'discount_value' => $discval,
             'max_discount_amount' => $maxdisc,

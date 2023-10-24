@@ -64,11 +64,13 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="vouchername">Voucher Name</label>
-                                <input type="text" name="vouchername" class="form-control" id="vouchername" placeholder="Enter voucher name" value="{{ old('vouchername') }}">
+                                <input type="text" name="vouchername" class="form-control" id="vouchername"
+                                    placeholder="Enter voucher name" value="{{ old('vouchername') }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="vouchercode">Voucher Code</label>
-                                <input type="text" name="vouchercode" class="form-control" id="vouchercode" placeholder="Enter voucher name" value="{{ old('vouchercode') }}">
+                                <input type="text" name="vouchercode" class="form-control" id="vouchercode"
+                                    placeholder="Enter voucher name" value="{{ old('vouchercode') }}">
                             </div>
                         </div>
                         <div class="form-row">
@@ -82,7 +84,8 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="quota">Quota</label>
-                                <input type="number" name="quota" class="form-control" id="quota" inputmode="numeric" value="{{ old('quota') }}">
+                                <input type="number" name="quota" class="form-control" id="quota" inputmode="numeric"
+                                    value="{{ old('quota') }}">
                             </div>
                         </div>
                         <div class="form-row">
@@ -96,12 +99,18 @@
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="discval">Discount Value</label>
-                                <input type="number" name="discval" class="form-control" id="discval" inputmode="numeric">
+                                <input type="number" name="discval" class="form-control" id="discval"
+                                    inputmode="numeric">
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="maxdiscount">Max Discount</label>
-                                <input type="number" name="maxdiscount" class="form-control" id="maxdiscount" inputmode="numeric">
+                                <input type="number" name="maxdiscount" class="form-control" id="maxdiscount"
+                                    inputmode="numeric">
                             </div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="minimumprice">Minimum Price</label>
+                            <input type="number" name="minimumprice" class="form-control" id="minimumprice" inputmode="numeric">
                         </div>
                     </div> <!-- /.card-body -->
                     <div class="card-footer">
@@ -143,7 +152,8 @@
         });
     
         $('input[name="startdate"]').on('apply.daterangepicker', (ev, picker) => {
-            $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+            // $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+            $('input[name="startdate"]').val(picker.startDate.format('MM/DD/YYYY HH:mm'));
             $('input[name="enddate"]').prop('disabled', false);
             let mindateval = picker.startDate.format('MM/DD/YYYY'); // Format as MM/DD/YYYY
     
@@ -158,7 +168,8 @@
         });
     
         $('input[name="enddate"]').on('apply.daterangepicker', (ev, picker) => {
-            $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+            // $(this).val(picker.startDate.format('MM/DD/YYYY HH:mm'));
+            $('input[name="enddate"]').val(picker.endDate.format('MM/DD/YYYY HH:mm'));
         });
     
         $('#quickForm').validate({
@@ -279,7 +290,8 @@
         // Call the function with the appropriate input elements
         inputValidation('#quota', 'number', 'Kuota harus lebih besar dari 0!');
         inputValidation('#discval', 'number', 'Discount value harus lebih besar dari 0!');
-        inputValidation('#maxdiscount', 'number', 'Max discount harus lebih besari dari 0!');
+        inputValidation('#maxdiscount', 'number', 'Max discount harus lebih besar dari 0!');
+        inputValidation('#minimumprice', 'number', 'Minimum price harus lebih besar dari 0!');
         inputValidation('#vouchercode', 'text');
         inputValidation('#vouchername', 'text');
     
