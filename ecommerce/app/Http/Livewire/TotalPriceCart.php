@@ -9,19 +9,28 @@ use Illuminate\Support\Facades\Auth;
 class TotalPriceCart extends Component
 {
     public $total;
+    public $cartsID = [];
 
-    protected $listeners = ['refreshTotalPrice' => '$refresh'];
+    protected $listeners = [
+        'refreshTotalPrice' => '$refresh',
+        'setCart' => 'setCart'
+    ];
 
     public function render()
     {
         $total = 0;
 
         if (Auth::check()) {
-            $total = DB::table('carts')
+            $query = DB::table('carts')
                 ->join('products', 'carts.product_id', '=', 'products.id')
-                ->where('carts.user_id', Auth::id())
                 ->selectRaw('SUM(products.price * carts.qty) AS price')
-                ->value('price');
+                ->where('carts.user_id', Auth::id());
+
+            if ($this->cartsID) {
+                $query->whereIn('carts.id', $this->cartsID);
+            }
+
+            $total = $query->value('price');
         }
 
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
@@ -49,5 +58,10 @@ class TotalPriceCart extends Component
         $this->total = rupiah($total);
 
         return view('livewire.total-price-cart');
+    }
+
+    public function setCart($cartID)
+    {
+        $this->cartsID = $cartID;
     }
 }

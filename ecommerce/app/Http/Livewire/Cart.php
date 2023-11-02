@@ -274,10 +274,10 @@ class Cart extends Component
     {
         $availStock = $this->availStock->count();
 
+        $this->emit('setCart', $this->selected);
+
         if (count($this->selected) == $availStock) {
             $this->selectAll = true;
-
-            // $this->emit('updatedCityIDFromDeliveryAddress', $data);
         } else {
             $this->reset('selectAll');
         }
