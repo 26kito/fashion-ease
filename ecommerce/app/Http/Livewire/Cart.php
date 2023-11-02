@@ -18,7 +18,7 @@ class Cart extends Component
     public $cartID;
     public $productID;
     public $selected = [];
-    public $selectAll = false;
+    public $selectAll;
 
     public $listeners = [
         'addAllCartItemsToWishlist' => 'addAllCartItemsToWishlist',
@@ -31,6 +31,31 @@ class Cart extends Component
     public function mount($page)
     {
         $this->page = $page;
+
+        $this->carts = DB::table('carts')
+            ->join('products', 'carts.product_id', 'products.id')
+            ->leftJoin('detail_products', function ($join) {
+                $join->on('carts.product_id', 'detail_products.dp_id')
+                    ->whereColumn('detail_products.size', 'carts.size');
+            })
+            ->where('carts.user_id', Auth::id())
+            ->select(
+                'carts.id AS CartID',
+                'products.id AS ProductID',
+                'products.product_id',
+                'products.name AS ProdName',
+                DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
+                'products.image',
+                DB::raw('products.price * carts.qty AS price'),
+                'carts.size',
+                'carts.qty'
+            )
+            ->get();
+
+        $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
+        $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+        $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+        $this->selectAll = true;
     }
 
     public function render()
@@ -245,12 +270,14 @@ class Cart extends Component
         }
     }
 
-    public function updatedSelected($value)
+    public function updatedSelected()
     {
         $availStock = $this->availStock->count();
 
         if (count($this->selected) == $availStock) {
             $this->selectAll = true;
+
+            // $this->emit('updatedCityIDFromDeliveryAddress', $data);
         } else {
             $this->reset('selectAll');
         }
