@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\DB;
 class Promo extends Component
 {
     public $vouchers;
-    public $selected = false;
-
-    protected $listeners = [
-        'setVoucher' => 'setVoucher'
-    ];
 
     public function render()
     {
@@ -23,10 +18,5 @@ class Promo extends Component
         }
 
         return view('livewire.promo');
-    }
-
-    public function setVoucher()
-    {
-        $this->selected = true;
     }
 }
