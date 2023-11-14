@@ -33,14 +33,49 @@ class TotalPriceCart extends Component
             $total = $query->value('price');
         }
 
+        // kode lama
+        // if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+        //     $dataArray = json_decode($_COOKIE['carts'], true);
+
+        //     $results = DB::table('products')
+        //         ->join('detail_products', 'products.id', '=', 'detail_products.dp_id')
+        //         ->select('products.id AS ProductID', 'products.price AS price')
+        //         ->whereIn('detail_products.dp_id', array_column($dataArray, 'product_id'))
+        //         ->get();
+
+        //     // Processing and formatting the results...
+        //     foreach ($results as &$result) {
+        //         $productId = $result->ProductID;
+
+        //         foreach ($dataArray as $item) {
+        //             if ($item['product_id'] == $productId) {
+        //                 $total += $result->price * $item['quantity'];
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
             $dataArray = json_decode($_COOKIE['carts'], true);
 
-            $results = DB::table('products')
+            $tempData = [];
+            if ($this->cartsID) {
+                foreach ($dataArray as $key => $value) {
+                    if (in_array($value['cart_id'], $this->cartsID)) {
+                        array_push($tempData, $value);
+                    }
+                }
+            }
+
+            $query = DB::table('products')
                 ->join('detail_products', 'products.id', '=', 'detail_products.dp_id')
-                ->select('products.id AS ProductID', 'products.price AS price')
-                ->whereIn('detail_products.dp_id', array_column($dataArray, 'product_id'))
-                ->get();
+                ->select('products.id AS ProductID', 'products.price AS price');
+
+            if ($this->cartsID) {
+                $query->whereIn('detail_products.dp_id', array_column($tempData, 'product_id'));
+            }
+
+            $results = $query->get();
 
             // Processing and formatting the results...
             foreach ($results as &$result) {
