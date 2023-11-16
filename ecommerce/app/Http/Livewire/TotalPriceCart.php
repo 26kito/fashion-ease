@@ -16,11 +16,34 @@ class TotalPriceCart extends Component
         'setCart' => 'setCart'
     ];
 
+    public function mount()
+    {
+        if (Auth::check()) {
+            $query = DB::table('carts')
+                ->join('products', 'carts.product_id', '=', 'products.id')
+                ->select('carts.id')
+                ->where('carts.user_id', Auth::id())
+                ->get();
+
+            foreach ($query as $key => $value) {
+                array_push($this->cartsID, $value->id);
+            }
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+
+            foreach ($dataArray as $data) {
+                array_push($this->cartsID, $data['cart_id']);
+            }
+        }
+    }
+
     public function render()
     {
         $total = 0;
 
-        if (Auth::check()) {
+        if (Auth::check() && count($this->cartsID) > 0) {
             $query = DB::table('carts')
                 ->join('products', 'carts.product_id', '=', 'products.id')
                 ->selectRaw('SUM(products.price * carts.qty) AS price')
@@ -33,7 +56,7 @@ class TotalPriceCart extends Component
             $total = $query->value('price');
         }
 
-        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && count($this->cartsID) > 0) {
             $dataArray = json_decode($_COOKIE['carts'], true);
 
             $tempData = [];
