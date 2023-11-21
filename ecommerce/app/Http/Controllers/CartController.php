@@ -26,4 +26,13 @@ class CartController extends Controller
 
         return view('cart', ['title' => $title, 'totalOrders' => $totalOrders, 'wishlist' => $wishlist]);
     }
+
+    public function getTotalPrice()
+    {
+        if (isset($_COOKIE['totalPriceCart'])) {
+            $totalPrice = $_COOKIE['totalPriceCart'];
+        }
+
+        return $totalPrice;
+    }
 }

@@ -37,9 +37,9 @@
             <tr>
                 <td>
                     <input type="checkbox" wire:model='selected' name="cartid[]" id="id[{{$row->CartID}}]"
-                        value="{{ $row->CartID }}"
-                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{
-                        ($row->AvailStock == 0) ? 'disabled' : '' }}>
+                        value="{{ $row->CartID }}" style="cursor: pointer"
+                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" 
+                        {{ ($row->AvailStock == 0) ? 'disabled' : '' }}>
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
