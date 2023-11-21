@@ -15,6 +15,7 @@ class CheckoutController extends Controller
     public function index()
     {
         $cartItemsID = request()->cartid;
+        $totalPriceCart = request()->total_price_cart;
         $validateCart = session('validateCart');
 
         if ((!is_array($cartItemsID) || empty($cartItemsID)) && $validateCart == null) {
@@ -66,7 +67,7 @@ class CheckoutController extends Controller
         $paymentMethod = DB::table('payment_method')->get();
         $title = 'Checkout';
 
-        return view('checkout', compact('orderItems', 'cartItemsID', 'paymentMethod', 'title'));
+        return view('checkout', compact('orderItems', 'cartItemsID', 'paymentMethod', 'title', 'totalPriceCart'));
     }
 
     private function getOrderItems(array $cartItemsID)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,5 +64,52 @@ class VoucherController extends Controller
         ]);
 
         return back()->with('toastr', 'Berhasil');
+    }
+
+    public function applyVoucher(Request $request)
+    {
+        // Assuming $vouchers is your array of voucher data
+        // $selectedVoucher = collect($vouchers["rows"])->firstWhere("id", $voucherId);
+        $totalPriceCart =  $request->totalPriceCart;
+        $voucherID = $request->voucherID;
+        $selectedVoucher = DB::table('vouchers')->where('id', $voucherID)->first();
+
+        if ($selectedVoucher) {
+            $discountValue = $this->calculateDiscount($totalPriceCart, $selectedVoucher);
+            $totalPrice = $totalPriceCart - $discountValue;
+
+            return response()->json([
+                "total_price" => $totalPriceCart,
+                "discount_applied_format" => rupiah($discountValue),
+                "discount_applied" => $discountValue,
+                "discounted_price" => $totalPrice,
+            ]);
+        } else {
+            return response()->json(["error" => "No voucher found with ID {$voucherID}"], 404);
+        }
+    }
+
+    public function calculateDiscount($totalPriceCart, $voucher)
+    {
+        $currentDate = Carbon::now()->format('Y-m-d H:i:s');
+
+        // Check if the voucher is active
+        if ($voucher->is_active == 1 && $currentDate >= $voucher->start_date && $voucher->end_date <= $currentDate) {
+            // Check if the total price meets the minimum requirement
+            if ($totalPriceCart >= $voucher->minimum_price) {
+                // Calculate discount based on voucher type
+                if ($voucher->discount_type == "FIXED") {
+                    $discountAmount = min($voucher->discount_value, $totalPriceCart);
+                }
+
+                if ($voucher->discount_type == "PERCENTAGE") {
+                    $discountAmount = min(($voucher->discount_value / 100) * $totalPriceCart, $voucher->max_discount_amount ?? PHP_FLOAT_MAX);
+                }
+
+                return $discountAmount;
+            }
+        }
+
+        return 0;
     }
 }

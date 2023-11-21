@@ -40,7 +40,8 @@
 						</li>
 						@endforeach
 					</ul>
-					@livewire('total-price-checkout', ['cartItemsID' => $cartItemsID])
+					{{-- @livewire('total-price-checkout', ['cartItemsID' => $cartItemsID]) --}}
+					@livewire('total-price-checkout', ['cartItemsID' => $cartItemsID, 'totalPriceCart' => $totalPriceCart])
 				</div>
 			</div>
 		</div>

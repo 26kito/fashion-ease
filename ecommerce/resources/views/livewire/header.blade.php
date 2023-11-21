@@ -57,19 +57,16 @@
                         @else
                         <div class="anon">
                             <i class="flaticon-profile"></i>
-                            <a href="{{ route('login') }}">Sign In</a> or <a href="{{ route('register') }}">Create
-                                Account</a>
+                            <a href="{{ route('login') }}">Sign In</a> or <a href="{{ route('register') }}">Create Account</a>
                         </div>
                         @endauth
                     </div>
                     <div class="up-item">
                         <div class="shopping-card">
                             <i class="flaticon-bag"></i>
-                            @auth
-                            @if ( Auth::user()->role_id === 2 && $cartQty > 0 )
+                            @if ( $cartQty > 0 )
                             <span class="qty">{{ $cartQty }}</span>
                             @endif
-                            @endauth
                         </div>
                         <a href="{{ route('cart') }}" class="orderCart">Your Cart</a>
                     </div>

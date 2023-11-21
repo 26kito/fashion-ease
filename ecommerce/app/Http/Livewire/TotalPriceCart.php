@@ -10,10 +10,12 @@ class TotalPriceCart extends Component
 {
     public $total;
     public $cartsID = [];
+    public $appliedDiscPrice;
 
     protected $listeners = [
         'refreshTotalPrice' => '$refresh',
-        'setCart' => 'setCart'
+        'setCart' => 'setCart',
+        'setAppliedDiscPrice' => 'setAppliedDiscPrice'
     ];
 
     public function mount()
@@ -91,7 +93,15 @@ class TotalPriceCart extends Component
             }
         }
 
-        $this->total = rupiah($total);
+        // $this->total = rupiah($total);
+
+        if ($this->appliedDiscPrice) {
+            $this->total = $total - $this->appliedDiscPrice;
+        } else {
+            $this->total = $total;
+        }
+
+        setcookie('totalPriceCart', $total, time() + (3600 * 2), '/');
 
         return view('livewire.total-price-cart');
     }
@@ -99,5 +109,10 @@ class TotalPriceCart extends Component
     public function setCart($cartID)
     {
         $this->cartsID = $cartID;
+    }
+
+    public function setAppliedDiscPrice($appliedDiscPrice)
+    {
+        $this->appliedDiscPrice = $appliedDiscPrice;
     }
 }

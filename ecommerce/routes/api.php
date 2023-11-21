@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RajaOngkirController;
 use App\Http\Controllers\Api\OrderItemController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\VoucherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,8 @@ Route::prefix('order')->group(function () {
 });
 
 Route::post('/update-status-order', [OrderController::class, 'updateStatusOrder']);
+Route::post('/apply-voucher', [VoucherController::class, 'applyVoucher']);
+Route::get('/total-price-cart', [CartController::class, 'getTotalPrice']);
 
 Route::get('/get-province', [RajaOngkirController::class, 'getProvince']);
 Route::get('/get-city/{province}', [RajaOngkirController::class, 'getCity']);
