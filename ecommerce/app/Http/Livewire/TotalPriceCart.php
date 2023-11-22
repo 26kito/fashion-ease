@@ -93,8 +93,6 @@ class TotalPriceCart extends Component
             }
         }
 
-        // $this->total = rupiah($total);
-
         if ($this->appliedDiscPrice) {
             $this->total = $total - $this->appliedDiscPrice;
         } else {

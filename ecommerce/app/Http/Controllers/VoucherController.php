@@ -94,7 +94,7 @@ class VoucherController extends Controller
         $currentDate = Carbon::now()->format('Y-m-d H:i:s');
 
         // Check if the voucher is active
-        if ($voucher->is_active == 1 && $currentDate >= $voucher->start_date && $voucher->end_date <= $currentDate) {
+        if ($voucher->is_active == 1 && ($currentDate >= $voucher->start_date && $currentDate <= $voucher->end_date)) {
             // Check if the total price meets the minimum requirement
             if ($totalPriceCart >= $voucher->minimum_price) {
                 // Calculate discount based on voucher type

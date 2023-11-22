@@ -17,28 +17,32 @@ class Promo extends Component
 
     public function render()
     {
-        // $this->vouchers = DB::table('vouchers')->where('is_active', 1)->orderBy('id', 'ASC')->get();
-
-        // foreach ($this->vouchers as $row) {
-        //     $row->selected = false;
-        // }
-
         $vouchers = DB::table('vouchers')->where('is_active', 1)->orderBy('id', 'ASC')->get();
-        $currentDate = Carbon::now()->format('Y-m-d H:i:s');
 
-        foreach ($vouchers as $row) {
-            if ($row->is_active == 1 && $currentDate >= $row->start_date && $row->end_date <= $currentDate) {
+        $this->vouchers = $vouchers;
+        $this->updateAvailability();
+
+        return view('livewire.promo');
+    }
+
+    public function updateAvailability()
+    {
+        $currentDate = Carbon::now()->format('Y-m-d H:i:s');
+        $totalPriceCart = 0;
+
+        if (isset($_COOKIE['totalPriceCart'])) {
+            $totalPriceCart = $_COOKIE['totalPriceCart'];
+        }
+
+        foreach ($this->vouchers as &$row) {
+            if ($row->is_active == 1 && ($currentDate >= $row->start_date && $currentDate <= $row->end_date) && ($totalPriceCart >= $row->minimum_price)) {
                 $row->available = true;
             } else {
                 $row->available = false;
             }
-
-            $row->selected = false;
         }
 
-        $this->vouchers = $vouchers;
-
-        return view('livewire.promo');
+        $this->emit('refresh');
     }
 
     public function setSelectedVoucher($voucherID)
