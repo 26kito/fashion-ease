@@ -1,43 +1,52 @@
-<div class="promo-code-form">
+<div class="promo-code-form" wire:ignore>
     {{-- Modal --}}
     <div id="modalpromo" class="modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true" wire:ignore>
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Pakai Promo</h5>
                     <div>
+                        {{-- <a href="#" class="btn btn-reset disabled" onclick="reset()">Reset Promo</a> --}}
                         <a href="#" class="btn btn-reset disabled">Reset Promo</a>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        {{-- <a href="#" role="button" class="btn btn-close" onclick="reset()" data-bs-dismiss="modal" aria-label="Close"></a> --}}
+                        <a href="#" role="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> --}}
                     </div>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <input type="search" class="form-control" name="" id="" placeholder="Masukkan kode promo">
+                            {{-- <input wire:model='keyword' type="search" class="form-control" name="searchVoucher"
+                                id="searchVoucher" placeholder="Masukkan kode promo"> --}}
+                            <input type="search" class="form-control" name="searchVoucher" id="searchVoucher"
+                                placeholder="Masukkan kode promo">
                         </div>
                         <div class="col-md-4">
-                            <a href="#" class="btn disabled">Terapkan</a>
+                            {{-- <a wire:click='searchVoucher' href="#"
+                                class="btn btn-apply-voucher btn-success disabled">Terapkan</a> --}}
+                            <a href="#" class="btn btn-apply-voucher btn-success disabled">Terapkan</a>
                         </div>
                     </div>
                     <br>
                     <div class="dropdown-divider"></div>
                     <br>
                     <div class="row">
-                        <div class="col-md-12">
-                            @foreach ($vouchers as $row)
+                        <div class="col-md-12" id="voucher-parent">
+                            {{-- @foreach ($vouchers as $row)
                             <div class="card mb-3">
-                                <div class="card-body voucher-card {{ ($row->available == true) ? 'available' : 'not-available' }}" data-voucher-id="{{ $row->id }}"
+                                <div class="card-body voucher-card {{ ($row->available == true) ? 'available' : 'not-available' }}"
+                                    data-voucher-id="{{ $row->id }}"
                                     style="{{ ($row->available == true) ? 'cursor: pointer' : '' }}" id="voucherCard">
                                     <p class="fw-bold">{{ $row->title }}</p>
                                 </div>
                             </div>
-                            @endforeach
+                            @endforeach --}}
                         </div>
                     </div>
                 </div>
                 <div class="row mb-4 voucher-calculate d-none">
-                    <div class="col-lg-8 col-md-8 col-sm-8">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="row">
                             <p class="ms-3">
                                 Kamu bisa hemat<br>
@@ -46,8 +55,12 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 ms-auto">
+                    {{-- <div class="col-lg-4 col-md-4 col-sm-4 ms-auto">
                         <a href="#" class="btn btn-success py-3" id="use-voucher">Pakai Promo</a>
+                    </div> --}}
+                    <div class="col-lg-6 col-md-6 col-sm-6 d-flex justify-content-end">
+                        <a href="#" class="btn btn-sm btn-danger py-4 d-none" id="cancel-voucher">Batalkan Promo</a>
+                        <a href="#" class="btn btn-sm ms-2 me-3 btn-success py-4" id="use-voucher">Pakai Promo</a>
                     </div>
                 </div>
             </div>
@@ -60,85 +73,115 @@
 </div>
 
 @push('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
-    let selectedVouchers = [];
+    let selectedVouchers = []
+    let selectedVouchersCode = []
 
-    // $('.voucher-card').on('click', function() {
+    $(document).on('click', '.btn-apply-voucher', function() {
+        let searchKeyword = $('#searchVoucher').val()
+
+        $.ajax({
+            type: "POST",
+            url: `/api/search-voucher`,
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                'keyword': searchKeyword
+            },
+            success: function(result) {
+                let currentText = $('.voucher-card').text().trim()
+
+                if (result.status == 'ok') {
+                    selectedVouchers = []
+                    selectedVouchersCode = []
+
+                    if (result.data.title != currentText) {
+                        $('.voucher-calculate').addClass('d-none')
+                        $('#voucher-parent').html(fetchVoucher(result.data))
+                    }
+                } else {
+                    let event = customNotif.notif(result.status, result.message)
+        
+                    window.dispatchEvent(event)
+                }
+            }
+        })
+    })
+
+    function fetchVoucher(data) {
+        let temp = ''
+
+        temp += `
+            <div class="card mb-3">
+                <div class="card-body voucher-card ${(data.available == true) ? 'available' : 'not-available'}" style="${(data.available == true) ? 'cursor: pointer' : ''}" id="voucherCard" data-voucher-id="${data.id}" data-voucher-code="${data.code}">
+                    <p class="fw-bold">${data.title}</p>
+                </div>
+            </div>
+        `
+
+        return temp
+    }
+
+    $(document).on('click', '#enterPromo', function() {
+        if ($('.voucher-card').hasClass('is-used')) {
+            $('.voucher-calculate #cancel-voucher').removeClass('d-none')
+        }
+    })
+
     $(document).on('click', '.voucher-card', function() {
-        let voucherID = $(this).data('voucher-id');
-        let index = selectedVouchers.indexOf(voucherID);
+        let voucherID = $(this).data('voucher-id')
+        let voucherCode = $(this).data('voucher-code')
+        let index = selectedVouchers.indexOf(voucherID)
 
         if ($(this).hasClass('available')) {
+            $('.btn-reset, .btn-close').attr('onclick', 'reset()')
+
             if ($(this).hasClass('selected')) {
-                $(this).removeClass('bg-success')
-                $(this).removeClass('text-white')
-                // $(this).css({
-                //     'background-color': 'white'
-                // });
-    
-                $('.btn-reset').addClass('disabled');
-                $(this).removeClass('selected');
-    
+                $(this).removeClass('bg-success text-white is-used selected')
+                $('.btn-reset').addClass('disabled')
+
                 // If voucherID is in the array, remove it using splice
                 if (index !== -1) {
                     selectedVouchers.splice(index, 1);
+                    selectedVouchersCode.splice(index, 1);
                 }
-    
             } else {
                 $(this).addClass('bg-success')
                 $(this).addClass('text-white')
-                // $(this).css({
-                //     'background-color': '#00AA5B'
-                // });
                 
-                $('.btn-reset').removeClass('disabled');
-                $(this).addClass('selected');
+                $('.btn-reset').removeClass('disabled')
+                $(this).addClass('selected')
                 
-                Livewire.emit('setSelectedVoucher', voucherID);
-    
+                Livewire.emit('setSelectedVoucher', voucherID)
+
                 if (!selectedVouchers.includes(voucherID)) {
                     selectedVouchers.push(voucherID);
+                    selectedVouchersCode.push(voucherCode);
                 }
-    
-                let totalPriceCart = 0;
-    
-                // Function to fetch total price
-                function fetchTotalPrice() {
-                    return $.ajax({
-                        type: "GET",
-                        url: `/api/total-price-cart`,
-                    });
-                }
-    
-                // Function to apply voucher
-                function applyVoucher() {
-                    return $.ajax({
-                        type: "POST",
-                        url: `/api/apply-voucher`,
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: {
-                            'totalPriceCart': totalPriceCart,
-                            'voucherID': selectedVouchers
-                        },
-                    });
-                }
-    
-                // Using promises to chain the requests
-                fetchTotalPrice()
-                    .then(function(result) {
-                        totalPriceCart = result;
-                        return applyVoucher();
-                    })
-                    .then(function(result) {
+
+                let totalPriceCart = localStorage.getItem("total_price_cart")
+
+                $.ajax({
+                    type: "POST",
+                    url: `/api/apply-voucher`,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        'totalPriceCart': totalPriceCart,
+                        'voucherID': selectedVouchers
+                    },
+                    success: function(result) {
                         $('.total-discount-cart').data('discount-price', result.discount_applied)
+                        // $('.total-discount-cart').attr('data-discount-price', result.discount_applied)
                         $('.total-discount-cart').html(result.discount_applied_format)
-                    })
-                    .catch(function(error) {
-                        console.error("Error:", error);
-                    });
+                    }
+                });
             }
     
             if (selectedVouchers.length > 0) {
@@ -149,27 +192,46 @@
         }
     });
 
-    $('#use-voucher').on('click', () => {
+    $(document).on('click', '#use-voucher', function() {
         let discPrice = $('.total-discount-cart').data('discount-price')
-        Livewire.emit('setAppliedDiscPrice', discPrice);
-        $('#modalpromo').modal('hide');
+        $('.voucher-card').addClass('is-used')
+        $('.voucher-calculate #cancel-voucher').removeClass('d-none')
+        Livewire.emit('setAppliedDiscPrice', discPrice)
+        // $('#modalpromo').modal('hide')
     })
 
-    $('.btn-reset').on('click', () => {
-        $('.voucher-card').removeClass('selected');
-        $('.btn-reset').addClass('disabled');
-        $('.voucher-calculate').addClass('d-none')
-
-        $('.voucher-card').css({
-            'background-color': 'white'
-        });
+    $(document).on('click', '#cancel-voucher', function() {
+        Livewire.emit('setAppliedDiscPrice', 0)
     })
 
-    $(document).on('click', '.btn-close', (e) => {
-        $('.voucher-calculate').addClass('d-none')        
-        $('.voucher-card').removeClass('selected')
-        $('.voucher-card').removeClass('bg-success')
-        $('.voucher-card').removeClass('text-white')
+    function reset() {
+        if ($('.voucher-card').hasClass('is-used') == false) {
+            $('.voucher-calculate').addClass('d-none')
+            $('#voucher-parent').html('')
+            $('.voucher-card').removeClass('selected bg-success text-white')
+            $('#searchVoucher').val('')
+            $('.btn-reset').addClass('disabled');
+        }
+    }
+
+    $(document).on('input', '#searchVoucher', function (e) {
+        // Get the input value
+        var inputValue = $(this).val();
+
+        // Check if the input length is greater than 3
+        if (inputValue.length > 3) {
+            // Do something here, for example, enable the button
+            $('.btn-apply-voucher').removeClass('disabled');
+        } else {
+            // Do something else, for example, disable the button
+            $('.btn-apply-voucher').addClass('disabled');
+        }
+    });
+
+    $(document).on('keypress', '#searchVoucher', function (e) {
+        if (e.keyCode == 32) {
+            e.preventDefault();
+        }
     })
 </script>
 @endpush
