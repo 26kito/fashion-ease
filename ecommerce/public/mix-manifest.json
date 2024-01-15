@@ -2,5 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/js/bootstrap.js": "/js/bootstrap.js",
     "/js/customNotif.js": "/js/customNotif.js",
+    "/js/helper.js": "/js/helper.js",
+    "/js/cookie.js": "/js/cookie.js",
     "/css/app.css": "/css/app.css"
 }

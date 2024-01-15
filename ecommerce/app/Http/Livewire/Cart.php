@@ -289,7 +289,7 @@ class Cart extends Component
             }
 
             $this->emit('refreshTotalPrice');
-            $this->emit('refreshVoucher');
+            // $this->emit('refreshVoucher');
             $this->emit('cartUpdated');
         }
     }

@@ -69,6 +69,7 @@ class VoucherController extends Controller
     public function getVoucher()
     {
         $keyword = request()->keyword;
+        // $totalPriceCart = request()->totalPriceCart;
 
         $data = DB::table('vouchers')->where('code', $keyword)->first();
 
@@ -114,25 +115,6 @@ class VoucherController extends Controller
 
         return $voucher;
     }
-
-    // protected function checkVoucher($voucherCode)
-    // {
-    //     $voucher = DB::table('vouchers')->where('code', $voucherCode)->first();
-
-    //     $currentDate = now()->format('Y-m-d H:i:s');
-    //     $totalPriceCart = isset($_COOKIE['totalPriceCart']) ? $_COOKIE['totalPriceCart'] : 0;
-
-    //     if (
-    //         $voucher->is_active == 1 && ($currentDate >= $voucher->start_date && $currentDate <= $voucher->end_date) &&
-    //         ($totalPriceCart >= $voucher->minimum_price) && $voucher->quota != 0
-    //     ) {
-    //         $voucher->available = true;
-    //     } else {
-    //         $voucher->available = false;
-    //     }
-
-    //     return $voucher;
-    // }
 
     protected function isVoucherAvailable($voucher, $currentDate, $totalPriceCart)
     {
