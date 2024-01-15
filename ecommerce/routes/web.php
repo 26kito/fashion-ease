@@ -38,7 +38,7 @@ Route::middleware('is_user')->group(function () {
 
     Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');//->middleware('auth');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart'); //->middleware('auth');
 
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
@@ -54,6 +54,10 @@ Route::middleware('is_user')->group(function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('/address', [UserController::class, 'getUserAddress']);
     });
+
+    Route::get('/cart-items', [CartController::class, 'getCartItems']);
+    Route::post('/carts/total-price', [CartController::class, 'getTotalPrice']);
+    Route::post('/carts/update-qty', [CartController::class, 'updateQty']);
 });
 
 Route::middleware(['is_admin'])->group(function () {

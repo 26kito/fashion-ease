@@ -39,8 +39,13 @@ Route::prefix('order')->group(function () {
 });
 
 Route::post('/update-status-order', [OrderController::class, 'updateStatusOrder']);
+// Route::get('/voucher', [VoucherController::class, 'getVoucher']);
+// Route::post('/voucher', [VoucherController::class, 'getVoucher']);
+Route::post('/search-voucher', [VoucherController::class, 'getVoucher']);
+Route::post('/check-voucher', [VoucherController::class, 'checkVoucher']);
 Route::post('/apply-voucher', [VoucherController::class, 'applyVoucher']);
 Route::get('/total-price-cart', [CartController::class, 'getTotalPrice']);
+// Route::get('/cart-items', [CartController::class, 'getCartItems']);
 
 Route::get('/get-province', [RajaOngkirController::class, 'getProvince']);
 Route::get('/get-city/{province}', [RajaOngkirController::class, 'getCity']);

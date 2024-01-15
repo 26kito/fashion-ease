@@ -288,8 +288,9 @@ class Cart extends Component
                 setcookie('carts', json_encode($dataArray), time() + (3600 * 2), '/');
             }
 
-            $this->emit('cartUpdated');
             $this->emit('refreshTotalPrice');
+            $this->emit('refreshVoucher');
+            $this->emit('cartUpdated');
         }
     }
 

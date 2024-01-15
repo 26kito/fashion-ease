@@ -53,10 +53,10 @@
                 <td class="quy-col">
                     <div class="quantity form-group">
                         <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
-                            class="btn" value="-">
+                            class="btn decrease-btn" value="-">
                         <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
                         <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
-                            class="btn" value="+">
+                            class="btn increase-btn" value="+">
                     </div>
                 </td>
                 <td class="size-col">

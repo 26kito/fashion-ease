@@ -66,6 +66,82 @@ class VoucherController extends Controller
         return back()->with('toastr', 'Berhasil');
     }
 
+    public function getVoucher()
+    {
+        $keyword = request()->keyword;
+
+        $data = DB::table('vouchers')->where('code', $keyword)->first();
+
+        if ($data) {
+            // $voucher = $this->checkVoucher($data->code);
+            $currentDate = now()->format('Y-m-d H:i:s');
+            $totalPriceCart = isset($_COOKIE['totalPriceCart']) ? $_COOKIE['totalPriceCart'] : 0;
+
+            if (
+                $data->is_active == 1 && ($currentDate >= $data->start_date && $currentDate <= $data->end_date) &&
+                ($totalPriceCart >= $data->minimum_price) && $data->quota != 0
+            ) {
+                $data->available = true;
+            } else {
+                $data->available = false;
+            }
+
+            return response()->json(['status' => 'ok', 'data' => $data]);
+        } else {
+            $status = 'error';
+            $message = 'Voucher tidak ditemukan';
+
+            return response()->json(['status' => $status, 'message' => $message]);
+        }
+    }
+
+    protected function checkVoucher()
+    {
+        $voucherCode = request()->voucherCode;
+        $totalPriceCart = request()->totalPriceCart;
+        $currentDate = now()->format('Y-m-d H:i:s');
+        
+        $voucher = DB::table('vouchers')->where('code', $voucherCode)->first();
+
+        if (
+            $voucher->is_active == 1 && ($currentDate >= $voucher->start_date && $currentDate <= $voucher->end_date) &&
+            ($totalPriceCart >= $voucher->minimum_price) && $voucher->quota != 0
+        ) {
+            $voucher->available = true;
+        } else {
+            $voucher->available = false;
+        }
+
+        return $voucher;
+    }
+
+    // protected function checkVoucher($voucherCode)
+    // {
+    //     $voucher = DB::table('vouchers')->where('code', $voucherCode)->first();
+
+    //     $currentDate = now()->format('Y-m-d H:i:s');
+    //     $totalPriceCart = isset($_COOKIE['totalPriceCart']) ? $_COOKIE['totalPriceCart'] : 0;
+
+    //     if (
+    //         $voucher->is_active == 1 && ($currentDate >= $voucher->start_date && $currentDate <= $voucher->end_date) &&
+    //         ($totalPriceCart >= $voucher->minimum_price) && $voucher->quota != 0
+    //     ) {
+    //         $voucher->available = true;
+    //     } else {
+    //         $voucher->available = false;
+    //     }
+
+    //     return $voucher;
+    // }
+
+    protected function isVoucherAvailable($voucher, $currentDate, $totalPriceCart)
+    {
+        return $voucher->is_active == 1 &&
+            $currentDate >= $voucher->start_date &&
+            $currentDate <= $voucher->end_date &&
+            $totalPriceCart >= $voucher->minimum_price;
+    }
+
     public function applyVoucher(Request $request)
     {
         // Assuming $vouchers is your array of voucher data
@@ -89,12 +165,12 @@ class VoucherController extends Controller
         }
     }
 
-    public function calculateDiscount($totalPriceCart, $voucher)
+    protected function calculateDiscount($totalPriceCart, $voucher)
     {
         $currentDate = Carbon::now()->format('Y-m-d H:i:s');
 
         // Check if the voucher is active
-        if ($voucher->is_active == 1 && $currentDate >= $voucher->start_date && $voucher->end_date <= $currentDate) {
+        if ($voucher->is_active == 1 && ($currentDate >= $voucher->start_date && $currentDate <= $voucher->end_date)) {
             // Check if the total price meets the minimum requirement
             if ($totalPriceCart >= $voucher->minimum_price) {
                 // Calculate discount based on voucher type
