@@ -96,12 +96,11 @@ class CheckoutController extends Controller
             $total = collect($request->data)->sum('Price');
             $shipmentFee = $request->shippingCost;
             $grandTotal = $total + $shipmentFee;
-
             $userID = $request->data[0]['user_id'];
             $orderDate = date('Y-m-d');
             $paymentMethodID = $request->paymentMethodID;
             $shippingTo = $request->shippingTo;
-
+            $discValue = $request->voucherFee;
             $getMaxOrderID = DB::table('orders')->max('order_id');
             $latestNum = substr($getMaxOrderID, -6);
 
@@ -123,6 +122,7 @@ class CheckoutController extends Controller
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
                     'shipping_to' => $shippingTo,
+                    'discount' => $discValue,
                     'grand_total' => $grandTotal,
                     'payment_method_id' => $paymentMethodID
                 ]);
