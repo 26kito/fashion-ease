@@ -10,8 +10,10 @@ class TotalPriceCheckout extends Component
 {
     public $cartItemsID;
     public $totalPriceCart;
+    public $grandTotalPriceCart;
     public $total;
     public $shippingFee;
+    public $voucherPrice;
     public $grandTotal;
 
     protected $listeners = ['setShippingFee' => 'setShippingFee'];
@@ -26,13 +28,17 @@ class TotalPriceCheckout extends Component
 
         // $this->total = rupiah($total);
 
+        if (isset($_COOKIE['isVoucherUsed']) && $_COOKIE['isVoucherUsed'] == 'true') {
+            $this->voucherPrice = intval($_COOKIE['appliedDiscPrice']);
+        };
+
         if ($this->shippingFee) {
             // $grandTotal = $total + $this->shippingFee;
-            $grandTotal = $this->totalPriceCart + $this->shippingFee;
+            $grandTotal = $this->grandTotalPriceCart + $this->shippingFee;
             $this->grandTotal = rupiah($grandTotal);
         } else {
             // $this->grandTotal = $this->total;
-            $this->grandTotal = rupiah($this->totalPriceCart);
+            $this->grandTotal = rupiah($this->grandTotalPriceCart);
         }
 
         return view('livewire.total-price-checkout');

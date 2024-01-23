@@ -10,7 +10,7 @@
                         {{-- <a href="#" class="btn btn-reset disabled" onclick="reset()">Reset Promo</a> --}}
                         <a href="#" class="btn btn-reset disabled">Reset Promo</a>
                         {{-- <a href="#" role="button" class="btn btn-close" onclick="reset()" data-bs-dismiss="modal" aria-label="Close"></a> --}}
-                        <a href="#" role="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
+                        <a href="#" role="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close""></a>
                         {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> --}}
                     </div>
                 </div>
@@ -75,12 +75,55 @@
 @push('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script src="{{ asset('js/customNotif.js') }}"></script>
+<script src="{{ asset('js/cookie.js') }}"></script>
+<script src="{{ asset('js/helper.js') }}"></script>
 <script>
     let selectedVouchers = []
     let selectedVouchersCode = []
 
-    $(document).on('click', '.btn-apply-voucher', function() {
-        let searchKeyword = $('#searchVoucher').val()
+    $(document).on('click', '.btn-apply-voucher', function () {
+        searchVoucher()
+        // let searchKeyword = $('#searchVoucher').val()
+        // $('.btn-close').attr('onclick', 'reset()')
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: `/api/search-voucher`,
+        //     dataType: 'json',
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     },
+        //     data: {
+        //         'keyword': searchKeyword
+        //     },
+        //     success: function(result) {
+        //         let currentText = $('.voucher-card').text().trim()
+
+        //         if (result.status == 'ok') {
+        //             selectedVouchers = []
+        //             selectedVouchersCode = []
+
+        //             if (result.data.title != currentText) {
+        //                 $('.voucher-calculate').addClass('d-none')
+        //                 $('#voucher-parent').html(fetchVoucher(result.data))
+        //             }
+        //         } else {
+        //             let event = customNotif.notif(result.status, result.message)
+        
+        //             window.dispatchEvent(event)
+        //         }
+        //     }
+        // })
+    })
+
+    let checkVoucherCookie = cookie.getCookie('isVoucherUsed')
+    let voucherCodeCookie = cookie.getCookie('selectedVouchersCode')
+    let appliedDiscPriceCookie = cookie.getCookie('appliedDiscPrice')
+
+    if (checkVoucherCookie) {
+        $('input[name="searchVoucher"]').val(voucherCodeCookie)
+        $('.btn-apply-voucher').removeClass('disabled')
+        $('.btn-reset, .btn-close').attr('onclick', 'reset()')
 
         $.ajax({
             type: "POST",
@@ -90,34 +133,23 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                'keyword': searchKeyword
+                'keyword': voucherCodeCookie
             },
             success: function(result) {
-                let currentText = $('.voucher-card').text().trim()
-
-                if (result.status == 'ok') {
-                    selectedVouchers = []
-                    selectedVouchersCode = []
-
-                    if (result.data.title != currentText) {
-                        $('.voucher-calculate').addClass('d-none')
-                        $('#voucher-parent').html(fetchVoucher(result.data))
-                    }
-                } else {
-                    let event = customNotif.notif(result.status, result.message)
-        
-                    window.dispatchEvent(event)
-                }
+                $('#voucher-parent').html(fetchVoucher(result.data))
+                $('.voucher-calculate, #cancel-voucher').removeClass('d-none')
+                $('.total-discount-cart').data('discount-price', appliedDiscPriceCookie)
+                $('.total-discount-cart').html(helper.rupiahFormatter(appliedDiscPriceCookie))
             }
         })
-    })
+    }
 
     function fetchVoucher(data) {
         let temp = ''
 
         temp += `
             <div class="card mb-3">
-                <div class="card-body voucher-card ${(data.available == true) ? 'available' : 'not-available'}" style="${(data.available == true) ? 'cursor: pointer' : ''}" id="voucherCard" data-voucher-id="${data.id}" data-voucher-code="${data.code}">
+                <div class="card-body voucher-card ${(data.available == true) ? 'available' : 'not-available'} ${(checkVoucherCookie) ? 'selected bg-success text-white is-used' : ''}" style="${(data.available == true) ? 'cursor: pointer' : ''}" id="voucherCard" data-voucher-id="${data.id}" data-voucher-code="${data.code}">
                     <p class="fw-bold">${data.title}</p>
                 </div>
             </div>
@@ -126,13 +158,13 @@
         return temp
     }
 
-    $(document).on('click', '#enterPromo', function() {
+    $(document).on('click', '#enterPromo', function () {
         if ($('.voucher-card').hasClass('is-used')) {
             $('.voucher-calculate #cancel-voucher').removeClass('d-none')
         }
     })
 
-    $(document).on('click', '.voucher-card', function() {
+    $(document).on('click', '.voucher-card', function () {
         let voucherID = $(this).data('voucher-id')
         let voucherCode = $(this).data('voucher-code')
         let index = selectedVouchers.indexOf(voucherID)
@@ -192,16 +224,25 @@
         }
     });
 
-    $(document).on('click', '#use-voucher', function() {
+    $(document).on('click', '#use-voucher', function () {
         let discPrice = $('.total-discount-cart').data('discount-price')
         $('.voucher-card').addClass('is-used')
         $('.voucher-calculate #cancel-voucher').removeClass('d-none')
         Livewire.emit('setAppliedDiscPrice', discPrice)
+        localStorage.setItem("selected_vouchers_code", selectedVouchersCode); // set localstorage
+        cookie.setCookie('appliedDiscPrice', discPrice, 2);
+        cookie.setCookie('isVoucherUsed', true, 2);
+        cookie.setCookie('selectedVouchersCode', selectedVouchersCode, 2)
         // $('#modalpromo').modal('hide')
     })
 
-    $(document).on('click', '#cancel-voucher', function() {
+    $(document).on('click', '#cancel-voucher', function () {
+        $('.voucher-card').removeClass('is-used')
         Livewire.emit('setAppliedDiscPrice', 0)
+        localStorage.removeItem('selected_vouchers_code')
+        cookie.unsetCookie('appliedDiscPrice')
+        cookie.unsetCookie('isVoucherUsed')
+        cookie.unsetCookie('selectedVouchersCode')
     })
 
     function reset() {
@@ -211,8 +252,20 @@
             $('.voucher-card').removeClass('selected bg-success text-white')
             $('#searchVoucher').val('')
             $('.btn-reset').addClass('disabled');
+            $('#cancel-voucher').addClass('d-none')
+            Livewire.emit('setAppliedDiscPrice', 0)
+            localStorage.removeItem('selected_vouchers_code')
+            cookie.unsetCookie('appliedDiscPrice')
+            cookie.unsetCookie('isVoucherUsed')
+            cookie.unsetCookie('selectedVouchersCode')
         }
     }
+
+    // listen event from total-price-cart livewire
+    $(document).on('resetVoucher', function () {
+        $('.voucher-card').removeClass('is-used')
+        reset()
+    })
 
     $(document).on('input', '#searchVoucher', function (e) {
         // Get the input value
@@ -229,9 +282,48 @@
     });
 
     $(document).on('keypress', '#searchVoucher', function (e) {
-        if (e.keyCode == 32) {
+        if (e.keyCode == 32) { // prevent whitespace
             e.preventDefault();
         }
+
+        if (e.which === 13) { // if enter is pressed
+            searchVoucher()
+            return false
+      }
     })
+
+    function searchVoucher() {
+        let searchKeyword = $('#searchVoucher').val()
+        $('.btn-close').attr('onclick', 'reset()')
+
+        $.ajax({
+            type: "POST",
+            url: `/api/search-voucher`,
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                'keyword': searchKeyword
+            },
+            success: function(result) {
+                let currentText = $('.voucher-card').text().trim()
+
+                if (result.status == 'ok') {
+                    selectedVouchers = []
+                    selectedVouchersCode = []
+
+                    if (result.data.title != currentText) {
+                        $('.voucher-calculate').addClass('d-none')
+                        $('#voucher-parent').html(fetchVoucher(result.data))
+                    }
+                } else {
+                    let event = customNotif.notif(result.status, result.message)
+        
+                    window.dispatchEvent(event)
+                }
+            }
+        })
+    }
 </script>
 @endpush

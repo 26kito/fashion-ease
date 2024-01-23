@@ -12,11 +12,13 @@ class TotalPriceCart extends Component
     public $total;
     public $cartsID = [];
     public $appliedDiscPrice;
+    public $isVoucherUsed;
 
     protected $listeners = [
         'refreshTotalPrice' => '$refresh',
         'setCart' => 'setCart',
         'setAppliedDiscPrice' => 'setAppliedDiscPrice',
+        'setVoucher' => 'setVoucher',
     ];
 
     public function mount()
@@ -92,11 +94,20 @@ class TotalPriceCart extends Component
         }
 
         if ($this->appliedDiscPrice) {
-            // $this->total = $total - $this->appliedDiscPrice;
+            $this->total = $total;
             $this->grandTotal = $total - $this->appliedDiscPrice;
         } else {
             $this->total = $total;
             $this->grandTotal = $total;
+        }
+
+        if (isset($_COOKIE['appliedDiscPrice'])) {
+            $this->isVoucherUsed = true;
+            $this->appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
+        } else {
+            // $this->isVoucherUsed = false;
+            $this->reset('isVoucherUsed');
+            $this->reset('appliedDiscPrice');
         }
 
         setcookie('totalPriceCart', $total, time() + (3600 * 2), '/');
@@ -155,11 +166,19 @@ class TotalPriceCart extends Component
         }
 
         if ($this->appliedDiscPrice) {
-            // $this->total = $total - $this->appliedDiscPrice;
+            $this->total = $total;
             $this->grandTotal = $total - $this->appliedDiscPrice;
         } else {
             $this->total = $total;
             $this->grandTotal = $total;
+        }
+
+        if (isset($_COOKIE['isVoucherUsed']) && $_COOKIE['isVoucherUsed'] == true) {
+            $this->isVoucherUsed = true;
+            $this->appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
+        } else {
+            $this->reset('isVoucherUsed');
+            $this->reset('appliedDiscPrice');
         }
 
         setcookie('totalPriceCart', $this->total, time() + (3600 * 2), '/');

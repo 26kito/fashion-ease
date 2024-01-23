@@ -41,7 +41,7 @@
 						@endforeach
 					</ul>
 					{{-- @livewire('total-price-checkout', ['cartItemsID' => $cartItemsID]) --}}
-					@livewire('total-price-checkout', ['cartItemsID' => $cartItemsID, 'totalPriceCart' => $totalPriceCart])
+					@livewire('total-price-checkout', ['cartItemsID' => $cartItemsID, 'totalPriceCart' => $totalPriceCart, 'grandTotalPriceCart' => $grandTotalPriceCart])
 				</div>
 			</div>
 		</div>
@@ -55,9 +55,10 @@
 <script>
 	$(document).on('click', '#placeOrder', () => {
 		let orderItems = @json($orderItems);
-		let address = $('.user-address').attr('data-user-address');
-		let shippingCost = $('#shippingCost').attr('data-shipping-fee');
-		let paymentMethodID = $('input[name="paymentMethod"]:checked').val();
+		let address = $('.user-address').attr('data-user-address')
+		let shippingCost = $('#shippingCost').attr('data-shipping-fee')
+		let voucherPrice = $('#voucherPrice').attr('data-voucher-price')
+		let paymentMethodID = $('input[name="paymentMethod"]:checked').val()
 
 		if (!address) {
 			let event = customNotif.notif('info', 'Isi alamatmu dluu yuk');
@@ -91,6 +92,10 @@
 			return;
 		}
 
+		if (!voucherPrice) {
+			voucherPrice = null
+		}
+
 		$.ajax({
 			type: "POST",
 			url: `/save-order`,
@@ -100,7 +105,8 @@
 				'data': orderItems,
 				'shippingCost': shippingCost,
 				'shippingTo': address,
-				'paymentMethodID': paymentMethodID
+				'paymentMethodID': paymentMethodID,
+				'voucherFee': voucherPrice
 			},
 			success: function(result) {
 				window.livewire.emit('refreshCart');

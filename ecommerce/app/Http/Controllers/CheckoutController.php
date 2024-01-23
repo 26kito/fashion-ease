@@ -16,8 +16,9 @@ class CheckoutController extends Controller
     {
         $cartItemsID = request()->cartid;
         $totalPriceCart = request()->total_price_cart;
+        $grandTotalPriceCart = request()->grand_total_cart;
         $validateCart = session('validateCart');
-
+        
         if ((!is_array($cartItemsID) || empty($cartItemsID)) && $validateCart == null) {
             return redirect()->back()->with('status', 400);
         }
@@ -67,7 +68,7 @@ class CheckoutController extends Controller
         $paymentMethod = DB::table('payment_method')->get();
         $title = 'Checkout';
 
-        return view('checkout', compact('orderItems', 'cartItemsID', 'paymentMethod', 'title', 'totalPriceCart'));
+        return view('checkout', compact('orderItems', 'cartItemsID', 'paymentMethod', 'title', 'totalPriceCart', 'grandTotalPriceCart'));
     }
 
     private function getOrderItems(array $cartItemsID)
@@ -95,12 +96,11 @@ class CheckoutController extends Controller
             $total = collect($request->data)->sum('Price');
             $shipmentFee = $request->shippingCost;
             $grandTotal = $total + $shipmentFee;
-
             $userID = $request->data[0]['user_id'];
             $orderDate = date('Y-m-d');
             $paymentMethodID = $request->paymentMethodID;
             $shippingTo = $request->shippingTo;
-
+            $discValue = $request->voucherFee;
             $getMaxOrderID = DB::table('orders')->max('order_id');
             $latestNum = substr($getMaxOrderID, -6);
 
@@ -122,6 +122,7 @@ class CheckoutController extends Controller
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
                     'shipping_to' => $shippingTo,
+                    'discount' => $discValue,
                     'grand_total' => $grandTotal,
                     'payment_method_id' => $paymentMethodID
                 ]);
