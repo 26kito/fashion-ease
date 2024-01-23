@@ -48,4 +48,28 @@ class LoginController extends Controller
             return redirect()->route('checkout');
         }
     }
+
+    public function logout(Request $request)
+    {
+        if (isset($_COOKIE['isVoucherUsed']) && isset($_COOKIE['selectedVouchersCode'])) {
+            setcookie('isVoucherUsed', '', time() - 1, '/');
+            setcookie('selectedVouchersCode', '', time() - 1, '/');
+            setcookie('totalPriceCart', '', time() - 1, '/');
+            setcookie('appliedDiscPrice', '', time() - 1, '/');
+        }
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
+    }
 }
