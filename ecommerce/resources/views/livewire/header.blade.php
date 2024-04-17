@@ -18,7 +18,7 @@
                     @if (count($productsSearch) > 0)
                     @foreach ($productsSearch as $row)
                     <div class="search-result-items-wrap">
-                        <a href="{{ url('product/'. $row->product_id) }}" class="search-result-items">
+                        <a href="{{ url("product/$row->ProductName/$row->code/$row->product_id") }}" class="search-result-items">
                             <i class="flaticon-search"></i>
                             {{ $row->ProductName }}
                         </a>
