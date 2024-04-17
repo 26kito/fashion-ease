@@ -35,7 +35,7 @@ class Header extends Component
         if (strlen($this->keyword) >= 3) {
             $this->productsSearch = DB::table('products')
                 ->join('categories', 'products.category_id', 'categories.id')
-                ->select('products.id', 'products.product_id', 'products.name AS ProductName', 'categories.name AS CategoryName')
+                ->select('products.id', 'products.product_id', 'products.name AS ProductName', 'products.code', 'categories.name AS CategoryName')
                 ->where('products.name', 'LIKE', '%' . $this->keyword . '%')
                 ->take(3)->get();
         }

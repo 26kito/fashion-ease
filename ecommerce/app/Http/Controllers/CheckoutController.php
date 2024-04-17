@@ -61,6 +61,15 @@ class CheckoutController extends Controller
                 ->whereIn('size', $productsSize)
                 ->pluck('id')
                 ->toArray();
+
+            if (isset($_COOKIE['appliedDiscPrice'])) {
+                $appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
+            } else {
+                $appliedDiscPrice = 0;
+            }
+
+            $totalPriceCart = $_COOKIE['totalPriceCart'];
+            $grandTotalPriceCart = $totalPriceCart - $appliedDiscPrice;
         }
 
         $orderItems = $this->getOrderItems($cartItemsID);

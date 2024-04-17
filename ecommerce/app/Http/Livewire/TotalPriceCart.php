@@ -105,7 +105,6 @@ class TotalPriceCart extends Component
             $this->isVoucherUsed = true;
             $this->appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
         } else {
-            // $this->isVoucherUsed = false;
             $this->reset('isVoucherUsed');
             $this->reset('appliedDiscPrice');
         }
