@@ -1,7 +1,9 @@
 <?php
 
-function rupiah($num)
-{
-    $result = 'Rp.' . number_format($num, 0, ',', '.');
-    return $result;
+if (!function_exists('rupiah')) {
+    function rupiah($num)
+    {
+        $result = 'Rp.' . number_format($num, 0, ',', '.');
+        return $result;
+    }
 }
