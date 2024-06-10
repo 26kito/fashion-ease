@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\VoucherController;
 
 /*
@@ -117,4 +118,7 @@ Route::middleware(['is_admin'])->group(function () {
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', [RegisterController::class, 'index'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('postregister');
+
+    Route::get('auth/google', [LoginController::class, 'redirectToProvider'])->name('oauth.google');
+    Route::get('auth/google/callback', [LoginController::class, 'handleProviderCallback'])->name('oauth.google.callback');
 });

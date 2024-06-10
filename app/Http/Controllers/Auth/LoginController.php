@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Providers\RouteServiceProvider;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -71,5 +74,43 @@ class LoginController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/');
+    }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+
+            $finduser = User::where('gauth_id', $user->id)->first();
+
+            if ($finduser) {
+                Auth::login($finduser);
+
+                return redirect()->route('home');
+            } else {
+                $pass = generateRandomString();
+
+                $newUser = User::create([
+                    'first_name' => $user->name,
+                    'last_name' => $user->given_name,
+                    'email' => $user->email,
+                    'role_id' => 2,
+                    'gauth_id' => $user->id,
+                    'gauth_type' => 'google',
+                    'password' => Hash::make($pass)
+                ]);
+
+                Auth::login($newUser);
+
+                return redirect()->route('home');
+            }
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }
