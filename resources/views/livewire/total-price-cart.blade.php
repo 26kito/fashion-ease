@@ -15,7 +15,9 @@
 <script>
 // Declare initialTotalPrice in the global scope
 let initialTotalPrice = $('input[name="total_price_cart"]').val();
-let voucherUsed = localStorage.getItem('selected_vouchers_code');
+// let voucherUsed = localStorage.getItem('selected_vouchers_code');
+let voucherUsed = cookie.getCookie('selectedVouchersCode')
+
 
 // Function to handle changes in the total price
 function handleTotalPriceChange(mutationsList) {
@@ -27,10 +29,11 @@ function handleTotalPriceChange(mutationsList) {
                 initialTotalPrice = currentTotalPrice;
 
                 // Your additional actions here
-                localStorage.setItem("total_price_cart", initialTotalPrice);
+                // localStorage.setItem("total_price_cart", initialTotalPrice);
+                cookie.setCookie('total_price_cart', initialTotalPrice, 2);
                 Livewire.emit('setTotalPriceCart', initialTotalPrice);
 
-                let voucherUsed = localStorage.getItem('selected_vouchers_code');
+                let voucherUsed = cookie.getCookie('selectedVouchersCode')
 
                 if (voucherUsed) {
                     $.ajax({
@@ -51,7 +54,8 @@ function handleTotalPriceChange(mutationsList) {
                                     icon: "error"
                                 }).then((result) => {
                                     if (result.isConfirmed === true || result.isDismissed === true) {
-                                        localStorage.removeItem('selected_vouchers_code');
+                                        // localStorage.removeItem('selected_vouchers_code');
+                                        cookie.unsetCookie('selectedVouchersCode')
                                         Livewire.emit('setAppliedDiscPrice', 0);
                                         $(document).trigger('resetVoucher');
                                     }
@@ -75,10 +79,8 @@ const observer = new MutationObserver(handleTotalPriceChange);
 observer.observe(targetNode, config);
 
 // Set initial values
-localStorage.setItem("total_price_cart", initialTotalPrice);
+// localStorage.setItem("total_price_cart", initialTotalPrice);
+cookie.setCookie('total_price_cart', initialTotalPrice, 2);
 Livewire.emit('setTotalPriceCart', initialTotalPrice);
-
-// Rest of your code goes here
-
 </script>
 @endpush

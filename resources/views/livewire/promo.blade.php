@@ -83,37 +83,6 @@
 
     $(document).on('click', '.btn-apply-voucher', function () {
         searchVoucher()
-        // let searchKeyword = $('#searchVoucher').val()
-        // $('.btn-close').attr('onclick', 'reset()')
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: `/api/search-voucher`,
-        //     dataType: 'json',
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     },
-        //     data: {
-        //         'keyword': searchKeyword
-        //     },
-        //     success: function(result) {
-        //         let currentText = $('.voucher-card').text().trim()
-
-        //         if (result.status == 'ok') {
-        //             selectedVouchers = []
-        //             selectedVouchersCode = []
-
-        //             if (result.data.title != currentText) {
-        //                 $('.voucher-calculate').addClass('d-none')
-        //                 $('#voucher-parent').html(fetchVoucher(result.data))
-        //             }
-        //         } else {
-        //             let event = customNotif.notif(result.status, result.message)
-        
-        //             window.dispatchEvent(event)
-        //         }
-        //     }
-        // })
     })
 
     let checkVoucherCookie = cookie.getCookie('isVoucherUsed')
@@ -184,9 +153,9 @@
             } else {
                 $(this).addClass('bg-success')
                 $(this).addClass('text-white')
+                $(this).addClass('selected')
                 
                 $('.btn-reset').removeClass('disabled')
-                $(this).addClass('selected')
                 
                 Livewire.emit('setSelectedVoucher', voucherID)
 
@@ -195,7 +164,8 @@
                     selectedVouchersCode.push(voucherCode);
                 }
 
-                let totalPriceCart = localStorage.getItem("total_price_cart")
+                // let totalPriceCart = localStorage.getItem("total_price_cart")
+                let totalPriceCart = cookie.getCookie('total_price_cart')
 
                 $.ajax({
                     type: "POST",
@@ -229,7 +199,7 @@
         $('.voucher-card').addClass('is-used')
         $('.voucher-calculate #cancel-voucher').removeClass('d-none')
         Livewire.emit('setAppliedDiscPrice', discPrice)
-        localStorage.setItem("selected_vouchers_code", selectedVouchersCode); // set localstorage
+        // localStorage.setItem("selected_vouchers_code", selectedVouchersCode); // set localstorage
         cookie.setCookie('appliedDiscPrice', discPrice, 2);
         cookie.setCookie('isVoucherUsed', true, 2);
         cookie.setCookie('selectedVouchersCode', selectedVouchersCode, 2)
@@ -239,7 +209,7 @@
     $(document).on('click', '#cancel-voucher', function () {
         $('.voucher-card').removeClass('is-used')
         Livewire.emit('setAppliedDiscPrice', 0)
-        localStorage.removeItem('selected_vouchers_code')
+        // localStorage.removeItem('selected_vouchers_code')
         cookie.unsetCookie('appliedDiscPrice')
         cookie.unsetCookie('isVoucherUsed')
         cookie.unsetCookie('selectedVouchersCode')
@@ -254,7 +224,7 @@
             $('.btn-reset').addClass('disabled');
             $('#cancel-voucher').addClass('d-none')
             Livewire.emit('setAppliedDiscPrice', 0)
-            localStorage.removeItem('selected_vouchers_code')
+            // localStorage.removeItem('selected_vouchers_code')
             cookie.unsetCookie('appliedDiscPrice')
             cookie.unsetCookie('isVoucherUsed')
             cookie.unsetCookie('selectedVouchersCode')
