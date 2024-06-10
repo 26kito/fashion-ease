@@ -76,14 +76,14 @@
             <p class="mb-0">
                 <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
             </p>
-            <div class="card mt-3" style="height: 50px">
+            <a href="{{ route('oauth.google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon ml-5" style="width: 80px">
                         <img src="{{ asset('asset/img/google.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
                     </div>
-                    <a href="" class="text-decoration-none text-center font-weight-bold text-dark">{{ __('Google') }}</a>
+                    <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Google') }}</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
@@ -92,20 +92,20 @@
 @push('script')
 <script>
     function noSpaces() {
-            if (event.keyCode == 32) {
-                event.returnValue = false;
-                return false;
-            }
+        if (event.keyCode == 32) {
+            event.returnValue = false;
+            return false;
         }
+    }
 
-        $('#seePassword').on('click', () => {
-            if ($('#password').attr('type') == 'password') {
-                $('#password').attr('type', 'text');
-                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
-            } else {
-                $('#password').attr('type', 'password');
-                $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
-            }
-        })
+    $('#seePassword').on('click', () => {
+        if ($('#password').attr('type') == 'password') {
+            $('#password').attr('type', 'text');
+            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
+        } else {
+            $('#password').attr('type', 'password');
+            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
+        }
+    })
 </script>
 @endpush
