@@ -66,9 +66,9 @@ class VoucherController extends Controller
         return back()->with('toastr', 'Berhasil');
     }
 
-    public function getVoucher()
+    public function getVoucher(Request $request)
     {
-        $keyword = request()->keyword;
+        $keyword = $request->keyword;
         // $totalPriceCart = request()->totalPriceCart;
 
         $data = DB::table('vouchers')->where('code', $keyword)->first();
@@ -96,10 +96,10 @@ class VoucherController extends Controller
         }
     }
 
-    protected function checkVoucher()
+    protected function checkVoucher(Request $request)
     {
-        $voucherCode = request()->voucherCode;
-        $totalPriceCart = request()->totalPriceCart;
+        $voucherCode = $request->voucherCode;
+        $totalPriceCart = $request->totalPriceCart;
         $currentDate = now()->format('Y-m-d H:i:s');
         
         $voucher = DB::table('vouchers')->where('code', $voucherCode)->first();
