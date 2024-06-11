@@ -18,7 +18,6 @@ class TotalPriceCart extends Component
         'refreshTotalPrice' => '$refresh',
         'setCart' => 'setCart',
         'setAppliedDiscPrice' => 'setAppliedDiscPrice',
-        'setVoucher' => 'setVoucher',
     ];
 
     public function mount()
