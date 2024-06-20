@@ -18,8 +18,6 @@ class HomeController extends Controller
     {
         $title = "Dashboard";
 
-        $products = Product::all();
-
         $latestProducts = DB::table('products')
             ->join('detail_products', 'products.id', 'detail_products.dp_id')
             ->select('products.id', 'products.product_id', 'products.name', 'products.description', 'products.price', 'products.created_at')
@@ -28,6 +26,6 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        return view('index', ['title' => $title, 'products' => $products, 'latestProducts' => $latestProducts]);
+        return view('index', ['title' => $title, 'latestProducts' => $latestProducts]);
     }
 }
