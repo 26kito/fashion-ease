@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title') Log In @endsection
+@section('title', 'Log In')
 
 @section('content')
 <div class="login-box">
@@ -36,7 +36,7 @@
                         onkeypress="return noSpaces()">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <a class="mr-2" id="seePassword" role="button">
+                            <a class="mr-2 d-none" id="seePassword" role="button">
                                 <img src="{{ asset('asset/img/hide.png') }}" width="20" height="20"
                                     id="seePasswordIcon">
                             </a>
@@ -76,14 +76,24 @@
             <p class="mb-0">
                 <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
             </p>
-            <a href="{{ route('oauth.google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
-                <div class="card-body d-flex align-items-center">
-                    <div class="icon ml-5" style="width: 80px">
-                        <img src="{{ asset('asset/img/google.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
+            <div class="mt-5">
+                <a href="{{ route('oauth.google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="icon ml-5" style="width: 80px">
+                            <img src="{{ asset('asset/img/google.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
+                        </div>
+                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Google') }}</p>
                     </div>
-                    <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Google') }}</p>
-                </div>
-            </a>
+                </a>
+                <a href="{{ route('oauth.facebook') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="icon ml-5" style="width: 80px">
+                            <img src="{{ asset('asset/img/facebook.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
+                        </div>
+                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Facebook') }}</p>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -93,18 +103,26 @@
 <script>
     function noSpaces() {
         if (event.keyCode == 32) {
-            event.returnValue = false;
-            return false;
+            event.returnValue = false
+            return false
         }
     }
 
-    $('#seePassword').on('click', () => {
-        if ($('#password').attr('type') == 'password') {
-            $('#password').attr('type', 'text');
-            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}');
+    $(document).on('keyup', '#password', function () {
+        if ($(this).val().length == 0) {
+            $('#seePassword').addClass('d-none')
         } else {
-            $('#password').attr('type', 'password');
-            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}');
+            $('#seePassword').removeClass('d-none')
+        }
+    })
+
+    $(document).on('click', '#seePassword', () => {
+        if ($('#password').attr('type') == 'password') {
+            $('#password').attr('type', 'text')
+            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/show.png') }}')
+        } else {
+            $('#password').attr('type', 'password')
+            $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}')
         }
     })
 </script>
