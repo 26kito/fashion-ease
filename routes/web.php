@@ -43,7 +43,7 @@ Route::middleware('is_user')->group(function () {
 
     Route::get('/add-to-cart/{product_id}', [CartController::class, 'addToCart']);
 
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
 
     Route::get('/product/{product_name}/{product_code}/{product_id}', [ProductsController::class, 'index']);
@@ -119,6 +119,6 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/register', [RegisterController::class, 'index'])->name('register');
     Route::post('/register', [RegisterController::class, 'register'])->name('postregister');
 
-    Route::get('auth/google', [LoginController::class, 'redirectToProvider'])->name('oauth.google');
-    Route::get('auth/google/callback', [LoginController::class, 'handleProviderCallback'])->name('oauth.google.callback');
+    Route::get('auth/{provider}', [LoginController::class, 'redirectToProvider'])->name('oauth.redirect');
+    Route::get('auth/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('oauth.callback');
 });

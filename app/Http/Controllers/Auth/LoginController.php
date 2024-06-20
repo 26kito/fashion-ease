@@ -76,78 +76,51 @@ class LoginController extends Controller
             : redirect('/');
     }
 
-    public function redirectToProvider()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleProviderCallback()
+    public function handleProviderCallback($provider)
     {
         try {
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver($provider)->user();
 
-            $finduser = User::where('gauth_id', $user->id)->first();
+            $finduser = DB::table('social_users')->where('provider_id', $user->id)->first();
 
-            if ($finduser) {
-                Auth::login($finduser);
+            if (!$finduser) {
+                DB::beginTransaction();
 
-                return redirect()->route('home');
-            } else {
                 $pass = generateRandomString();
 
                 $newUser = User::create([
                     'first_name' => $user->name,
-                    'last_name' => $user->given_name,
                     'email' => $user->email,
                     'role_id' => 2,
-                    'gauth_id' => $user->id,
-                    'gauth_type' => 'google',
                     'password' => Hash::make($pass)
                 ]);
+
+                DB::table('social_users')->insert([
+                    'user_id' => $newUser->id,
+                    'provider_id' => $user->id,
+                    'provider_name' => $provider,
+                    'provider_token' => $user->token,
+                    'provider_refresh_token' => $user->refreshToken,
+                ]);
+
+                DB::commit();
 
                 Auth::login($newUser);
 
                 return redirect()->route('home');
             }
+
+            Auth::login($finduser);
+
+            return redirect()->route('home');
         } catch (Exception $e) {
-            dd($e->getMessage());
-        }
-    }
+            DB::rollback();
 
-    public function redirectToProviderFacebook()
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    public function handleProviderCallbackFacebook()
-    {
-        try {
-            $user = Socialite::driver('facebook')->user();
-
-            $finduser = User::where('gauth_id', $user->id)->first();
-
-            if ($finduser) {
-                Auth::login($finduser);
-
-                return redirect()->route('home');
-            } else {
-                $pass = generateRandomString();
-
-                $newUser = User::create([
-                    'first_name' => $user->name,
-                    'last_name' => $user->given_name,
-                    'email' => $user->email,
-                    'role_id' => 2,
-                    'gauth_id' => $user->id,
-                    'gauth_type' => 'google',
-                    'password' => Hash::make($pass)
-                ]);
-
-                Auth::login($newUser);
-
-                return redirect()->route('home');
-            }
-        } catch (Exception $e) {
             dd($e->getMessage());
         }
     }
