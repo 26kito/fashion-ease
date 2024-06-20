@@ -4,21 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class CartController extends Controller
 {
+    use TraitsCart;
+
     public function index()
     {
         $title = 'Cart';
-        $totalOrders = 0;
-
-        if (Auth::check()) {
-            $totalOrders = DB::table('carts')->where('user_id', Auth::id())->count('product_id');
-        }
-
-        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
-            $totalOrders = count(json_decode($_COOKIE['carts']));
-        }
+        $totalOrders = $this->cart();
 
         $wishlist = DB::table('wishlists')
             ->where('user_id', Auth::id())
