@@ -77,20 +77,20 @@
                 <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
             </p>
             <div class="mt-5">
-                <a href="{{ route('oauth.google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                <a href="{{ route('oauth.redirect', 'google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
                     <div class="card-body d-flex align-items-center">
-                        <div class="icon ml-5" style="width: 80px">
+                        <div class="icon ml-3" style="width: 80px">
                             <img src="{{ asset('asset/img/google.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
                         </div>
-                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Google') }}</p>
+                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Sign In with Google') }}</p>
                     </div>
                 </a>
-                <a href="{{ route('oauth.facebook') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                <a href="{{ route('oauth.redirect', 'facebook') }}" class="card mt-3 text-decoration-none" style="height: 50px">
                     <div class="card-body d-flex align-items-center">
-                        <div class="icon ml-5" style="width: 80px">
+                        <div class="icon ml-3" style="width: 80px">
                             <img src="{{ asset('asset/img/facebook.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
                         </div>
-                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Facebook') }}</p>
+                        <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Sign In with Facebook') }}</p>
                     </div>
                 </a>
             </div>

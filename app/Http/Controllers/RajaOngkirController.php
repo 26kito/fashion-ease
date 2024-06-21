@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class RajaOngkirController extends Controller
 {
@@ -17,64 +18,30 @@ class RajaOngkirController extends Controller
 
     public function getProvince()
     {
-        $curl = curl_init();
+        $fetch = Http::withHeaders([
+            'key' => $this->rajaOngkirKey
+        ])
+            ->acceptJson()
+            ->get("$this->rajaOngkirUrl/province")
+            ->json();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->rajaOngkirUrl/province",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "key: $this->rajaOngkirKey"
-            ),
-        ));
+        $data = $fetch['rajaongkir']['results'];
 
-        $response = json_decode(curl_exec($curl));
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-            $response = "cURL Error #:" . $err;
-        } else {
-            $response = $response->rajaongkir->results;
-        }
-
-        return response()->json($response);
+        return response()->json($data);
     }
 
     public function getCity($provinceID)
     {
-        $curl = curl_init();
+        $fetch = Http::withHeaders([
+            'key' => $this->rajaOngkirKey
+        ])
+            ->acceptJson()
+            ->get("$this->rajaOngkirUrl/city?province=$provinceID")
+            ->json();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->rajaOngkirUrl/city?province=$provinceID",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "key: $this->rajaOngkirKey"
-            ),
-        ));
+        $data = $fetch['rajaongkir']['results'];
 
-        $response = json_decode(curl_exec($curl));
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-            $response = "cURL Error #:" . $err;
-        } else {
-            $response = $response->rajaongkir->results;
-        }
-
-        return response()->json($response);
+        return response()->json($data);
     }
 
     public function checkCost(Request $request)
@@ -84,34 +51,18 @@ class RajaOngkirController extends Controller
         $weight = $request->weight;
         $courierCode = $request->courierCode;
 
-        $curl = curl_init();
+        $fetch = Http::withHeaders([
+            'key' => $this->rajaOngkirKey
+        ])
+            ->post("$this->rajaOngkirUrl/cost", [
+                'origin' => $origin,
+                'destination' => $destination,
+                'weight' => $weight,
+                'courier' => $courierCode
+            ]);
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "$this->rajaOngkirUrl/cost",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "origin=$origin&destination=$destination&weight=$weight&courier=$courierCode",
-            CURLOPT_HTTPHEADER => array(
-                "content-type: application/x-www-form-urlencoded",
-                "key: $this->rajaOngkirKey"
-            ),
-        ));
+        $data = $fetch['rajaongkir']['results'];
 
-        $response = json_decode(curl_exec($curl));
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-            $response = "cURL Error #:" . $err;
-        } else {
-            $response = $response->rajaongkir->results;
-        }
-
-        return response()->json($response);
+        return response()->json($data);
     }
 }
