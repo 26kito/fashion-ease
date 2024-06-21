@@ -12,13 +12,17 @@ class Wishlist extends Component
     public $wishlists = [];
     public $ProductID;
     public $size;
+    public $totalWishlist;
 
     public $listeners = [
         'setSize' => 'setSize',
+        'refreshWishlist' => '$refresh'
     ];
 
     public function render()
     {
+        $this->totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
+
         $sizeSubquery = DB::table('detail_products')
             ->selectRaw("dp_id, GROUP_CONCAT(size SEPARATOR ', ') AS size, GROUP_CONCAT(stock SEPARATOR ', ') AS stock")
             ->groupBy('dp_id');

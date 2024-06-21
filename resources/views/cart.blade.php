@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- cart section -->
-<form action="{{ route('checkout') }}" method="GET" style="margin-top: 20px">
+<form action="{{ route('checkout') }}" method="POST" style="margin-top: 20px">
 	@csrf
 	<section class="cart-section spad">
 		<div class="container">
@@ -39,7 +39,7 @@
 </form>
 
 <!-- cart section end -->
-@if ( $wishlist > 0 )
+{{-- @if ( $wishlist > 0 )
 <div class="container">
 	<div class="row mb-3">
 		<div class="col-lg-4 ps-4">
@@ -55,7 +55,9 @@
 		</div>
 	</div>
 </div>
-@endif
+@endif --}}
+{{-- @livewire('wishlist-section') --}}
+
 <div class="container">
 	<div class="row mb-3">
 		<div class="col-lg-4 ps-4">
@@ -67,7 +69,8 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-8">
-			@livewire('latest-products-section')
+			{{-- @livewire('latest-products-section') --}}
+			@livewire('latest-products')
 		</div>
 	</div>
 </div>
