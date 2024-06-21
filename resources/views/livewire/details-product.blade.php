@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="product-pic">
-                <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}" alt="{{'image of '.$products->image}}">
+                {{-- <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}" alt="{{'image of '.$products->image}}"> --}}
+                <img class="product-big-img" src="{{asset('asset/img/products/'.$products->image)}}" alt="{{'image of '.$products->image}}">
             </div>
         </div>
         <div class="col-lg-6 product-details">

@@ -17,9 +17,7 @@ trait addToWishlist
             ]);
         }
 
-        $checkCart = DB::table('carts')
-            ->where('user_id', Auth::id())
-            ->get()->toArray();
+        $checkCart = DB::table('carts')->where('user_id', Auth::id())->get()->toArray();
 
         $today = date("Y-m-d H:i:s");
 
@@ -46,9 +44,16 @@ trait addToWishlist
             ]);
         }
 
+        $today = date("Y-m-d H:i:s");
+
         Wishlist::updateOrCreate(
             ['user_id' => Auth::id(), 'product_id' => $productID],
-            ['product_id' => $productID]
+            ['product_id' => $productID, 'updated_at' => $today]
         );
+
+        $this->dispatchBrowserEvent('toastr', [
+            'status' => 'success',
+            'message' => 'Berhasil menambahkan ke wishlist!'
+        ]);
     }
 }

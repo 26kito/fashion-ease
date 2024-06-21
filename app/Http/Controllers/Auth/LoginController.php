@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -93,12 +94,10 @@ class LoginController extends Controller
 
                 $pass = generateRandomString();
 
-                $newUser = User::create([
-                    'first_name' => $user->name,
-                    'email' => $user->email,
-                    'role_id' => 2,
-                    'password' => Hash::make($pass)
-                ]);
+                $newUser = User::updateOrCreate(
+                    ['email' => $user->email],
+                    ['first_name' => $user->name, 'role_id' => 2, 'password' => Hash::make($pass)]
+                );
 
                 DB::table('social_users')->insert([
                     'user_id' => $newUser->id,

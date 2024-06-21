@@ -6,7 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Traits\addToWishlist;
 
-class LatestProductsHome extends Component
+class LatestProducts extends Component
 {
     use addToWishlist;
 
@@ -23,11 +23,13 @@ class LatestProductsHome extends Component
             ->take(5)
             ->get()->toArray();
 
-        return view('livewire.latest-products-home');
+        return view('livewire.latest-products');
     }
 
     public function addToWishlist($productID)
-    {
+    {        
         $this->addToWishlistTrait($productID);
+
+        $this->emit('refreshWishlist');
     }
 }
