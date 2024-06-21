@@ -70,21 +70,21 @@ class Wishlist extends Component
 
     public function addToCart($ProductID, $size)
     {
-        if ($ProductID == $this->ProductID && $this->size) {
-            $checkStock = DB::table('detail_products')
-                ->where('dp_id', $ProductID)
-                ->where('size', $size)
-                ->first();
-
-            if ($checkStock->stock > 0) {
-                $this->emit('addToCart', $ProductID, $size, 1);
-                $this->emit('refreshCart');
-            }
-        } else {
+        if ($ProductID != $this->ProductID && !$this->size) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
                 'message' => 'Kamu belum memilih size nih'
             ]);
+        }
+
+        $checkStock = DB::table('detail_products')
+            ->where('dp_id', $ProductID)
+            ->where('size', $size)
+            ->first();
+
+        if ($checkStock->stock > 0) {
+            $this->emit('addToCart', $ProductID, $size, 1);
+            $this->emit('refreshCart');
         }
     }
 
@@ -96,20 +96,9 @@ class Wishlist extends Component
             ->where('product_id', $productID)
             ->delete();
 
-        $totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
-        $status = 'error';
-        $message = 'Berhasil menghapus produk dari wishlist kamu';
-
-        if ($totalWishlist > 0) {
-            return $this->dispatchBrowserEvent('toastr', [
-                'status' => $status,
-                'message' => $message
-            ]);
-        } else {
-            $this->emit(
-                'refreshWishlist',
-                ['status' => $status, 'message' => $message]
-            );
-        }
+        return $this->dispatchBrowserEvent('toastr', [
+            'status' => 'error',
+            'message' => 'Berhasil menghapus produk dari wishlist kamu'
+        ]);
     }
 }

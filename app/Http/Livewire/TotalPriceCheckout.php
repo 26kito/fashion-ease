@@ -24,11 +24,11 @@ class TotalPriceCheckout extends Component
             $this->voucherPrice = intval($_COOKIE['appliedDiscPrice']);
         }
 
+        $this->grandTotal = rupiah($this->grandTotalPriceCart);
+
         if ($this->shippingFee) {
             $grandTotal = $this->grandTotalPriceCart + $this->shippingFee;
             $this->grandTotal = rupiah($grandTotal);
-        } else {
-            $this->grandTotal = rupiah($this->grandTotalPriceCart);
         }
 
         return view('livewire.total-price-checkout');

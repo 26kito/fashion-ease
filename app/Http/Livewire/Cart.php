@@ -207,19 +207,19 @@ class Cart extends Component
                 ->where('product_id', $this->productID)
                 ->first();
 
-            if ($cart) {
-                $cart->delete();
-
-                $this->emit('refreshTotalPrice');
-                $this->emit('refreshCart');
-
-                return redirect($this->page)->with('status', 200);
-            } else {
+            if (!$cart) {
                 return $this->dispatchBrowserEvent('toastr', [
                     'status' => 'error',
                     'message' => 'Gagal menghapus pesanan'
                 ]);
             }
+
+            $cart->delete();
+
+            $this->emit('refreshTotalPrice');
+            $this->emit('refreshCart');
+
+            return redirect($this->page)->with('status', 200);
         }
 
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
