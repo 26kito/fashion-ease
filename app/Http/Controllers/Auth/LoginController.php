@@ -87,7 +87,10 @@ class LoginController extends Controller
         try {
             $user = Socialite::driver($provider)->user();
 
-            $finduser = DB::table('social_users')->where('provider_id', $user->id)->first();
+            $finduser = DB::table('social_users')
+                ->where('provider_id', $user->id)
+                ->where('provider_name', $provider)
+                ->first();
 
             if (!$finduser) {
                 DB::beginTransaction();
@@ -114,7 +117,7 @@ class LoginController extends Controller
                 return redirect()->route('home');
             }
 
-            Auth::login($finduser);
+            Auth::login(User::find($finduser->user_id));
 
             return redirect()->route('home');
         } catch (Exception $e) {
