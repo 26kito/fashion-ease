@@ -7,9 +7,7 @@
 <link rel="stylesheet" href="{{asset('asset/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
 @endpush
 
-@section('title')
-{{ $title }}
-@endsection
+@section('title', $title)
 
 @section('content-header')
 <div class="content-header">
