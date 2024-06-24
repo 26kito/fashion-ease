@@ -64,11 +64,9 @@
 
 			window.dispatchEvent(event);
 
-			setTimeout(() => {
+			return setTimeout(() => {
 				$('#addressModal').modal('show');
 			}, 1000);
-
-			return;
 		} 
 		
 		if (!shippingCost) {
@@ -76,19 +74,15 @@
 
 			window.dispatchEvent(event);
 
-			setTimeout(() => {
+			return setTimeout(() => {
 				$('#deliveryModal').modal('show');
 			}, 1000);
-
-			return;
 		} 
 		
 		if (!paymentMethodID) {
 			let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
 
-			window.dispatchEvent(event);
-
-			return;
+			return window.dispatchEvent(event);
 		}
 
 		if (!voucherPrice) {

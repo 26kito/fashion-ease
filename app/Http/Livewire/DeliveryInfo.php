@@ -24,10 +24,6 @@ class DeliveryInfo extends Component
     {
         $this->serviceDelivery = DB::table('couriers')->get();
 
-        $this->cityID = DB::table('user_addresses')
-            ->where('user_id', Auth::id())
-            ->get();
-
         return view('livewire.delivery-info');
     }
 
