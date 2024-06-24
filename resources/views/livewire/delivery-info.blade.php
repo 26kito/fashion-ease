@@ -58,6 +58,7 @@
 
 @push('script')
 <script src="{{ asset('js/customNotif.js') }}"></script>
+<script src="{{ asset('js/helper.js') }}"></script>
 <script>
     $(document).on('click', '#deliveryService', () => {
         let cityID = $('.user-address').attr('data-user-address');
@@ -76,9 +77,10 @@
     })
 
     $(document).on('change', '#courier', () => {
-        let cityID = $('.user-address').attr('data-user-address');
-        let courierCode = $('#courier').val();
+        const cityID = $('.user-address').attr('data-user-address');
+        const courierCode = $('#courier').val();
         $('#service').prop('disabled', false);
+        $('#service').empty()
 
         $.ajax({
             type: "POST",
@@ -101,12 +103,18 @@
 
         data.forEach((d) => {
             let services = d.costs.values();
+
             if (d.costs.length > 0) {
                 for (let service of services ) {
-                    let etd = service.cost[0].etd.toLowerCase().replace('hari', '');
-                    let ongkir = service.cost[0].value;
+                    let etd = service.cost[0].etd.toLowerCase().replace('hari', '')
+                    let ongkir = service.cost[0].value
+                    let formattedOngkir = helper.rupiahFormatter(ongkir)
 
-                    res += `<option value='{"serviceName":"${service.service}", "serviceFee":"${ongkir}", "etd":"${etd}"}'>${service.service} ongkir ${ongkir} estimasi sampai ${etd} hari</option>`;
+                    res += `
+                        <option value='{"serviceName":"${service.service}", "serviceFee":"${ongkir}", "etd":"${etd}"}'>
+                            ${service.service} ongkir ${formattedOngkir} estimasi sampai ${etd} hari
+                        </option>
+                    `;
                 }
             } else {
                 res += `<option value="null" selected disabled>Tidak tersedia pengiriman</option>`;
