@@ -77,7 +77,7 @@
                 <a href="{{ route('register') }}" class="text-decoration-none">Register</a>
             </p>
             <div class="mt-5">
-                <a href="{{ route('oauth.redirect', 'google') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                <a href="{{ route('oauth.redirect', 'google') }}" class="card mt-3 text-decoration-none social-login" style="height: 50px">
                     <div class="card-body d-flex align-items-center">
                         <div class="icon ml-3" style="width: 80px">
                             <img src="{{ asset('asset/img/google.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
@@ -85,7 +85,7 @@
                         <p class="text-decoration-none font-weight-bold text-dark mt-3">{{ __('Sign In with Google') }}</p>
                     </div>
                 </a>
-                <a href="{{ route('oauth.redirect', 'facebook') }}" class="card mt-3 text-decoration-none" style="height: 50px">
+                <a href="{{ route('oauth.redirect', 'facebook') }}" class="card mt-3 text-decoration-none social-login" style="height: 50px">
                     <div class="card-body d-flex align-items-center">
                         <div class="icon ml-3" style="width: 80px">
                             <img src="{{ asset('asset/img/facebook.png') }}" class="mx-auto" alt="" style="max-width: 35%; max-height: 10%">
@@ -100,6 +100,7 @@
 @endsection
 
 @push('script')
+<script src="{{ asset('js/cookie.js') }}"></script>
 <script>
     function noSpaces() {
         if (event.keyCode == 32) {
@@ -124,6 +125,25 @@
             $('#password').attr('type', 'password')
             $('#seePasswordIcon').prop('src', '{{ asset('asset/img/hide.png') }}')
         }
+    })
+
+    $(document).on('click', '.social-login', (event) => {
+        event.preventDefault()
+
+        const url = event.currentTarget
+
+        const popupWindow = window.open(url, 'google-login-popup', 'width=800, height=600') // Open popup
+
+        // Interval to check for popup closure and successful login
+        const intervalId = setInterval(function() {
+            const isLoginCookie = cookie.getCookie('isLogin')
+
+            if (isLoginCookie) {
+                cookie.unsetCookie('isLogin')
+                popupWindow.close()
+                window.location.href = '/'
+            }
+        }, 1000)
     })
 </script>
 @endpush

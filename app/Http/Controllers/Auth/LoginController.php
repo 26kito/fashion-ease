@@ -114,12 +114,16 @@ class LoginController extends Controller
 
                 Auth::login($newUser);
 
-                return redirect()->route('home');
+                setcookie('isLogin', true, time() + (3600 * 2), '/');
+                return;
+                // return redirect()->route('home');
             }
 
             Auth::login(User::find($finduser->user_id));
 
-            return redirect()->route('home');
+            setcookie('isLogin', true, time() + (3600 * 2), '/');
+            return;
+            // return redirect()->route('home');
         } catch (Exception $e) {
             DB::rollback();
 
