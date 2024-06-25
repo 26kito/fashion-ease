@@ -45,6 +45,7 @@ Route::middleware('is_user')->group(function () {
 
     Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
+    Route::get('/payment-status', [CheckoutController::class, 'paymentStatus']);
 
     Route::get('/product/{product_name}/{product_code}/{product_id}', [ProductsController::class, 'index']);
 

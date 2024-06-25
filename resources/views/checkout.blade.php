@@ -51,6 +51,7 @@
 
 @push('script')
 <script src="{{ asset('js/customNotif.js') }}"></script>
+<script src="{{ asset('js/cookie.js') }}"></script>
 <script>
 	$(document).on('click', '#placeOrder', () => {
 		let orderItems = @json($orderItems);
@@ -102,11 +103,15 @@
 				'voucherFee': voucherPrice
 			},
 			success: function(result) {
-				window.livewire.emit('refreshCart');
+				// window.livewire.emit('refreshCart');
 
-				let event = customNotif.notif('success', result.message);
+				// let event = customNotif.notif('success', result.message);
 		
-				window.dispatchEvent(event);
+				// window.dispatchEvent(event);
+
+				cookie.setCookie('payment', true, 2);
+
+				window.location.href = '/payment-status'
 			}
 		})
 	})

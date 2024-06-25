@@ -156,4 +156,17 @@ class CheckoutController extends Controller
 
         return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat'], 200);
     }
+
+    public function paymentStatus()
+    {
+        $title = 'Payment';
+
+        if (!isset($_COOKIE['payment'])) {
+            return redirect()->route('home');
+        }
+
+        setcookie('payment', '', time() - 1, '/');
+
+        return view('after-payment')->with('title', $title);
+    }
 }
