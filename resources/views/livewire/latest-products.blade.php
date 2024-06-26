@@ -11,14 +11,14 @@
                 {{-- <img src="{{ asset('storage/products-images/'.$row->image) }}" alt="{{ 'image of '.$row->name }}"> --}}
                 <img src="{{ asset('asset/img/products/'.$row->image) }}" alt="{{ 'image of '.$row->name }}">
             </a>
-            <div class="pi-links">
+            {{-- <div class="pi-links">
                 <a href="{{ url('product/' . $row->name . '/' . $row->code . '/' . $row->product_id) }}" class="add-card add-to-cart">
                     <i class="flaticon-bag"></i><span>ADD TO CART</span>
                 </a>
                 <a wire:click.prevent='addToWishlist({{ $row->id }})' class="wishlist-btn">
                     <i class="flaticon-heart"></i>
                 </a>
-            </div>
+            </div> --}}
         </div>
         <div class="pi-text">
             <h6>{{ rupiah($row->price) }}</h6>
