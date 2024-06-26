@@ -20,7 +20,50 @@ class TotalPriceCart extends Component
         'setAppliedDiscPrice' => 'setAppliedDiscPrice',
     ];
 
-    public function mount()
+    // public function mount()
+    // {
+    //     if (Auth::check()) {
+    //         $query = DB::table('carts')
+    //             ->join('products', 'carts.product_id', '=', 'products.id')
+    //             ->select('carts.id')
+    //             ->where('carts.user_id', Auth::id())
+    //             ->get();
+
+    //         foreach ($query as $key => $value) {
+    //             array_push($this->cartsID, $value->id);
+    //         }
+    //     }
+
+    //     if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+    //         $dataArray = json_decode($_COOKIE['carts'], true);
+
+    //         foreach ($dataArray as $data) {
+    //             array_push($this->cartsID, $data['cart_id']);
+    //         }
+    //     }
+
+    //     $total = $this->calculateCartTotalPrice();
+
+    //     if ($this->appliedDiscPrice) {
+    //         $this->total = $total;
+    //         $this->grandTotal = $total - $this->appliedDiscPrice;
+    //     } else {
+    //         $this->total = $total;
+    //         $this->grandTotal = $total;
+    //     }
+
+    //     if (isset($_COOKIE['isVoucherUsed']) && $_COOKIE['isVoucherUsed'] == true) {
+    //         $this->isVoucherUsed = true;
+    //         $this->appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
+    //     } else {
+    //         $this->reset('isVoucherUsed');
+    //         $this->reset('appliedDiscPrice');
+    //     }
+
+    //     setcookie('totalPriceCart', $total, time() + (3600 * 2), '/');
+    // }
+
+    public function render()
     {
         if (Auth::check()) {
             $query = DB::table('carts')
@@ -61,29 +104,6 @@ class TotalPriceCart extends Component
         }
 
         setcookie('totalPriceCart', $total, time() + (3600 * 2), '/');
-    }
-
-    public function render()
-    {
-        $total = $this->calculateCartTotalPrice();
-
-        if ($this->appliedDiscPrice) {
-            $this->total = $total;
-            $this->grandTotal = $total - $this->appliedDiscPrice;
-        } else {
-            $this->total = $total;
-            $this->grandTotal = $total;
-        }
-
-        if (isset($_COOKIE['isVoucherUsed']) && $_COOKIE['isVoucherUsed'] == true) {
-            $this->isVoucherUsed = true;
-            $this->appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
-        } else {
-            $this->reset('isVoucherUsed');
-            $this->reset('appliedDiscPrice');
-        }
-
-        setcookie('totalPriceCart', $this->total, time() + (3600 * 2), '/');
 
         return view('livewire.total-price-cart');
     }

@@ -13,7 +13,8 @@
 					<div class="cart-table">
 						@if ( $totalOrders > 0 )
 						<h4 class="cart-table-heading">Keranjang Kamu</h4>
-						@livewire('cart', ['page' => request()->fullUrl()])
+						{{-- @livewire('cart', ['page' => request()->fullUrl()]) --}}
+						@livewire('cart')
 						@livewire('total-price-cart')
 						@else
 						<h3 class="text-center mt-5">Duh, keranjangmu kosong nih:(</h3>
