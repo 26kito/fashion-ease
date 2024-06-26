@@ -32,8 +32,7 @@
                                 Tambahkan ke keranjang
                             </a>
                             <a wire:click.prevent="remove('{{ $row->WishlistID }}', '{{ $row->ProductID }}')"
-                                class="btn btn-sm btn-danger d-block mt-2" data-bs-toggle="modal"
-                                data-bs-target="#wishlistModal">
+                                class="btn btn-sm btn-danger d-block mt-2">
                                 Hapus
                             </a>
                         </div>

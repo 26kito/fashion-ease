@@ -1,13 +1,13 @@
 <div class="cart-table-warp">
     {{-- Modal --}}
-    <div class="modal" id="modalCart" tabindex="-1" role="dialog" wire:ignore>
+    {{-- <div class="modal" id="modalCart" tabindex="-1" role="dialog" wire:ignore>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="cart-modal-body modal-body">
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- End of Modal --}}
 
     <div class="select-all mb-4">
@@ -16,8 +16,7 @@
             <label for="select-all" class="select-all-text form-check-label">Pilih Semua</label>
         </div>
         @if ($selectAll == true)
-        <a data-bs-toggle="modal" data-bs-target="#modalCart" wire:ignore
-            class="delete-all-cart-items text-danger">Hapus</a>
+        <a href="#" wire:ignore class="delete-all-cart-items text-danger">Hapus</a>
         @endif
     </div>
 
@@ -66,8 +65,11 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" data-bs-toggle="modal"
+                    {{-- <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" data-bs-toggle="modal"
                         data-bs-target="#modalCart" class="removeCartItem btn btn-danger">
+                        Hapus
+                    </a> --}}
+                    <a href="#" wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" class="removeCartItem btn btn-danger" role="button">
                         Hapus
                     </a>
                 </td>
@@ -78,35 +80,72 @@
 </div>
 
 @push('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).on('click', '.delete-all-cart-items', () => {
-        $('.cart-modal-body').html(`
-            <h5 class="text-center mt-3 mb-4">Hapus semua barang?</h5>
-            <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
-            <div class="d-flex flex-column">
-                <button type="button" id="removeAllCartItems" wire:click="removeAllCartItems" class="btn btn-primary mb-2">Hapus Barang</button>
-                <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
-                    Pindahkan ke Wishlist
-                </button>
-            </div>
-        `)
+        Swal.fire({
+            title: "Hapus semua barang?",
+            text: "Produk yang kamu pilih akan dihapus dari keranjang!",
+            icon: "warning",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Hapus barang",
+            showCancelButton: true,
+            cancelButtonColor: "#3085d6",
+            cancelButtonText: "Pindahkan ke wishlist"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.emit('removeAllCartItems');
+            }
+
+            if (result.dismiss == 'cancel') {
+                Livewire.emit('addAllCartItemsToWishlist');
+            }
+        });
+        // $('.cart-modal-body').html(`
+        //     <h5 class="text-center mt-3 mb-4">Hapus semua barang?</h5>
+        //     <p class="text-center mb-4">Produk yang kamu pilih akan dihapus dari keranjang.</p>
+        //     <div class="d-flex flex-column">
+        //         <button type="button" id="removeAllCartItems" wire:click="removeAllCartItems" class="btn btn-primary mb-2">Hapus Barang</button>
+        //         <button type="button" id="addAllCartItemsToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
+        //             Pindahkan ke Wishlist
+        //         </button>
+        //     </div>
+        // `)
     })
 
     $(document).on('click', '.removeCartItem', () => {
-        $('.cart-modal-body').html(`
-            <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
-            <p class="text-center mb-4">
-                Produk yang kamu pilih akan dihapus dari keranjang.
-            </p>
-            <div class="d-flex flex-column">
-                <button type="button" id="removeCartItem" class="btn btn-primary mb-2">
-                    Hapus Barang
-                </button>
-                <button type="button" id="addCartItemToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
-                    Pindahkan ke Wishlist
-                </button>
-            </div>
-        `)
+        Swal.fire({
+            title: "Hapus barang?",
+            text: "Produk yang kamu pilih akan dihapus dari keranjang!",
+            icon: "warning",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Hapus barang",
+            showCancelButton: true,
+            cancelButtonColor: "#3085d6",
+            cancelButtonText: "Pindahkan ke wishlist"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.emit('removeCartItem');
+            }
+
+            if (result.dismiss == 'cancel') {
+                Livewire.emit('addCartItemToWishlist');
+            }
+        });
+        // $('.cart-modal-body').html(`
+        //     <h5 class="text-center mt-3 mb-4">Hapus barang?</h5>
+        //     <p class="text-center mb-4">
+        //         Produk yang kamu pilih akan dihapus dari keranjang.
+        //     </p>
+        //     <div class="d-flex flex-column">
+        //         <button type="button" id="removeCartItem" class="btn btn-primary mb-2">
+        //             Hapus Barang
+        //         </button>
+        //         <button type="button" id="addCartItemToWishlist" class="btn btn-secondary mb-3" data-dismiss="modal">
+        //             Pindahkan ke Wishlist
+        //         </button>
+        //     </div>
+        // `)
     })
     
     $(document).on('click', '#removeCartItem', () => {
