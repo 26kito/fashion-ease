@@ -9,7 +9,7 @@
         <div class="col-lg-6 product-details">
             <h2 class="p-title">{{ $products->name }}</h2>
             <h3 class="p-price">{{ rupiah($products->price) }}</h3>
-            @if ( $defaultStock != 0 )
+            @if ( $stock != 0 )
             <h4 class="p-stock">Available: <span>In Stock !</span></h4>
             @else
             <h4 class="p-stock">Available: <span>Out of Stock !</span></h4>

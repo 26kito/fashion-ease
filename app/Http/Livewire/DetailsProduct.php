@@ -17,15 +17,19 @@ class DetailsProduct extends Component
 
     public function render()
     {
-        if ($this->stock == null) {
-            $stock = DB::table('detail_products')
-                ->where('dp_id', $this->products->id)
-                ->sum('stock');
+        // if ($this->stock == null) {
+        //     $stock = DB::table('detail_products')
+        //         ->where('dp_id', $this->products->id)
+        //         ->sum('stock');
 
-            $this->stock = $stock;
-        }
+        //     $this->stock = $stock;
+        // }
 
-        $this->defaultStock = DB::table('detail_products')
+        // $this->defaultStock = DB::table('detail_products')
+        //     ->where('dp_id', $this->products->id)
+        //     ->sum('stock');
+
+        $this->stock = ($this->stock) ?? DB::table('detail_products')
             ->where('dp_id', $this->products->id)
             ->sum('stock');
 
@@ -121,6 +125,6 @@ class DetailsProduct extends Component
             ->where('size', $defaultSize)
             ->sum('stock');
 
-        $this->stock = $stock === 0 ? '0' : $stock;
+        $this->stock = ($stock === 0) ? '0' : $stock;
     }
 }
