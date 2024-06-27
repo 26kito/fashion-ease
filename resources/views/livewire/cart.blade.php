@@ -148,21 +148,21 @@
         // `)
     })
     
-    $(document).on('click', '#removeCartItem', () => {
-        Livewire.emit('removeCartItem');
-    })
+    // $(document).on('click', '#removeCartItem', () => {
+    //     Livewire.emit('removeCartItem');
+    // })
 
-    $(document).on('click', '#removeAllCartItems', () => {
-        Livewire.emit('removeAllCartItems');
-    })
+    // $(document).on('click', '#removeAllCartItems', () => {
+    //     Livewire.emit('removeAllCartItems');
+    // })
 
-    $(document).on('click', '#addAllCartItemsToWishlist', () => {
-        Livewire.emit('addAllCartItemsToWishlist');
-        $('.modal').modal('hide');
-    })
+    // $(document).on('click', '#addAllCartItemsToWishlist', () => {
+    //     Livewire.emit('addAllCartItemsToWishlist');
+    //     $('.modal').modal('hide');
+    // })
 
-    $(document).on('click', '#addCartItemToWishlist', () => {
-        Livewire.emit('addCartItemToWishlist');
-    })
+    // $(document).on('click', '#addCartItemToWishlist', () => {
+    //     Livewire.emit('addCartItemToWishlist');
+    // })
 </script>
 @endpush

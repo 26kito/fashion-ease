@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class DetailsProduct extends Component
 {
+    use TraitsCart;
+
     public $qty;
     public $products;
     public $size;
@@ -17,15 +20,19 @@ class DetailsProduct extends Component
 
     public function render()
     {
-        if ($this->stock == null) {
-            $stock = DB::table('detail_products')
-                ->where('dp_id', $this->products->id)
-                ->sum('stock');
+        // if ($this->stock == null) {
+        //     $stock = DB::table('detail_products')
+        //         ->where('dp_id', $this->products->id)
+        //         ->sum('stock');
 
-            $this->stock = $stock;
-        }
+        //     $this->stock = $stock;
+        // }
 
-        $this->defaultStock = DB::table('detail_products')
+        // $this->defaultStock = DB::table('detail_products')
+        //     ->where('dp_id', $this->products->id)
+        //     ->sum('stock');
+
+        $this->stock = ($this->stock) ?? DB::table('detail_products')
             ->where('dp_id', $this->products->id)
             ->sum('stock');
 
@@ -54,7 +61,8 @@ class DetailsProduct extends Component
 
         if ($this->stock > 0) {
             $this->reset('qty');
-            $this->emit('addToCart', $productId, $size, $qty);
+            // $this->emit('addToCart', $productId, $size, $qty);
+            $this->addToCartTrait($productId, $size, $qty);
         }
     }
 
@@ -121,6 +129,6 @@ class DetailsProduct extends Component
             ->where('size', $defaultSize)
             ->sum('stock');
 
-        $this->stock = $stock === 0 ? '0' : $stock;
+        $this->stock = ($stock === 0) ? '0' : $stock;
     }
 }

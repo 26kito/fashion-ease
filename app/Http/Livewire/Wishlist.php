@@ -5,9 +5,12 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class Wishlist extends Component
 {
+    use TraitsCart;
+
     public $page;
     public $wishlists = [];
     public $ProductID;
@@ -83,7 +86,8 @@ class Wishlist extends Component
             ->first();
 
         if ($checkStock->stock > 0) {
-            $this->emit('addToCart', $ProductID, $size, 1);
+            // $this->emit('addToCart', $ProductID, $size, 1);
+            $this->addToCartTrait($ProductID, $size, 1);
             $this->emit('refreshCart');
         }
     }

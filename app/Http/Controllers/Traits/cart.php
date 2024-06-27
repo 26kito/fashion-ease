@@ -32,11 +32,6 @@ trait cart
                 ['user_id' => Auth::id(), 'product_id' => $productId, 'size' => $size],
                 ['qty' => $qty]
             );
-
-            // $this->dispatchBrowserEvent('toastr', [
-            //     'status' => 'success',
-            //     'message' => 'Berhasil menambahkan ke keranjang!'
-            // ]);
         }
 
         if (!Auth::check() & isset($_COOKIE['cart_id'])) {
@@ -68,11 +63,11 @@ trait cart
             setcookie('carts', json_encode($cart), time() + (3600 * 2), '/');
 
             $this->emit('refreshCart');
-
-            $this->dispatchBrowserEvent('toastr', [
-                'status' => 'success',
-                'message' => 'Berhasil menambahkan ke keranjang!'
-            ]);
         }
+
+        $this->dispatchBrowserEvent('toastr', [
+            'status' => 'success',
+            'message' => 'Berhasil menambahkan ke keranjang!'
+        ]);
     }
 }

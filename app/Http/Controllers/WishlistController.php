@@ -17,9 +17,8 @@ class WishlistController extends Controller
     public function index()
     {
         $title = 'My Wishlist';
-        $totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
 
-        return view('wishlist', ['title' => $title, 'totalWishlist' => $totalWishlist]);
+        return view('wishlist', ['title' => $title]);
     }
 
     /**
