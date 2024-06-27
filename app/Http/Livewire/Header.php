@@ -16,21 +16,26 @@ class Header extends Component
     public $productsSearch;
 
     public $listeners = [
-        'addToCart' => 'addToCart',
+        // 'addToCart' => 'addToCart',
         'refreshCart' => '$refresh'
     ];
 
-    public function mount()
-    {
-        if (!Auth::check() && !isset($_COOKIE['cart_id'])) { // if user is not login and there is no cookie cart_id then set a cookie
-            $cartID = md5(uniqid(rand(), true));
-            setcookie('cart_id', $cartID, time() + (3600 * 2), '/'); // Set cookie to expire in 2 hour
-        }
-    }
+    // public function mount()
+    // {
+    //     if (!Auth::check() && !isset($_COOKIE['cart_id'])) { // if user is not login and there is no cookie cart_id then set a cookie
+    //         $cartID = md5(uniqid(rand(), true));
+    //         setcookie('cart_id', $cartID, time() + (3600 * 2), '/'); // Set cookie to expire in 2 hour
+    //     }
+    // }
 
     public function render()
     {
         $this->productsSearch = '';
+
+        if (!Auth::check() && !isset($_COOKIE['cart_id'])) { // if user is not login and there is no cookie cart_id then set a cookie
+            $cartID = md5(uniqid(rand(), true));
+            setcookie('cart_id', $cartID, time() + (3600 * 2), '/'); // Set cookie to expire in 2 hour
+        }
 
         if (strlen($this->keyword) >= 3) {
             $this->productsSearch = DB::table('products')
@@ -45,10 +50,10 @@ class Header extends Component
         return view('livewire.header');
     }
 
-    public function addToCart($productId, $size, $qty)
-    {
-        ['addToCart' => $this->addToCartTrait($productId, $size, $qty)];
-    }
+    // public function addToCart($productId, $size, $qty)
+    // {
+    //     ['addToCart' => $this->addToCartTrait($productId, $size, $qty)];
+    // }
 
     public function search()
     {

@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Traits\cart as TraitsCart;
 
 class DetailsProduct extends Component
 {
+    use TraitsCart;
+
     public $qty;
     public $products;
     public $size;
@@ -58,7 +61,8 @@ class DetailsProduct extends Component
 
         if ($this->stock > 0) {
             $this->reset('qty');
-            $this->emit('addToCart', $productId, $size, $qty);
+            // $this->emit('addToCart', $productId, $size, $qty);
+            $this->addToCartTrait($productId, $size, $qty);
         }
     }
 
