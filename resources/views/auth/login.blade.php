@@ -131,8 +131,13 @@
         event.preventDefault()
 
         const url = event.currentTarget
+        const w = 800
+        const h = 600
+        const y = window.outerHeight / 2 + window.screenY - ( h / 2)
+        const x = window.outerWidth / 2 + window.screenX - ( w / 2)
 
-        const popupWindow = window.open(url, 'google-login-popup', 'width=800, height=600') // Open popup
+        const popupWindow = window.open(url, 'google-login-popup', `width=${w}, height=${h}, top=${y}, left=${x}`).focus() // Open popup
+
 
         // Interval to check for popup closure and successful login
         const intervalId = setInterval(function() {
