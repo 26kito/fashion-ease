@@ -12,14 +12,14 @@ class CartController extends Controller
 
     public function index()
     {
-        $title = 'Cart';
+        $title = 'Your Cart - ';
         $totalOrders = $this->cart();
 
         $wishlist = DB::table('wishlists')
             ->where('user_id', Auth::id())
             ->count();
 
-        return view('cart', ['title' => $title, 'totalOrders' => $totalOrders, 'wishlist' => $wishlist]);
+        return view('cart')->with(['title' => $title, 'totalOrders' => $totalOrders, 'wishlist' => $wishlist]);
     }
 
     public function getCartItems()

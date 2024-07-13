@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        $title = "Dashboard";
+        // $title = "FashionEase";
 
         $latestProducts = DB::table('products')
             ->join('detail_products', 'products.id', 'detail_products.dp_id')
@@ -26,6 +26,6 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        return view('index', ['title' => $title, 'latestProducts' => $latestProducts]);
+        return view('index')->with(['latestProducts' => $latestProducts]);
     }
 }

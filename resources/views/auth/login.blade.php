@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Log In')
+@section('title', 'Log In - ')
 
 @section('content')
 <div class="login-box">
     <div class="login-logo">
-        <a href="#" class="text-decoration-none"><b>E-</b>Commerce</a>
+        {{-- <a href="#" class="text-decoration-none"><b>E-</b>Commerce</a> --}}
+        <p>
+            <b>F</b>ashion<b>E</b>ase
+        </p>
     </div>
     <div class="card">
         <div class="card-body login-card-body">
@@ -137,7 +140,6 @@
         const x = window.outerWidth / 2 + window.screenX - ( w / 2)
 
         const popupWindow = window.open(url, 'google-login-popup', `width=${w}, height=${h}, top=${y}, left=${x}`) // Open popup
-
 
         // Interval to check for popup closure and successful login
         const intervalId = setInterval(function() {

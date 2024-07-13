@@ -22,7 +22,10 @@
 </div>
 <div class="register-box">
     <div class="register-logo">
-        <a><b>E-</b>Commerce</a>
+        {{-- <a><b>E-</b>Commerce</a> --}}
+        <p>
+            <b>F</b>ashion<b>E</b>ase
+        </p>
     </div>
 
     <div class="card">
