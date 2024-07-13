@@ -35,8 +35,13 @@
     </div>
     @endforeach
     @if ( count($products) < $totalProducts ) 
-    <div class="text-center pt-5">
-        <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
+    <div class="text-center">
+        <button wire:click='load' wire:loading.attr="disabled" wire:loading.remove class="site-btn sb-line sb-dark">LOAD MORE</button>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <div wire:loading wire:target="load" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
     @endif
 </div>
