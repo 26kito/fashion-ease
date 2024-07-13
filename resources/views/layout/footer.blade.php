@@ -1,7 +1,8 @@
 <section class="footer-section">
     <div class="container">
         <div class="footer-logo text-center">
-            <a href="index.html"><img src="{{asset('asset/img/logo-light.png')}}" alt=""></a>
+            {{-- <a href="index.html"><img src="{{asset('asset/img/logo-light.png')}}" alt=""></a> --}}
+            <h3 class="text-light">FashionEase</h3>
         </div>
         <div class="row">
             <div class="col-lg-3 col-sm-6">
@@ -34,7 +35,7 @@
             </div>
             <div class="col-lg-3 col-sm-6">
                 <div class="footer-widget contact-widget">
-                    <h2>Questions</h2>
+                    <h2>Contact Us</h2>
                     <div class="con-info">
                         <span>T.</span>
                         <p>(+62) 81 330 868 663</p>
@@ -49,7 +50,7 @@
     </div>
     <div class="social-links-warp">
         <div class="container">
-            <div class="social-links">
+            {{-- <div class="social-links">
                 <a href="https://instagram.com/kt2602__" target="_blank" class="instagram">
                     <i class="fa fa-instagram"></i><span>instagram</span>
                 </a>
@@ -62,7 +63,7 @@
                 <a href="https://linkedin.com/in/kt2602" target="_blank" class="linkedin">
                     <i class="fa fa-linkedin"></i><span>linkedin</span>
                 </a>
-            </div>
+            </div> --}}
             <p class="text-white text-center mt-5">Copyright &copy;
                 <script>
                     document.write(new Date().getFullYear());

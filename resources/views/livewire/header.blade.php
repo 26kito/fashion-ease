@@ -4,7 +4,8 @@
             <div class="col-lg-2 text-center text-lg-left">
                 <!-- logo -->
                 <a href="{{ route('home') }}" class="site-logo">
-                    <img src="{{ asset('asset/img/logo.png') }}" alt="">
+                    {{-- <img src="{{ asset('asset/img/logo.png') }}" alt=""> --}}
+                    <h3>FashionEase</h3>
                 </a>
             </div>
             <div class="col-xl-6 col-lg-5">
