@@ -1,6 +1,6 @@
 @extends('layout.template')
 
-@section('title'){{ $title }}@endsection
+{{-- @section('title'){{ $title }}@endsection --}}
 
 @push('stylesheet')
 <link rel="stylesheet" href="{{asset('asset/css/owl.carousel.min.css')}}">

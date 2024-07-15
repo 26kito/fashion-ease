@@ -12,9 +12,9 @@ class RegisterController extends Controller
 {
     public function index()
     {
-        $title = "Register";
+        $title = "Register - ";
 
-        return view('auth.register', ['title' => $title]);
+        return view('auth.register')->with(['title' => $title]);
     }
 
     public function register(Request $request)
