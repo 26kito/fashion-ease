@@ -134,7 +134,12 @@
         </div>
         @if (count($products) < $totalProduct)
         <div class="text-center w-100 pt-3">
-            <button wire:click='load' class="site-btn sb-line sb-dark">LOAD MORE</button>
+            <button wire:click='load' wire:loading.attr="disabled" wire:loading.remove class="site-btn sb-line sb-dark">LOAD MORE</button>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <div wire:loading wire:target="load" class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
         @endif
     </div>
