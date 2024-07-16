@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Traits\cart as TraitsCart;
+use App\Http\Controllers\Traits\Cart as TraitsCart;
 
 class DetailsProduct extends Component
 {

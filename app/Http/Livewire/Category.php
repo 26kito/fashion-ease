@@ -5,11 +5,11 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Category as ModelsCategory;
 use App\Models\Product;
-use App\Http\Controllers\Traits\addToWishlist;
+use App\Http\Controllers\Traits\AddToWishlist;
 
 class Category extends Component
 {
-    use addToWishlist;
+    use AddToWishlist;
 
     public $amount = 6;
     public $categoryId;

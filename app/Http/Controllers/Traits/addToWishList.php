@@ -6,7 +6,7 @@ use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-trait addToWishlist
+trait AddToWishlist
 {
     public function addAllCartItemsToWishlistTrait()
     {

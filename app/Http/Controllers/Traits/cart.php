@@ -6,7 +6,7 @@ use App\Models\Cart as Carts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-trait cart
+trait Cart
 {
     public function cart()
     {
