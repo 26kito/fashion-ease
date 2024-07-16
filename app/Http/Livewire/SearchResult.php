@@ -48,6 +48,14 @@ class SearchResult extends Component
             $this->setSelectedFilter('MaximumPriceFilter');
         }
 
+        if (!$this->minPriceFilter || $this->minPriceFilter == null) {
+            $this->removeFilter('Harga Minimum');
+        }
+
+        if (!$this->maxPriceFilter || $this->maxPriceFilter == null) {
+            $this->removeFilter('Harga Maksimum');
+        }
+
         if ($this->sortByPrice) {
             $sortBy = ($this->sortByPrice == 'lowest') ? 'ASC' : 'DESC';
             $this->products = $this->getProductsSortByPrice($baseProducts, $sortBy);
