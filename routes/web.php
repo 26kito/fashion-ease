@@ -11,11 +11,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\OrderController AS AdminOrderController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\VoucherController;
 
 /*
@@ -36,6 +37,7 @@ Route::middleware('is_user')->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 
     Route::get('/search/{keyword}', [SearchController::class, 'searchResult']);
 
@@ -99,12 +101,12 @@ Route::middleware(['is_admin'])->group(function () {
         });
 
         Route::prefix('order')->group(function () {
-            Route::get('/', [OrderController::class, 'index']);
+            Route::get('/', [AdminOrderController::class, 'index']);
 
-            Route::get('/insert', [OrderController::class, 'insert']);
-            Route::post('/insert', [OrderController::class, 'insertAction']);
+            Route::get('/insert', [AdminOrderController::class, 'insert']);
+            Route::post('/insert', [AdminOrderController::class, 'insertAction']);
 
-            Route::get('/lihat-pesanan/{id}', [OrderController::class, 'lihatPesanan']);
+            Route::get('/lihat-pesanan/{id}', [AdminOrderController::class, 'lihatPesanan']);
             // Route::post('/lihat-pesanan/{id}', [OrderController::class, 'insertOrder']);
         });
 
