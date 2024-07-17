@@ -191,6 +191,20 @@ input[type="number"] {
     box-shadow: inset 0 0 0 1px #111111;
 }
 
+.btn.order-status-btn {
+    height: 40px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 12px;
+    border: 1px;
+}
+
+.btn.order-status-selected-btn {
+    background: #ecfef4;
+    border-color: #20ce7d !important;
+    color: #00aa5b;
+}
+
 /* Preloder */
 
 #preloder {
@@ -1876,7 +1890,8 @@ a#dropdownUser {
     margin-left: 30px !important;
 }
 
-.cart-table-warp, .wishlist-table-warp {
+.cart-table-warp,
+.wishlist-table-warp {
     margin-left: 30px !important;
 }
 
@@ -2031,7 +2046,8 @@ a#dropdownUser {
     margin-left: 30px !important;
 }
 
-.wishlist-table-warp, .wishlist-table-warp {
+.wishlist-table-warp,
+.wishlist-table-warp {
     margin-left: 30px !important;
 }
 
