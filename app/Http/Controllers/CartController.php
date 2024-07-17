@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Traits\cart as TraitsCart;
+use App\Http\Controllers\Traits\Cart as TraitsCart;
 
 class CartController extends Controller
 {

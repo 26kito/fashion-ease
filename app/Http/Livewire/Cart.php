@@ -6,11 +6,11 @@ use App\Models\Cart as CartModel;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Traits\addToWishlist;
+use App\Http\Controllers\Traits\AddToWishlist;
 
 class Cart extends Component
 {
-    use addToWishlist;
+    use AddToWishlist;
 
     // public $page;
     public $carts = [];
@@ -198,7 +198,7 @@ class Cart extends Component
             setcookie('carts', json_encode($newArray), time() + (3600 * 2), '/');
         }
 
-        return redirect($this->page)->with('status', 200);
+        return redirect()->route('cart')->with('status', 200);
     }
 
     public function addCartItemToWishlist()

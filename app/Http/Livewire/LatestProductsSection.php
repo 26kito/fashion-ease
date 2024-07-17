@@ -4,11 +4,11 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Traits\addToWishlist;
+use App\Http\Controllers\Traits\AddToWishlist;
 
 class LatestProductsSection extends Component
 {
-    use addToWishlist;
+    use AddToWishlist;
 
     public $latestProducts;
 
