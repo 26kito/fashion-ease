@@ -119,14 +119,14 @@ class CheckoutController extends Controller
                 $num = strval($latestNum + 1);
             }
 
-            $orderID = 'PO' . '-' . date('Ymdhi') . $userID . substr('000000' . $num, strlen($num));
+            $orderID = 'OID' . '-' . date('Ymdhi') . $userID . substr('0000' . $num, strlen($num));
 
             DB::table('orders')
                 ->insert([
                     'order_id' => $orderID,
                     'user_id' => $userID,
                     'order_date' => $orderDate,
-                    'status_order_id' => 1,
+                    // 'status_order_id' => 1,
                     'shipment_date' => null,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
