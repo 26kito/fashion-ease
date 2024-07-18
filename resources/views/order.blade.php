@@ -7,7 +7,7 @@
 	<div class="container">
 		<div class="row">
 			<h3>Daftar Transaksi</h3>
-			<div class="col-lg-10">
+			<div class="col-lg-10 mt-3">
 				<div class="card">
 					@livewire('order')
 				</div>
