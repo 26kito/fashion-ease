@@ -1,12 +1,14 @@
 <div class="total-cost" id="total-cost">
-  <input type="hidden" name="total_price_cart" value="{{ $total }}">
-  <input type="hidden" name="grand_total_cart" value="{{ $grandTotal }}">
-  @if ($isVoucherUsed == true)
-  <h6>Discount<span>{{ "-" . rupiah($appliedDiscPrice) }}</span></h6>
-  @endif
-  <h6>Grand Total<span>
-      <wire:model>{{ rupiah($grandTotal) }}</wire:model>
-    </span></h6>
+    <input type="hidden" name="total_price_cart" value="{{ $total }}">
+    <input type="hidden" name="grand_total_cart" value="{{ $grandTotal }}">
+    @if ($isVoucherUsed == true)
+    <h6>Discount<span>{{ "-" . rupiah($appliedDiscPrice) }}</span></h6>
+    @endif
+    <h6>Grand Total
+        <span>
+            <wire:model>{{ rupiah($grandTotal) }}</wire:model>
+        </span>
+    </h6>
 </div>
 
 @push('script')
