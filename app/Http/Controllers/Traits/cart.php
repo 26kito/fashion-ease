@@ -45,7 +45,7 @@ trait Cart
             // Check if the product ID already exists in the existing items
             if ($cart != null) {
                 foreach ($cart as &$row) {
-                    if ($row['product_id'] === $cartItems['product_id']) {
+                    if ($row['product_id'] === $cartItems['product_id'] && $row['size'] === $cartItems['size']) {
                         // Update the existing item
                         $row = $cartItems;
                         $productExists = true;
@@ -61,13 +61,13 @@ trait Cart
 
             // Set the updated list of items in the cookie
             setcookie('carts', json_encode($cart), time() + (3600 * 2), '/');
-
-            $this->emit('refreshCart');
         }
 
-        $this->dispatchBrowserEvent('toastr', [
-            'status' => 'success',
-            'message' => 'Berhasil menambahkan ke keranjang!'
-        ]);
+        // $this->emit('refreshCart');
+
+        // $this->dispatchBrowserEvent('toastr', [
+        //     'status' => 'success',
+        //     'message' => 'Berhasil menambahkan ke keranjang!'
+        // ]);
     }
 }

@@ -27,19 +27,19 @@ class Wishlist extends Component
         $this->totalWishlist = DB::table('wishlists')->where('user_id', Auth::id())->count();
 
         $sizeSubquery = DB::table('detail_products')
-            ->selectRaw("dp_id, GROUP_CONCAT(size SEPARATOR ', ') AS size, GROUP_CONCAT(stock SEPARATOR ', ') AS stock")
-            ->groupBy('dp_id');
+            ->selectRaw("product_id, GROUP_CONCAT(size SEPARATOR ', ') AS size, GROUP_CONCAT(stock SEPARATOR ', ') AS stock")
+            ->groupBy('product_id');
 
         $this->wishlists = DB::table('wishlists')
-            ->join('products', 'wishlists.product_id', 'products.id')
+            ->join('products', 'wishlists.product_id', 'products.product_id')
             ->joinSub($sizeSubquery, 'sizeSubquery', function ($join) {
-                $join->on('sizeSubquery.dp_id', 'wishlists.product_id');
+                $join->on('sizeSubquery.product_id', 'wishlists.product_id');
             })
             ->where('wishlists.user_id', Auth::id())
             ->select(
                 'wishlists.id AS WishlistID',
-                'products.id AS ProductID',
-                'products.product_id',
+                // 'products.id AS ProductID',
+                'products.product_id AS ProductID',
                 'products.name AS ProdName',
                 'products.price',
                 'sizeSubquery.size',

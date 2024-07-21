@@ -67,7 +67,7 @@ class TotalPriceCart extends Component
     {
         if (Auth::check()) {
             $query = DB::table('carts')
-                ->join('products', 'carts.product_id', '=', 'products.id')
+                ->join('products', 'carts.product_id', 'products.product_id')
                 ->select('carts.id')
                 ->where('carts.user_id', Auth::id())
                 ->get();
@@ -122,56 +122,76 @@ class TotalPriceCart extends Component
         $this->appliedDiscPrice = $appliedDiscPrice;
     }
 
-    public function getTotalPrice()
-    {
-        return $this->total;
-    }
+    // public function getTotalPrice()
+    // {
+    //     return $this->total;
+    // }
 
     private function calculateCartTotalPrice()
     {
         $total = 0;
 
         if (Auth::check() && count($this->cartsID) > 0) {
-            $query = DB::table('carts')
-                ->join('products', 'carts.product_id', '=', 'products.id')
-                ->selectRaw('SUM(products.price * carts.qty) AS price')
-                ->where('carts.user_id', Auth::id());
+            $total = DB::table('carts')
+                ->join('detail_products', function ($join) {
+                    $join->on('carts.product_id', '=', 'detail_products.product_id')
+                        ->on('carts.size', '=', 'detail_products.size');
+                })
+                ->selectRaw('SUM(detail_products.price * carts.qty) AS price')
+                ->where('carts.user_id', Auth::id())
+                ->whereIn('carts.id', $this->cartsID)
+                ->value('price');
 
-            if ($this->cartsID) {
-                $query->whereIn('carts.id', $this->cartsID);
-            }
+            // if ($this->cartsID) {
+            //     $query->whereIn('carts.id', $this->cartsID);
+            // }
 
-            $total = $query->value('price');
+            // $total = $query->value('price');
         }
 
+        // dd($this->cartsID);
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && count($this->cartsID) > 0) {
             $dataArray = json_decode($_COOKIE['carts'], true);
 
-            $tempData = [];
-            if ($this->cartsID) {
-                foreach ($dataArray as $key => $value) {
-                    if (in_array($value['cart_id'], $this->cartsID)) {
-                        array_push($tempData, $value);
+            // $tempData = [];
+            // if ($this->cartsID) {
+            //     foreach ($dataArray as $key => $value) {
+            //         if (in_array($value['cart_id'], $this->cartsID)) {
+            //             array_push($tempData, $value);
+            //         }
+            //     }
+            // }
+
+            $results = DB::table('products')
+                ->join('detail_products', 'products.product_id', 'detail_products.product_id')
+                ->select('products.product_id', 'detail_products.size', 'detail_products.price AS price')
+                // ->whereIn('detail_products.product_id', array_column($dataArray, 'product_id'))
+                // ->where('detail_products.size', array_column($dataArray, 'size'))
+                ->where(function ($query) use ($dataArray) {
+                    foreach ($dataArray as $item) {
+                        $query->orWhere(function ($q) use ($item) {
+                            $q->where('products.product_id', $item['product_id'])
+                                ->where('detail_products.size', $item['size']);
+                        });
                     }
-                }
-            }
+                })
+                ->get();
 
-            $query = DB::table('products')
-                ->join('detail_products', 'products.id', '=', 'detail_products.dp_id')
-                ->select('products.id AS ProductID', 'products.price AS price');
+            // if ($this->cartsID) {
+            //     $query->whereIn('detail_products.product_id', array_column($dataArray, 'product_id'))
+            //         ->where('detail_products.size', array_column($dataArray, 'size'));
+            // }
 
-            if ($this->cartsID) {
-                $query->whereIn('detail_products.dp_id', array_column($tempData, 'product_id'));
-            }
+            // $results = $query->get();
 
-            $results = $query->get();
-
+            // dd($results);
             // Processing and formatting the results...
             foreach ($results as &$result) {
-                $productId = $result->ProductID;
+                $productId = $result->product_id;
 
                 foreach ($dataArray as $item) {
-                    if ($item['product_id'] == $productId) {
+                    // dd($results);
+                    if ($item['product_id'] == $productId && $item['size'] == $result->size) {
                         $total += $result->price * $item['quantity'];
                         break;
                     }
