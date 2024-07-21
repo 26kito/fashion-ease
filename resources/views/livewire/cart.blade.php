@@ -1,15 +1,4 @@
 <div class="cart-table-warp">
-    {{-- Modal --}}
-    {{-- <div class="modal" id="modalCart" tabindex="-1" role="dialog" wire:ignore>
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="cart-modal-body modal-body">
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- End of Modal --}}
-
     <div class="select-all mb-4">
         <div class="select-all-checkbox form-check d-inline-block ms-1">
             <input wire:model='selectAll' type="checkbox" id="select-all" class="form-check-input">
@@ -51,10 +40,10 @@
                 </td>
                 <td class="quy-col">
                     <div class="quantity form-group">
-                        <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
+                        <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->product_id }}')" type="button"
                             class="btn decrease-btn" value="-">
                         <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
-                        <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->ProductID }}')" type="button"
+                        <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->product_id }}')" type="button"
                             class="btn increase-btn" value="+">
                     </div>
                 </td>
@@ -65,11 +54,11 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    {{-- <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" data-bs-toggle="modal"
+                    {{-- <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->product_id }}')" data-bs-toggle="modal"
                         data-bs-target="#modalCart" class="removeCartItem btn btn-danger">
                         Hapus
                     </a> --}}
-                    <a href="#" wire:click="initProp('{{ $row->CartID }}', '{{ $row->ProductID }}')" class="removeCartItem btn btn-danger" role="button">
+                    <a href="#" wire:click="initProp('{{ $row->CartID }}', '{{ $row->product_id }}')" class="removeCartItem btn btn-danger" role="button">
                         Hapus
                     </a>
                 </td>

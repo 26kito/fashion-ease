@@ -6,7 +6,7 @@
                 @foreach ( $wishlists as $key => $row )
                 <tr>
                     <td class="product-col">
-                        <a href="/product/{{ $row->product_id }}">
+                        <a href="/product/{{ $row->ProductID }}">
                             <img src="{{ asset('asset/img/cart/'. $row->image ) }}" alt="{{ $row->image }}">
                         </a>
                         <div class="pc-title">
@@ -19,7 +19,7 @@
                         <select class="form-select" aria-label="Default select example">
                             <option selected disabled value="null">Pilih size</option>
                             @foreach ($row->sizeAndStock as $sizeRow => $stockRow)
-                            <option value="{{ " $row->ProductID, $sizeRow" }}" {{ ($stockRow==0) ? 'disabled' : '' }}>
+                            <option value="{{ "$row->ProductID, $sizeRow" }}" {{ ($stockRow==0) ? 'disabled' : '' }}>
                                 {{ $sizeRow }} {{ ($stockRow == 0) ? ' - Stok habis' : '' }}
                             </option>
                             @endforeach

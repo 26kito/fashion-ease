@@ -49,7 +49,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if (isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
-            return redirect()->route('checkout');
+            return redirect()->route('cart');
         }
     }
 
