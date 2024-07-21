@@ -18,7 +18,7 @@ class CheckoutController extends Controller
         $totalPriceCart = request()->total_price_cart;
         $grandTotalPriceCart = request()->grand_total_cart;
         $validateCart = session('validateCart');
-        
+
         if ((!is_array($cartItemsID) || empty($cartItemsID)) && $validateCart == null) {
             return redirect()->back()->with('status', 400);
         }
@@ -30,49 +30,50 @@ class CheckoutController extends Controller
             return redirect()->route('login');
         }
 
-        if (Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $validateCart == true) {
-            $tempCart = json_decode($_COOKIE['carts']);
-            $selectedCartsID = json_decode($_COOKIE['selectedCart']);
-            $productsID = array();
-            $productsSize = array();
+        // if (Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $validateCart == true) {
+        //     $tempCart = json_decode($_COOKIE['carts']);
+        //     $selectedCartsID = json_decode($_COOKIE['selectedCart']);
+        //     $productsID = array();
+        //     $productsSize = array();
 
-            foreach ($tempCart as $row) {
-                $tempCartID = $row->cart_id;
+        //     foreach ($tempCart as $row) {
+        //         $tempCartID = $row->cart_id;
 
-                if (in_array($tempCartID, $selectedCartsID)) {
-                    $productId = $row->product_id;
-                    $qty = $row->quantity;
-                    $size = $row->size;
-                    array_push($productsID, $row->product_id);
-                    array_push($productsSize, $row->size);
-                    $this->addToCartTrait($productId, $size, $qty);
-                }
-            }
+        //         if (in_array($tempCartID, $selectedCartsID)) {
+        //             $productId = $row->product_id;
+        //             $qty = $row->quantity;
+        //             $size = $row->size;
+        //             array_push($productsID, $row->product_id);
+        //             array_push($productsSize, $row->size);
+        //             $this->addToCartTrait($productId, $size, $qty);
+        //         }
+        //     }
 
-            session()->forget('validateCart');
-            // delete cookie
-            setcookie('cart_id', '', time() - 1, '/');
-            setcookie('carts', '', time() - 1, '/');
-            setcookie('selectedCart', '', time() - 1, '/');
+        //     session()->forget('validateCart');
+        //     // delete cookie
+        //     setcookie('cart_id', '', time() - 1, '/');
+        //     setcookie('carts', '', time() - 1, '/');
+        //     setcookie('selectedCart', '', time() - 1, '/');
 
-            $cartItemsID = DB::table('carts')
-                ->where('user_id', Auth::id())
-                ->whereIn('product_id', $productsID)
-                ->whereIn('size', $productsSize)
-                ->pluck('id')
-                ->toArray();
+        //     $cartItemsID = DB::table('carts')
+        //         ->where('user_id', Auth::id())
+        //         ->whereIn('product_id', $productsID)
+        //         ->whereIn('size', $productsSize)
+        //         ->pluck('id')
+        //         ->toArray();
 
-            if (isset($_COOKIE['appliedDiscPrice'])) {
-                $appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
-            } else {
-                $appliedDiscPrice = 0;
-            }
+        //     if (isset($_COOKIE['appliedDiscPrice'])) {
+        //         $appliedDiscPrice = $_COOKIE['appliedDiscPrice'];
+        //     } else {
+        //         $appliedDiscPrice = 0;
+        //     }
 
-            $totalPriceCart = $_COOKIE['totalPriceCart'];
-            $grandTotalPriceCart = $totalPriceCart - $appliedDiscPrice;
-        }
+        //     $totalPriceCart = $_COOKIE['totalPriceCart'];
+        //     $grandTotalPriceCart = $totalPriceCart - $appliedDiscPrice;
+        // }
 
         $orderItems = $this->getOrderItems($cartItemsID);
+        // dd($orderItems);
 
         $paymentMethod = DB::table('payment_method')->get();
         $title = 'Checkout';
@@ -82,7 +83,11 @@ class CheckoutController extends Controller
 
     private function getOrderItems(array $cartItemsID)
     {
-        return Cart::join('products', 'carts.product_id', '=', 'products.id')
+        return Cart::join('products', 'carts.product_id', '=', 'products.product_id')
+            ->leftJoin('detail_products', function ($join) {
+                $join->on('carts.product_id', 'detail_products.product_id')
+                    ->whereColumn('carts.size', 'detail_products.size');
+            })
             ->select(
                 'carts.id AS CartID',
                 'carts.user_id',
@@ -90,7 +95,8 @@ class CheckoutController extends Controller
                 'products.product_id',
                 'products.name AS ProdName',
                 'products.image',
-                DB::raw('products.price * carts.qty AS Price'),
+                DB::raw('detail_products.price * carts.qty AS total_price'),
+                'detail_products.price',
                 'carts.size',
                 'carts.qty'
             )
@@ -102,7 +108,7 @@ class CheckoutController extends Controller
     public function saveOrder(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $total = collect($request->data)->sum('Price');
+            $total = collect($request->data)->sum('total_price');
             $shipmentFee = $request->shippingCost;
             $grandTotal = $total + $shipmentFee;
             $userID = $request->data[0]['user_id'];
@@ -140,14 +146,14 @@ class CheckoutController extends Controller
                 DB::table('order_items')
                     ->insert([
                         'order_id' => $orderID,
-                        'product_id' => $row['ProductID'],
+                        'product_id' => $row['product_id'],
                         'size' => $row['size'],
-                        'price' => $row['Price'],
+                        'price' => $row['price'],
                         'qty' => $row['qty']
                     ]);
 
                 DB::table('carts')
-                    ->where('product_id', $row['ProductID'])
+                    ->where('product_id', $row['product_id'])
                     ->where('size', $row['size'])
                     ->where('user_id', $userID)
                     ->delete();

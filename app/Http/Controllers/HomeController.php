@@ -19,7 +19,7 @@ class HomeController extends Controller
         // $title = "FashionEase";
 
         $latestProducts = DB::table('products')
-            ->join('detail_products', 'products.id', 'detail_products.dp_id')
+            ->join('detail_products', 'products.product_id', 'detail_products.product_id')
             ->select('products.id', 'products.product_id', 'products.name', 'products.description', 'products.price', 'products.created_at')
             ->groupBy('products.id')
             ->orderBy('products.created_at', 'DESC')
