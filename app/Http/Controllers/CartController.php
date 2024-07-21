@@ -14,10 +14,37 @@ class CartController extends Controller
     {
         $title = 'Your Cart - ';
         $totalOrders = $this->cart();
+        $validateCart = session('validateCart');
 
         $wishlist = DB::table('wishlists')
             ->where('user_id', Auth::id())
             ->count();
+
+        if (Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts']) && $validateCart == true) {
+            $tempCart = json_decode($_COOKIE['carts']);
+            $selectedCartsID = json_decode($_COOKIE['selectedCart']);
+            $productsID = array();
+            $productsSize = array();
+
+            foreach ($tempCart as $row) {
+                $tempCartID = $row->cart_id;
+
+                if (in_array($tempCartID, $selectedCartsID)) {
+                    $productId = $row->product_id;
+                    $qty = $row->quantity;
+                    $size = $row->size;
+                    array_push($productsID, $row->product_id);
+                    array_push($productsSize, $row->size);
+                    $this->addToCartTrait($productId, $size, $qty);
+                }
+            }
+
+            session()->forget('validateCart');
+            // delete cookie
+            setcookie('cart_id', '', time() - 1, '/');
+            setcookie('carts', '', time() - 1, '/');
+            setcookie('selectedCart', '', time() - 1, '/');
+        }
 
         return view('cart')->with(['title' => $title, 'totalOrders' => $totalOrders, 'wishlist' => $wishlist]);
     }
