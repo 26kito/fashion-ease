@@ -11,6 +11,7 @@ class DetailsProduct extends Component
     use TraitsCart;
 
     public $qty;
+    public $productID;
     public $products;
     public $size;
     public $defaultSize;
@@ -22,36 +23,26 @@ class DetailsProduct extends Component
     {
         $this->defaultSize = DB::table('detail_products')
             ->join('product_sizes', 'detail_products.size', 'product_sizes.size')
-            ->where('detail_products.product_id', $this->products->product_id)
+            ->where('detail_products.product_id', $this->products['product_id'])
             ->orderBy('product_sizes.id', 'ASC')
             ->pluck('detail_products.size');
-        // dd($this->defaultSize);
     }
 
     public function render()
     {
-        // if ($this->stock == null) {
-        //     $stock = DB::table('detail_products')
-        //         ->where('dp_id', $this->products->id)
-        //         ->sum('stock');
-
-        //     $this->stock = $stock;
-        // }
-
-        // $this->defaultStock = DB::table('detail_products')
-        //     ->where('dp_id', $this->products->id)
-        //     ->sum('stock');
-
         $this->stock = ($this->stock) ?? DB::table('detail_products')
-            ->where('product_id', $this->products->product_id)
+            ->where('product_id', $this->products['product_id'])
             ->sum('stock');
+
+        $productsPrice = DB::table('detail_products')->where('product_id', $this->products['product_id'])->where('size', $this->size)->pluck('price')->first();
+        $this->products['price'] = $productsPrice ?? $this->products['price'];
 
         return view('livewire.details-product');
     }
 
     public function addToCart()
     {
-        $productId = $this->products->product_id;
+        $productId = $this->products['product_id'];
         $size = $this->size;
         $qty = $this->qty;
 
@@ -128,15 +119,13 @@ class DetailsProduct extends Component
         }
     }
 
-    public function checkSize($defaultSize)
+    public function checkSize($size)
     {
         $this->reset('qty');
 
-        $productID = $this->products->product_id;
-
         $stock = DB::table('detail_products')
-            ->where('product_id', $productID)
-            ->where('size', $defaultSize)
+            ->where('product_id', $this->products['product_id'])
+            ->where('size', $size)
             ->sum('stock');
 
         $this->stock = ($stock === 0) ? '0' : $stock;
