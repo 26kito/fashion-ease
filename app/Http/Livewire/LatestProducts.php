@@ -16,9 +16,10 @@ class LatestProducts extends Component
     {
         $this->products = DB::table('products')
             ->join('detail_products', 'products.product_id', 'detail_products.product_id')
-            ->selectRaw("products.*, MAX(detail_products.size) AS size, MAX(detail_products.stock) AS stock")
-            ->groupBy('products.id')
-            ->havingRaw("SUM(detail_products.stock) != 0")
+            ->selectRaw("products.id, products.name, detail_products.product_id, products.image, products.code, MIN(detail_products.price) AS price")
+            ->groupBy('detail_products.product_id')
+            ->havingRaw("SUM(detail_products.stock) > 0")
+            ->orderBy('detail_products.price', 'desc')
             ->orderByDesc('products.created_at')
             ->take(5)
             ->get();
