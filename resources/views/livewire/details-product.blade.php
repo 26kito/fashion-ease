@@ -3,12 +3,12 @@
         <div class="col-lg-6">
             <div class="product-pic">
                 {{-- <img class="product-big-img" src="{{asset('storage/products-images/'.$products->image)}}" alt="{{'image of '.$products->image}}"> --}}
-                <img class="product-big-img" src="{{asset('asset/img/products/'.$products->image)}}" alt="{{'image of '.$products->image}}">
+                <img class="product-big-img" src="{{asset('asset/img/products/'.$products['image'])}}" alt="{{'image of '.$products['image']}}">
             </div>
         </div>
         <div class="col-lg-6 product-details">
-            <h2 class="p-title">{{ $products->name }}</h2>
-            <h3 class="p-price">{{ rupiah($products->price) }}</h3>
+            <h2 class="p-title">{{ $products['name'] }}</h2>
+            <h3 class="p-price">{{ rupiah($products['price']) }}</h3>
             @if ( $stock != 0 )
             <h4 class="p-stock">Available: <span>In Stock !</span></h4>
             @else
@@ -41,9 +41,9 @@
                     </div>
                     <div id="collapse1" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
                         <div class="panel-body">
-                            <p>{{ $products->description }}</p>
+                            <p>{{ $products['description'] }}</p>
                             <p>{{ 'Stock: '.$stock }}</p>
-                            <p>{{ $products->varian }}</p>
+                            {{-- <p>{{ $products->varian }}</p> --}}
                         </div>
                     </div>
                 </div>
