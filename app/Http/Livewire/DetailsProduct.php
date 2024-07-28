@@ -34,8 +34,10 @@ class DetailsProduct extends Component
             ->where('product_id', $this->products['product_id'])
             ->sum('stock');
 
-        $productsPrice = DB::table('detail_products')->where('product_id', $this->products['product_id'])->where('size', $this->size)->pluck('price')->first();
-        $this->products['price'] = $productsPrice ?? $this->products['price'];
+        $defaultSizeSelected = DB::table('detail_products')->where('product_id', $this->products['product_id'])->orderBy('price', 'asc')->orderBy('stock', 'desc')->pluck('size')->first();
+        $this->size = $this->size ?? $defaultSizeSelected;
+        $defaultProductsPrice = DB::table('detail_products')->where('product_id', $this->products['product_id'])->where('size', $this->size)->pluck('price')->first();
+        $this->products['price'] = $defaultProductsPrice ?? $this->products['price'];
 
         return view('livewire.details-product');
     }

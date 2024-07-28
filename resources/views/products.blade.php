@@ -26,14 +26,13 @@
 <!-- product section -->
 <section class="product-section mt-5">
 	{{-- Param 1:View. Param 2:Passing Model --}}
-	{{-- @livewire('details-product', ['products' => $products, 'defaultSize' => $defaultSize]) --}}
 	@livewire('details-product', ['products' => $products])
 </section>
 <!-- product section end -->
 
 <!-- RELATED PRODUCTS section -->
 <section class="related-product-section">
-	@livewire('related-products', ['relatedProducts' => $relatedProducts]);
+	{{-- @livewire('related-products', ['relatedProducts' => $relatedProducts]); --}}
 </section>
 <!-- RELATED PRODUCTS section end -->
 @endsection
