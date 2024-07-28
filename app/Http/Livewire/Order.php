@@ -10,24 +10,41 @@ use Illuminate\Support\Facades\Date;
 class Order extends Component
 {
     public $data = [];
+    public $keywordOrderSearch = "";
     public $orderStatus = ["Semua", "Berlangsung", "Berhasil", "Tidak Berhasil"];
     public $orderStatusSelected = "Semua";
-    public $keywordOrderSearch = "";
+    public $subOrderStatus = ["Menunggu Konfirmasi", "Diproses", "Dikirim", "Tiba di Tujuan", "Dikomplain"];
+    public $subDrderStatusSelected;
+    public $orderStatusFilter = [
+        "Berlangsung" => ["SO001", "SO002", "SO003", "SO005"],
+        "Berhasil" => ["SO006"],
+        "Tidak Berhasil" => ["SO004"],
+    ];
+    public $orderSubStatusFilter = [
+        "Menunggu Konfirmasi" => "SO001",
+        "Diproses" => "SO002",
+        "Dikirim" => "SO005",
+        "Tiba di Tujuan" => -1,
+        "Dikomplain" => -1,
+    ];
 
     public function render()
     {
         $query = $this->getOrder();
 
-        if ($this->orderStatusSelected == "Berlangsung") {
-            $query->whereIn("orders.status_order_id", [2, 3, 7]);
+        if ($this->orderStatusSelected === "Semua") {
+            $this->reset("orderStatusSelected");
+            $this->reset("subDrderStatusSelected");
         }
 
-        if ($this->orderStatusSelected == "Berhasil") {
-            $query->where("orders.status_order_id", 8);
+        if ($this->orderStatusSelected !== "Semua" && isset($this->orderStatusFilter[$this->orderStatusSelected])) {
+            $query->whereIn("orders.status_order_id", $this->orderStatusFilter[$this->orderStatusSelected]);
         }
 
-        if ($this->orderStatusSelected == "Tidak Berhasil") {
-            $query->where("orders.status_order_id", 4);
+        if (isset($this->orderSubStatusFilter[$this->subDrderStatusSelected])) {
+            $statusIds = $this->orderSubStatusFilter[$this->subDrderStatusSelected];
+
+            $query->where("orders.status_order_id", $statusIds);
         }
 
         $this->data = $query->get();
@@ -48,10 +65,22 @@ class Order extends Component
     {
         $data = DB::table("orders")
             ->join("order_items", "orders.order_id", "order_items.order_id")
-            ->join("products", "order_items.product_id", "products.id")
-            ->join("status_order", "orders.status_order_id", "status_order.id")
-            ->select("orders.order_id", "orders.order_date", "orders.status_order_id", "orders.grand_total", "order_items.qty", "products.name AS product_name", "products.image AS product_image", "products.price AS product_price", "status_order.description AS order_status", "status_order.status_order_id AS order_status_id")
-            ->where("orders.user_id", Auth::id());
+            ->join("products", "order_items.product_id", "products.product_id")
+            ->join("status_order", "orders.status_order_id", "status_order.status_order_id")
+            ->select(
+                "orders.order_id",
+                "orders.order_date",
+                "orders.status_order_id",
+                "status_order.description AS order_status",
+                "orders.grand_total",
+                "order_items.qty",
+                "products.name AS product_name",
+                "products.image AS product_image",
+                "order_items.product_id",
+                "order_items.price AS product_price"
+            )
+            ->where("orders.user_id", Auth::id())
+            ->groupBy("order_items.order_id");
 
         return $data;
     }
@@ -64,6 +93,11 @@ class Order extends Component
     public function selectStatus($status)
     {
         $this->orderStatusSelected = $status;
+    }
+
+    public function selectSubStatus($status)
+    {
+        $this->subDrderStatusSelected = $status;
     }
 
     public function resetSelectedOrderStatus()
