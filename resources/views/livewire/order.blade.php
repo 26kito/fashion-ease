@@ -31,6 +31,13 @@
                     <a href="#" wire:click.prevent="resetSelectedOrderStatus" class="fw-bold" style="color: #00AA5B">Reset Filter</a>
                 </div>
             </div>
+            @if ($orderStatusSelected == 'Berlangsung')
+                <div class="mt-2">
+                    @foreach ($subOrderStatus as $key => $value)
+                        <button wire:click.prevent="selectSubStatus('{{ $value }}')" type="button" class="btn order-status-btn border me-1 shadow-none {{ ($orderStatusSelected == 'Berlangsung' && $subDrderStatusSelected == $value) ? 'order-status-selected-btn' : '' }}">{{ $value }}</button>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
     @if (count($data) == 0)
