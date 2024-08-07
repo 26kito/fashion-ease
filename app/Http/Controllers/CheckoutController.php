@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\Cart as TraitsCart;
+use Midtrans\Snap as MidtransSnap;
 
 class CheckoutController extends Controller
 {
@@ -107,13 +108,15 @@ class CheckoutController extends Controller
 
     public function saveOrder(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        DB::beginTransaction();
+
+        try {
             $total = collect($request->data)->sum('total_price');
             $shipmentFee = $request->shippingCost;
             $grandTotal = $total + $shipmentFee;
             $userID = $request->data[0]['user_id'];
             $orderDate = date('Y-m-d');
-            $paymentMethodID = $request->paymentMethodID;
+            // $paymentMethodID = $request->paymentMethodID;
             $shippingTo = $request->shippingTo;
             $discValue = $request->voucherFee;
             $getMaxOrderID = DB::table('orders')->max('order_id');
@@ -127,19 +130,36 @@ class CheckoutController extends Controller
 
             $orderID = 'OID' . '-' . date('Ymdhi') . $userID . substr('0000' . $num, strlen($num));
 
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => $orderID,
+                    'gross_amount' => $grandTotal,
+                ),
+                'customer_details' => array(
+                    'first_name' => Auth::user()->first_name,
+                    'last_name' => Auth::user()->last_name,
+                    'email' => Auth::user()->email,
+                    'phone' => Auth::user()->phone_number,
+                ),
+            );
+
+            $midtrans = MidtransSnap::createTransaction($params);
+
             DB::table('orders')
                 ->insert([
                     'order_id' => $orderID,
                     'user_id' => $userID,
                     'order_date' => $orderDate,
-                    // 'status_order_id' => 1,
+                    'status_order_id' => 'SO007',
                     'shipment_date' => null,
                     'total' => $total,
                     'shipment_fee' => $shipmentFee,
                     'shipping_to' => $shippingTo,
                     'discount' => $discValue,
                     'grand_total' => $grandTotal,
-                    'payment_method_id' => $paymentMethodID
+                    // 'payment_method_id' => $paymentMethodID
+                    'midtrans_token' => $midtrans->token,
+                    'midtrans_redirect_url' => $midtrans->redirect_url
                 ]);
 
             foreach ($request->data as $row) {
@@ -158,9 +178,15 @@ class CheckoutController extends Controller
                     ->where('user_id', $userID)
                     ->delete();
             }
-        });
 
-        return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat'], 200);
+            DB::commit();
+
+            return response()->json(['status' => 'Success', 'message' => 'Pesanan berhasil dibuat', 'data' => $midtrans->token], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json(['status' => 'Failed', 'message' => 'Error'], 500);
+        }
     }
 
     public function paymentStatus()

@@ -2,7 +2,12 @@
 
 @section('title'){{ $title }}@endsection
 
+@push('stylesheet')
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-qJjtSPLK8cyVRxZx"></script>
+@endpush
+
 @section('content')
+<div class="snap-container"></div>
 <!-- checkout section  -->
 <section class="checkout-section spad mt-5">
 	<div class="container">
@@ -11,7 +16,7 @@
 				<div class="checkout-form">
 					@livewire('delivery-address')
 					@livewire('delivery-info')
-					<div class="cf-title">Payment</div>
+					{{-- <div class="cf-title">Payment</div>
 					<div class="row m-0">
 						<ul>
 							@foreach ($paymentMethod as $row)
@@ -22,7 +27,7 @@
 							</li>
 							@endforeach
 						</ul>
-					</div>
+					</div> --}}
 					<a class="site-btn submit-order-btn" id="placeOrder">Place Order</a>
 				</div>
 			</div>
@@ -81,11 +86,11 @@
 			}, 1000);
 		} 
 		
-		if (!paymentMethodID) {
-			let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
+		// if (!paymentMethodID) {
+		// 	let event = customNotif.notif('info', 'Pilih metode pembayaran dulu ya');
 
-			return window.dispatchEvent(event);
-		}
+		// 	return window.dispatchEvent(event);
+		// }
 
 		if (!voucherPrice) {
 			voucherPrice = null
@@ -104,15 +109,11 @@
 				'voucherFee': voucherPrice
 			},
 			success: function(result) {
-				// window.livewire.emit('refreshCart');
-
-				// let event = customNotif.notif('success', result.message);
-		
-				// window.dispatchEvent(event);
-
-				cookie.setCookie('payment', true, 2);
+				cookie.setCookie('payment', true, 2)
+				cookie.setCookie('snapToken', result.data, 2)
 
 				window.location.href = '/payment-status'
+				// window.snap.pay(result.data);
 			}
 		})
 	})
