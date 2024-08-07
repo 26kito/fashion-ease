@@ -56,6 +56,11 @@ class Order extends Component
             // parse and format date
             $orderDate = Date::createFromFormat("Y-m-d", $value->order_date);
             $value->order_date = date_format($orderDate, "d M Y");
+
+            $value->item_count = DB::table('order_items')
+                ->where('order_id', $value->order_id)
+                ->where('id', '!=', $value->id)
+                ->count('*');
         }
 
         return view("livewire.order");
@@ -76,10 +81,13 @@ class Order extends Component
                 "order_items.qty",
                 "products.name AS product_name",
                 "products.image AS product_image",
+                "order_items.id",
                 "order_items.product_id",
-                "order_items.price AS product_price"
+                "order_items.price AS product_price",
             )
             ->where("orders.user_id", Auth::id())
+            ->orderBy('orders.id', 'desc')
+            ->orderBy('orders.order_date', 'desc')
             ->groupBy("order_items.order_id");
 
         return $data;
