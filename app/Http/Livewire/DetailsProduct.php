@@ -10,8 +10,8 @@ class DetailsProduct extends Component
 {
     use TraitsCart;
 
-    public $qty;
-    public $productID;
+    public $qty = 1;
+    // public $productID;
     public $products;
     public $size;
     public $defaultSize;
@@ -48,37 +48,48 @@ class DetailsProduct extends Component
         $size = $this->size;
         $qty = $this->qty;
 
-        if (!$size) {
+        // if (!$size) {
+        //     return $this->dispatchBrowserEvent('toastr', [
+        //         'status' => 'error',
+        //         'message' => 'Kamu belum memilih size nih'
+        //     ]);
+        // }
+
+        if ($this->stock === 0) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
-                'message' => 'Kamu belum memilih size nih'
+                'message' => 'Size yang kamu pilih habis nih :('
             ]);
         }
+        // if (!$qty) {
+        //     return $this->dispatchBrowserEvent('toastr', [
+        //         'status' => 'error',
+        //         'message' => 'Masukin jumlah yang ingin dibeli ya'
+        //     ]);
+        // }
 
-        if (!$qty) {
-            return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'error',
-                'message' => 'Masukin jumlah yang ingin dibeli ya'
-            ]);
-        }
+        $this->reset('qty');
+        // $this->emit('addToCart', $productId, $size, $qty);
+        $this->addToCartTrait($productId, $size, $qty);
 
-        if ($this->stock > 0) {
-            $this->reset('qty');
-            // $this->emit('addToCart', $productId, $size, $qty);
-            $this->addToCartTrait($productId, $size, $qty);
-        }
+        $this->emit('refreshCart');
+
+        $this->dispatchBrowserEvent('toastr', [
+            'status' => 'success',
+            'message' => 'Berhasil menambahkan ke keranjang!'
+        ]);
     }
 
     public function increment()
     {
-        if (!$this->size) {
-            return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'error',
-                'message' => 'Kamu belum memilih size nih'
-            ]);
-        }
+        // if (!$this->size) {
+        //     return $this->dispatchBrowserEvent('toastr', [
+        //         'status' => 'error',
+        //         'message' => 'Kamu belum memilih size nih'
+        //     ]);
+        // }
 
-        if ($this->stock == 0) {
+        if ($this->stock === 0) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
                 'message' => 'Size yang kamu pilih habis nih :('
@@ -96,18 +107,18 @@ class DetailsProduct extends Component
 
     public function decrement()
     {
-        if (!$this->size) {
-            return $this->dispatchBrowserEvent('toastr', [
-                'status' => 'error',
-                'message' => 'Kamu belum memilih size nih'
-            ]);
-        }
+        // if (!$this->size) {
+        //     return $this->dispatchBrowserEvent('toastr', [
+        //         'status' => 'error',
+        //         'message' => 'Kamu belum memilih size nih'
+        //     ]);
+        // }
 
         if (!$this->qty) {
             return;
         }
 
-        if ($this->stock == 0) {
+        if ($this->stock === 0) {
             return $this->dispatchBrowserEvent('toastr', [
                 'status' => 'error',
                 'message' => 'Size yang kamu pilih habis nih :('
@@ -125,11 +136,11 @@ class DetailsProduct extends Component
     {
         $this->reset('qty');
 
-        $stock = DB::table('detail_products')
+        $this->stock = (int) DB::table('detail_products')
             ->where('product_id', $this->products['product_id'])
             ->where('size', $size)
             ->sum('stock');
 
-        $this->stock = ($stock === 0) ? '0' : $stock;
+        // $this->stock = ($stock === 0) ? 0 : $stock;
     }
 }
