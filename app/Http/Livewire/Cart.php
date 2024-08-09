@@ -12,7 +12,6 @@ class Cart extends Component
 {
     use AddToWishlist;
 
-    // public $page;
     public $carts = [];
     public $availStock;
     public $cartID;
@@ -28,79 +27,7 @@ class Cart extends Component
         'cartUpdated' => '$refresh',
     ];
 
-    // public function mount($page)
-    // {
-    //     $this->page = $page;
-
-    //     if (Auth::check()) {
-    //         $this->carts = DB::table('carts')
-    //             ->join('products', 'carts.product_id', 'products.id')
-    //             ->leftJoin('detail_products', function ($join) {
-    //                 $join->on('carts.product_id', 'detail_products.dp_id')
-    //                     ->whereColumn('detail_products.size', 'carts.size');
-    //             })
-    //             ->where('carts.user_id', Auth::id())
-    //             ->select(
-    //                 'carts.id AS CartID',
-    //                 'products.id AS ProductID',
-    //                 'products.product_id',
-    //                 'products.name AS ProdName',
-    //                 DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
-    //                 'products.image',
-    //                 DB::raw('products.price * carts.qty AS price'),
-    //                 'carts.size',
-    //                 'carts.qty'
-    //             )
-    //             ->get();
-
-    //         $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
-    //         $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
-    //         $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-    //         $this->selectAll = true;
-    //     }
-
-    //     if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
-    //         $dataArray = json_decode($_COOKIE['carts'], true);
-    //         $getAll = [];
-
-    //         $results = DB::table('products')
-    //             ->join('detail_products', 'products.id', '=', 'detail_products.dp_id')
-    //             ->select(
-    //                 'products.id AS ProductID',
-    //                 'products.product_id',
-    //                 'products.name AS ProdName',
-    //                 'products.image',
-    //                 DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
-    //                 DB::raw('products.price AS price'),
-    //                 DB::raw('products.price * detail_products.stock AS total_price'),
-    //                 'detail_products.size'
-    //             )
-    //             ->whereIn('detail_products.dp_id', array_column($dataArray, 'product_id'))
-    //             ->whereIn('detail_products.size', array_column($dataArray, 'size'))
-    //             ->get();
-
-    //         // Processing and formatting the results...
-    //         foreach ($results as &$result) {
-    //             $productId = $result->ProductID;
-
-    //             foreach ($dataArray as $item) {
-    //                 array_push($getAll, $item['cart_id']);
-    //                 if ($item['product_id'] == $productId) {
-    //                     $result->CartID = $item['cart_id'];
-    //                     $result->qty = $item['quantity'];
-    //                     break;
-    //                 }
-    //             }
-    //         }
-
-    //         $this->carts = $results;
-    //         $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
-    //         $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-    //         $this->selectAll = true;
-    //     }
-    // }
-
-    public function render()
+    public function mount()
     {
         if (Auth::check()) {
             $this->carts = DB::table('carts')
@@ -161,7 +88,7 @@ class Cart extends Component
             foreach ($results as &$result) {
                 $productId = $result->product_id;
                 $size = $result->size;
-            
+
                 foreach ($dataArray as $item) {
                     if ($item['product_id'] == $productId && $item['size'] == $size) {
                         $result->CartID = $item['cart_id'];
@@ -173,10 +100,88 @@ class Cart extends Component
             }
 
             $this->carts = $results;
-            // dd($this->carts);
             $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
             $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
             $this->selectAll = true;
+        }
+    }
+
+    public function render()
+    {
+        if (Auth::check()) {
+            $this->carts = DB::table('carts')
+                ->join('products', 'carts.product_id', 'products.product_id')
+                ->leftJoin('detail_products', function ($join) {
+                    $join->on('carts.product_id', 'detail_products.product_id')
+                        ->whereColumn('carts.size', 'detail_products.size');
+                })
+                ->where('carts.user_id', Auth::id())
+                ->select(
+                    'carts.id AS CartID',
+                    'products.id AS ProductID',
+                    'products.product_id',
+                    'products.name AS ProdName',
+                    DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
+                    'products.image',
+                    DB::raw('detail_products.price * carts.qty AS price'),
+                    'carts.size',
+                    'carts.qty'
+                )
+                ->get();
+
+            $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
+            // $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
+            // $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+            // $this->selectAll = true;
+        }
+
+        if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
+            $dataArray = json_decode($_COOKIE['carts'], true);
+            $getAll = [];
+
+            $results = DB::table('products')
+                ->leftJoin('detail_products', function ($join) {
+                    $join->on('products.product_id', '=', 'detail_products.product_id');
+                })
+                ->select(
+                    'products.id AS ProductID',
+                    'products.product_id',
+                    'products.name AS ProdName',
+                    'products.image',
+                    DB::raw('COALESCE(detail_products.stock, 0) AS AvailStock'),
+                    DB::raw('detail_products.price AS price'),
+                    DB::raw('detail_products.price * detail_products.stock AS total_price'),
+                    'detail_products.size'
+                )
+                ->where(function ($query) use ($dataArray) {
+                    foreach ($dataArray as $item) {
+                        $query->orWhere(function ($q) use ($item) {
+                            $q->where('products.product_id', $item['product_id'])
+                                ->where('detail_products.size', $item['size']);
+                        });
+                    }
+                })
+                ->get();
+
+            // Processing and formatting the results...
+            foreach ($results as &$result) {
+                $productId = $result->product_id;
+                $size = $result->size;
+
+                foreach ($dataArray as $item) {
+                    if ($item['product_id'] == $productId && $item['size'] == $size) {
+                        $result->CartID = $item['cart_id'];
+                        $result->qty = $item['quantity'];
+                        $getAll[] = $item['cart_id'];
+                        break;
+                    }
+                }
+            }
+
+            $this->carts = $results;
+            $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
+            // $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
+            // $this->selectAll = true;
         }
 
         return view('livewire.cart');
