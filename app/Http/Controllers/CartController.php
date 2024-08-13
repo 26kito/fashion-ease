@@ -12,7 +12,7 @@ class CartController extends Controller
 
     public function index()
     {
-        $title = 'Your Cart - ';
+        $title = 'Your Cart | ';
         $totalOrders = $this->cart();
         $validateCart = session('validateCart');
 

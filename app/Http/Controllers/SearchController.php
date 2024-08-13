@@ -12,7 +12,7 @@ class SearchController extends Controller
         // Get param from url
         $keyword = request()->keyword;
 
-        $title = "Result of $keyword - ";
+        $title = "Hasil pencarian $keyword | ";
 
         return view('search-result')->with(['title' => $title, 'keyword' => $keyword]);
     }

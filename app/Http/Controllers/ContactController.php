@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ContactController extends Controller
 {
     public function index() {
-        $title = 'Contact';
+        $title = 'Contact | ';
 
         return view('contact', ['title' => $title]);
     }
