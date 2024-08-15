@@ -8,7 +8,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $title = 'Category List - ';
+        $title = 'Category List | ';
 
         // return view('category', ['title' => $title]);
         return view('category')->with(['title' => $title]);

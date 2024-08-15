@@ -20,7 +20,7 @@ class ProductsController extends Controller
         // $relatedProducts = Product::where('category_id', $products->category_id)->take(8)->get();
         // $defaultSize = ['S', 'M', 'L', 'XL'];
         $productName = DB::table('products')->where('product_id', $productID)->pluck('name')->first();
-        $title = ucwords($productName) . " - ";
+        $title = ucwords($productName) . " | ";
 
         return view('products')->with(['title' => $title, 'products' => $products]);
     }

@@ -16,7 +16,7 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        $title = 'My Wishlist - ';
+        $title = 'My Wishlist | ';
 
         return view('wishlist')->with(['title' => $title]);
     }
