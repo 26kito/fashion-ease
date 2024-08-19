@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use App\Models\Category as ModelsCategory;
 use App\Models\Product;
+use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+use App\Models\Category as ModelsCategory;
 use App\Http\Controllers\Traits\AddToWishlist;
 
 class Category extends Component
@@ -18,9 +19,19 @@ class Category extends Component
     {
         $totalProducts = Product::count();
 
-        $products = Product::when($this->categoryId, function ($query) {
-            return $query->where('category_id', $this->categoryId);
-        })
+        // $products = Product::when($this->categoryId, function ($query) {
+        //     return $query->where('category_id', $this->categoryId);
+        // })
+        //     ->take($this->amount)
+        //     ->get();
+
+        $products = DB::table('products')
+            ->leftJoin('detail_products', 'products.product_id', 'detail_products.product_id')
+            ->selectRaw("products.id, products.name, products.product_id, products.image, products.code, IFNULL(MIN(detail_products.price), products.price) AS price")
+            ->when($this->categoryId, function ($query) {
+                return $query->where('products.category_id', $this->categoryId);
+            })
+            ->groupBy('products.product_id')
             ->take($this->amount)
             ->get();
 
