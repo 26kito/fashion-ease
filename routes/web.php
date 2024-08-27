@@ -1,23 +1,25 @@
 <?php
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\Admin\OrderController AS AdminOrderController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminProductController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,7 @@ use App\Http\Controllers\VoucherController;
 |
 */
 
+// URL::forceScheme("https");
 // Auth::routes();
 Auth::routes(['register' => false]);
 
@@ -47,7 +50,6 @@ Route::middleware('is_user')->group(function () {
 
     Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/save-order', [CheckoutController::class, 'saveOrder']);
-    Route::get('/payment-status', [CheckoutController::class, 'paymentStatus']);
 
     Route::get('/product/{product_name}/{product_code}/{product_id}', [ProductsController::class, 'index']);
 
@@ -125,3 +127,8 @@ Route::middleware(['guest'])->group(function () {
     Route::get('auth/{provider}', [LoginController::class, 'redirectToProvider'])->name('oauth.redirect');
     Route::get('auth/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('oauth.callback');
 });
+
+// Route::get('/payment-status', [CheckoutController::class, 'paymentStatus']);
+Route::get('/payment-success', [CheckoutController::class, 'redirectPayment']);
+
+Route::post('/midtrans-payment-notification-url', [MidtransController::class, 'paymentNotificationURL']);
