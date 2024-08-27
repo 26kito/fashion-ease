@@ -74,10 +74,9 @@ class CheckoutController extends Controller
         // }
 
         $orderItems = $this->getOrderItems($cartItemsID);
-        // dd($orderItems);
 
         $paymentMethod = DB::table('payment_method')->get();
-        $title = 'Checkout';
+        $title = 'Checkout | ';
 
         return view('checkout', compact('orderItems', 'cartItemsID', 'paymentMethod', 'title', 'totalPriceCart', 'grandTotalPriceCart'));
     }
@@ -189,16 +188,23 @@ class CheckoutController extends Controller
         }
     }
 
-    public function paymentStatus()
+    // public function paymentStatus()
+    // {
+    //     $title = 'Payment | ';
+
+    //     // if (!isset($_COOKIE['payment'])) {
+    //     //     return redirect()->route('home');
+    //     // }
+
+    //     // setcookie('payment', '', time() - 1, '/');
+
+    //     return view('after-payment')->with('title', $title);
+    // }
+
+    public function redirectPayment()
     {
-        $title = 'Payment';
+        $title = 'Payment | ';
 
-        if (!isset($_COOKIE['payment'])) {
-            return redirect()->route('home');
-        }
-
-        setcookie('payment', '', time() - 1, '/');
-
-        return view('after-payment')->with('title', $title);
+        return view('payment-success')->with('title', $title);
     }
 }
