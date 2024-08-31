@@ -10,7 +10,7 @@
                         {{-- <a href="#" class="btn btn-reset disabled" onclick="reset()">Reset Promo</a> --}}
                         <a href="#" class="btn btn-reset disabled">Reset Promo</a>
                         {{-- <a href="#" role="button" class="btn btn-close" onclick="reset()" data-bs-dismiss="modal" aria-label="Close"></a> --}}
-                        <a href="#" role="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close""></a>
+                        <a href="#" role="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
                         {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> --}}
                     </div>
                 </div>
@@ -68,8 +68,7 @@
     </div>
     {{-- End of Modal --}}
 
-    <button type="button" id="enterPromo" class="btn btn-success mt-5 mb-4" data-bs-toggle="modal"
-        data-bs-target="#modalpromo">Makin hemat pakai promo</button>
+    <button type="button" id="enterPromo" class="btn btn-success mt-5 mb-4" data-bs-toggle="modal" data-bs-target="#modalpromo">Makin hemat pakai promo</button>
 </div>
 
 @push('script')
