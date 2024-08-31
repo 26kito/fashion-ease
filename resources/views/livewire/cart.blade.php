@@ -26,8 +26,8 @@
                 <td>
                     <input type="checkbox" wire:model='selected' name="cartid[]" id="id[{{$row->CartID}}]"
                         value="{{ $row->CartID }}" style="cursor: pointer"
-                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" 
-                        {{ ($row->AvailStock == 0) ? 'disabled' : '' }}>
+                        class="cartid form-check-input ms-1 {{ ($row->AvailStock != 0) ? 'availstock' : '' }}" {{
+                        ($row->AvailStock == 0) ? 'disabled' : '' }}>
                 </td>
                 <td class="product-col">
                     <a href="/product/{{ $row->product_id }}">
@@ -40,11 +40,11 @@
                 </td>
                 <td class="quy-col">
                     <div class="quantity form-group">
-                        <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->product_id }}')" type="button"
-                            class="btn decrease-btn" value="-">
+                        <input wire:click="updateQty('decrement', '{{ $row->CartID }}', '{{ $row->product_id }}')"
+                            type="button" class="btn decrease-btn" value="-">
                         <input type="text" value="{{ $row->qty }}" class="qty" readonly disabled>
-                        <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->product_id }}')" type="button"
-                            class="btn increase-btn" value="+">
+                        <input wire:click="updateQty('increment', '{{ $row->CartID }}', '{{ $row->product_id }}')"
+                            type="button" class="btn increase-btn" value="+">
                     </div>
                 </td>
                 <td class="size-col">
@@ -54,11 +54,8 @@
                     <h4>{{ rupiah($row->price) }}</h4>
                 </td>
                 <td>
-                    {{-- <a wire:click="initProp('{{ $row->CartID }}', '{{ $row->product_id }}')" data-bs-toggle="modal"
-                        data-bs-target="#modalCart" class="removeCartItem btn btn-danger">
-                        Hapus
-                    </a> --}}
-                    <a href="#" wire:click="initProp('{{ $row->CartID }}', '{{ $row->product_id }}')" class="removeCartItem btn btn-danger" role="button">
+                    <a href="#" wire:click="initProp('{{ $row->CartID }}', '{{ $row->product_id }}')"
+                        class="removeCartItem btn btn-danger" role="button">
                         Hapus
                     </a>
                 </td>

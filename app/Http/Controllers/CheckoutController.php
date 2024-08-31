@@ -21,6 +21,11 @@ class CheckoutController extends Controller
         $validateCart = session('validateCart');
 
         if ((!is_array($cartItemsID) || empty($cartItemsID)) && $validateCart == null) {
+            session()->flash('toastr', [
+                'status' => 'info',
+                'message' => 'Pilih pesanan yang mau di checkout dulu yaa'
+            ]);
+
             return redirect()->back()->with('status', 400);
         }
 

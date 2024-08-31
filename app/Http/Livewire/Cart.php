@@ -12,11 +12,11 @@ class Cart extends Component
 {
     use AddToWishlist;
 
-    public $carts = [];
+    public $carts;
     public $availStock;
     public $cartID;
     public $productID;
-    public $selected = [];
+    public $selected;
     public $selectAll;
 
     public $listeners = [
@@ -53,7 +53,6 @@ class Cart extends Component
             $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
             $getAll = DB::table('carts')->where('user_id', Auth::id())->pluck('id')->toArray();
             $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-            $this->selectAll = true;
         }
 
         if (!Auth::check() && isset($_COOKIE['cart_id']) && isset($_COOKIE['carts'])) {
@@ -102,8 +101,9 @@ class Cart extends Component
             $this->carts = $results;
             $this->availStock = $this->carts->filter(fn ($cart) => $cart->AvailStock);
             $this->selected = $this->availStock->whereIn('CartID', $getAll)->pluck('CartID');
-            $this->selectAll = true;
         }
+        
+        $this->selectAll = true;
     }
 
     public function render()
@@ -255,6 +255,11 @@ class Cart extends Component
         }
 
         $this->emit('refreshCart');
+
+        session()->flash('toastr', [
+            'status' => 'success',
+            'message' => 'Pesanan berhasil dihapus dari keranjang'
+        ]);
 
         return redirect()->route('cart')->with('status', 200);
     }

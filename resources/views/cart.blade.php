@@ -30,8 +30,7 @@
 						@livewire('promo')
 						<button type="submit" id="proceedCheckout" class="site-btn">Proceed to Checkout</button>
 						@endif
-						<a href="{{ route('home') }}"
-							class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
+						<a href="{{ route('home') }}" class="site-btn sb-dark {{ $totalOrders == 0 ? 'mt-5' : ''}}">Continue Shopping</a>
 					</div>
 				</div>
 			</div>
@@ -81,18 +80,22 @@
 @if (Session::has('status'))
 <script src="{{ asset('js/customNotif.js') }}"></script>
 <script>
-	const statusCode = {{ Session::get('status') }};
-	let status, message;
+	// const statusCode = {{ Session::get('status') }};
+	// let status, message;
 
-	if (statusCode == 200) {
-		message = 'Pesanan berhasil dihapus';
-		status = 'success';
-	} else {
-		message = 'Pilih pesanan yang mau di checkout dulu yaa';
-		status = 'info';
-	}
+	// if (statusCode == 200) {
+	// 	message = 'Pesanan berhasil dihapus';
+	// 	status = 'success';
+	// } 
+	
+	// if (statusCode == 400) {
+	// 	message = 'Pilih pesanan yang mau di checkout dulu yaa';
+	// 	status = 'info';
+	// }
+	const status = "{{ session('toastr')['status'] }}"
+	const message = "{{ session('toastr')['message'] }}"
 
-	let event = customNotif.notif(status, message);
+	const event = customNotif.notif(status, message)
 		
 	window.dispatchEvent(event);
 </script>

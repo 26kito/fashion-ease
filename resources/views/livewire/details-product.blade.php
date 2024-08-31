@@ -9,11 +9,7 @@
         <div class="col-lg-6 product-details">
             <h2 class="p-title">{{ $products['name'] }}</h2>
             <h3 class="p-price">{{ rupiah($products['price']) }}</h3>
-            @if ( $stock != 0 )
-            <h4 class="p-stock">Available: <span>In Stock !</span></h4>
-            @else
-            <h4 class="p-stock">Available: <span>Out of Stock !</span></h4>
-            @endif
+            <h4 class="p-stock">Available: <span>{{($stock != 0) ? "In Stock!" : "Out of Stock!"}}</span></h4>
             <form wire:submit.prevent='addToCart'>
                 <div class="fw-size-choose">
                     <p>Size</p>
@@ -28,7 +24,7 @@
                 <div class="quantity form-group">
                     <p>Quantity</p>
                     <input wire:click='decrement' type="button" class="btn" value="-">
-                    <input wire:model.lazy='qty' type="text" class="qty" readonly disabled value="{{ $qty }}">
+                    <input wire:model.lazy='qty' type="number" class="qty" readonly disabled value="{{ $qty }}">
                     <input wire:click='increment' type="button" {{ $isDisabled ? 'disabled' : '' }} class="btn" value="+">
                 </div>
                 <button type="submit" class="site-btn">Buy Now</button>
